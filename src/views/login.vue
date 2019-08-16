@@ -17,13 +17,17 @@
       >
         <b-card class="shadow">
           <div class="d-flex flex-row-reverse flex-nowrap mb-4">
-            <b-link class="m-1 ml-2 text-info" to="Reset">reset</b-link>
-            <b-link class="m-1  text-info" to="Register">register</b-link>
-            <h4 class="text-success login-left">login</h4>
+            <b-link class="m-1 ml-2 text-info" to="Reset">{{
+              lang.get("reset")
+            }}</b-link>
+            <b-link class="m-1  text-info" to="Register">{{
+              lang.get("registered")
+            }}</b-link>
+            <h4 class="text-success login-left">{{ lang.get("login") }}</h4>
           </div>
           <b-form>
             <b-form-group
-              label="user:"
+              :label="lang.get('user') + ':'"
               label-for="user"
               label-cols="12"
               label-cols-sm="3"
@@ -37,7 +41,7 @@
               ></b-form-input>
             </b-form-group>
             <b-form-group
-              label="Passwd:"
+              :label="lang.get('password') + ':'"
               label-for="passwd"
               label-cols="12"
               label-cols-sm="3"
@@ -67,7 +71,7 @@
                 @click="login_submit"
                 block
                 variant="info"
-                >login<span></span
+                >{{ lang.get("login") }}<span></span
               ></b-button>
             </b-form-group>
           </b-form>
@@ -81,6 +85,7 @@
 import { Loading, MessageBox /* , Message, Notification */ } from "element-ui";
 import { requestLogin } from "../util/axios";
 import { btoa } from "../util/tool";
+import { mapGetters } from "vuex";
 
 export default {
   name: "",
@@ -92,6 +97,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["lang"]),
     stateUser() {
       return false;
     },
