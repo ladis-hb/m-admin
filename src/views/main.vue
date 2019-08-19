@@ -1,6 +1,6 @@
 <template>
   <b-row id="main">
-    <b-col cols="12" v-for="(key, id) in filter_devType(dev)" :key="id">
+    <b-col cols="12" md="6" v-for="(key, id) in filter_devType(dev)" :key="id">
       <b-card
         class="my-2"
         :title="lang.get(key)"
@@ -14,7 +14,7 @@
               :key="id"
               class="el-icon-link w-100"
               v-b-tooltip.hover
-              title="csdcsdc"
+              :title="id"
             >
               <span class="text-center">{{ val.name || id }}</span>
               <div class=" float-right ">
@@ -69,8 +69,11 @@ export default {
       this.$router.push({ path: `/dev/${key}` });
     }
   },
-  created() {
+  mounted() {
     {
+      /* 
+      注册socket连接
+      */
       socketConnect({ user: this.user, token: this.token });
       io.on("newDevs", data => {
         this.$store.dispatch("newDevs", data);
@@ -90,6 +93,9 @@ export default {
       });
     }
     {
+      /* 
+      获取用户所有设备列表
+      */
       let main_page = Loading.service({ target: "#main" });
       Get_user_all_devs({
         user: this.user,
@@ -113,8 +119,25 @@ export default {
           Message(msg);
         })
         .catch(err => {
-          MessageBox.confirm(err, "err");
+          Message(err);
+          MessageBox.confirm(`您还没有绑定任何设备，请先添加设备使用`, "err")
+            .then(() => {
+              this.$router.push("/SetMain");
+            })
+            .catch(() => {
+              this.$router.push("/");
+            });
         });
+    }
+    {
+      /* 
+      注册监听，loginout
+      */
+      this.$on("loginOut", () => {
+        console.log("loginOut");
+        Message("loginout");
+        io.emit("disconnect");
+      });
     }
   }
 };

@@ -1,19 +1,11 @@
 <template>
   <b-container fluid class="d-flex flex-column h-100">
-    <b-row>
-      <b-col
-        cols="12"
-        ref="loginTitle"
-        class="loginTitle bg-info d-flex flex-row align-items-center"
-      >
-        <span class="text-center text-light">{{ lang.get("registered") }}</span>
-      </b-col>
-    </b-row>
+    <Header :title="lang.get('registered')"></Header>
     <b-row class="h-75">
       <b-col
         cols="12"
         ref="loginBody"
-        class="d-flex flex-column h-auto w-50 p-5"
+        class="d-flex flex-column h-auto w-50 p-4"
       >
         <b-form>
           <b-form-group
@@ -89,7 +81,7 @@
             label-for="company"
             label-cols="12"
             label-cols-sm="3"
-            description=""
+            description="您的组织"
           >
             <b-form-input
               id="company"
@@ -98,7 +90,7 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group class="p-3">
-            <b-button @click="login_submit" block variant="info">{{
+            <b-button @click="register_submit" block variant="info">{{
               lang.get("registered")
             }}</b-button>
           </b-form-group>
@@ -110,8 +102,11 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { MessageBox, Loading } from "element-ui";
+import { UserRegister } from "../util/axios";
+import { btoa } from "../util/tool";
+import Header from "../components/Header";
 export default {
-  name: "",
   data() {
     return {
       user: "",
@@ -121,6 +116,9 @@ export default {
       mail: "",
       tel: ""
     };
+  },
+  components: {
+    Header
   },
   computed: {
     ...mapGetters(["lang"]),
@@ -142,7 +140,39 @@ export default {
     }
   },
   methods: {
-    login_submit() {}
+    register_submit() {
+      let { company, mail, passwd, passwd2, tel, user } = this.$data;
+      if (user == "") return MessageBox.alert("用户名不能为空！");
+      if (passwd == "") return MessageBox.alert("密码不能为空");
+      if (mail == "") return MessageBox.alert("邮箱不能为空");
+      if (passwd !== passwd2) return MessageBox.alert("两次密码必须一致");
+      let registerLoading = Loading.service({ text: "正在注册" });
+      UserRegister({
+        orgin: company,
+        mail,
+        passwd: String(btoa(passwd)),
+        passwdck: String(btoa(passwd)),
+        tel,
+        name: String(user)
+      })
+        .then(({ code, msg }) => {
+          setTimeout(() => {
+            registerLoading.close();
+            if (code != 200) return MessageBox.alert(msg, "注册错误");
+            MessageBox.confirm("注册成功，是否返回登录界面", msg, {
+              /* confirmButtonText: 'confirm',
+              cancelButtonText: 'cancel', */
+              type: "success"
+            }).then(() => {
+              this.$router.push("/");
+            });
+          }, 3000);
+        })
+        .catch(err => {
+          registerLoading.close();
+          MessageBox.alert(err, "error");
+        });
+    }
   }
 };
 </script>

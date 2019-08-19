@@ -1,21 +1,13 @@
 <template>
   <b-container fluid class="d-flex flex-column h-100">
-    <b-row>
-      <b-col
-        cols="12"
-        ref="loginTitle"
-        class="loginTitle bg-info d-flex flex-row align-items-center"
-      >
-        <span class="text-center text-light">Ladis Login pages</span>
-      </b-col>
-    </b-row>
-    <b-row class="h-75">
+    <Header :title="lang.get('login')"></Header>
+    <b-row class="h-100">
       <b-col
         cols="12"
         ref="loginBody"
         class="d-flex align-items-center justify-content-center h-auto"
       >
-        <b-card class="shadow">
+        <b-card class="shadow w-500">
           <div class="d-flex flex-row-reverse flex-nowrap mb-4">
             <b-link class="m-1 ml-2 text-info" to="Reset">{{
               lang.get("reset")
@@ -86,15 +78,18 @@ import { Loading, MessageBox /* , Message, Notification */ } from "element-ui";
 import { requestLogin } from "../util/axios";
 import { btoa } from "../util/tool";
 import { mapGetters } from "vuex";
+import Header from "../components/Header";
 
 export default {
-  name: "",
   data() {
     return {
       user: "",
       passwd: "",
       keep_passwd: false
     };
+  },
+  components: {
+    Header
   },
   computed: {
     ...mapGetters(["lang"]),
@@ -163,9 +158,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.loginTitle {
-  height: 60px;
+@media screen and (min-width: 568px) {
+  .w-500 {
+    min-width: 500px;
+  }
 }
+
 .login-left {
   margin-right: auto;
 }

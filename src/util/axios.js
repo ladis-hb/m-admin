@@ -42,21 +42,23 @@ export const getLog = params => {
 };
 
 //add devid
-export const addDevid = params => {
-  return axios.get("/Get/addDevid", { params });
+export const addDevid = ({ devid, devType, user, token }) => {
+  return axios.get("/Get/addDevid", {
+    params: { devid, devType, user, token }
+  });
 };
 //get devid_list
-export const Get_devid_list = params => {
-  return axios.get("/Get/Get_devid_list", { params });
+export const Get_devid_list = ({ user, token }) => {
+  return axios.get("/Get/Get_devid_list", { params: { user, token } });
 };
 //del devid
-export const delete_Devid = params => {
-  return axios.get("/Get/delete_Devid", { params });
+export const delete_Devid = ({ user, token, devid }) => {
+  return axios.get("/Get/delete_Devid", { params: { user, token, devid } });
 };
 
 //log info
-export const Get_user_info = params => {
-  return axios.get("/Get/Get_user_info", { params });
+export const Get_user_info = ({ type, user, token }) => {
+  return axios.get("/Get/Get_user_info", { params: { type, user, token } });
 };
 //admin - user
 export const admin_get_info_list = params => {
@@ -67,8 +69,26 @@ export const admin_get_info_list = params => {
 export const modify_user_info = params => {
   return axios.get("/Get/modify_user_info", { params });
 };
+/* 
 
+
+*/
 //phone pages
-export const Get_user_all_devs = params => {
-  return axios.get("/Get/Get_user_all_devs", { params });
+export const Get_user_all_devs = ({ user, token }) => {
+  return axios.get("/Get/Get_user_all_devs", { params: { user, token } });
+};
+
+export const modify_user_info_one = ({
+  user,
+  token,
+  modifyType,
+  modifyVal
+}) => {
+  return axios.get("/Get/modify_user_info_one", {
+    params: { user, token, modifyType, modifyVal }
+  });
+};
+
+export const Get_user_info_one = ({ user, token }) => {
+  return axios.get("/Get/Get_user_info_one", { params: { user, token } });
 };

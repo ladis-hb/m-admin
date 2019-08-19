@@ -18,24 +18,20 @@ Vue.use(BootstrapVue);
 Vue.component(VeLine.name, VeLine);
 
 Vue.config.productionTip = false;
-/* 
+
 router.beforeEach((to, from, next) => {
   console.log(to);
   console.log(from);
   let localUser = sessionStorage.getItem("user");
-
-  if (to.name == "Login" || to.name == "Register" || to.name == "Reset") {
-    next();
+  console.log(localUser);
+  if (to.name != "Login" && !localUser) {
+    next({ path: "/" });
   }
-  if (to.name == "Main" && localUser) {
-    console.log("to main");
-    next();
-  }
-  if (to.name != "Main" && !from.name && !localUser) {
+  if (to.name == "Devs" && !from.name) {
     next({ path: "/main" });
   }
+  next();
 });
- */
 new Vue({
   router,
   store,

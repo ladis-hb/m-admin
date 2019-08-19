@@ -28,6 +28,12 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    //退出登录，注销state
+    loginOut(state) {
+      state.token = sessionStorage.getItem("token") || "";
+      state.user = sessionStorage.getItem("user") || "";
+    },
+    //设置用户，token
     setUser(state, payload) {
       let { user, token } = payload;
       state.user = user;

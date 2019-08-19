@@ -1,5 +1,13 @@
 /* jshint esversion:8 */
 const langDefault = {
+  DM: {
+    en: "Devicd Manage",
+    cn: "设备管理"
+  },
+  UM: {
+    en: "User Manage",
+    cn: "用户管理"
+  },
   user: {
     cn: "用户",
     en: "user"
@@ -179,6 +187,10 @@ const langDefault = {
   company: {
     en: "company",
     cn: "公司"
+  },
+  Validation: {
+    en: "Validation",
+    cn: "验证码"
   }
 };
 

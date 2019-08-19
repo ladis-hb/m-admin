@@ -41,10 +41,20 @@
           <b-collapse id="nav-collapse" is-nav class="float-rigth mr-1">
             <!-- Right aligned nav items -->
             <b-navbar-nav class="ml-auto text-nowrap">
-              <b-nav-item href="#">
+              <b-nav-item to="SetMain">
+                <span class="text-light text-wrap"
+                  ><i></i>{{ lang.get("DM") }}</span
+                >
+              </b-nav-item>
+              <b-nav-item to="SetUser">
+                <span class="text-light text-wrap"
+                  ><i></i>{{ lang.get("UM") }}</span
+                >
+              </b-nav-item>
+              <b-nav-item :to="{ path: '/reset' }">
                 <span class="text-light">{{ lang.get("modify_pw") }}</span>
               </b-nav-item>
-              <b-nav-item :to="{ path: '/login' }">
+              <b-nav-item @click="loginOut">
                 <span class="text-light">{{ lang.get("loginout") }}</span>
               </b-nav-item>
             </b-navbar-nav>
@@ -62,10 +72,24 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
+import { MessageBox } from "element-ui";
 export default {
   computed: {
     ...mapState({ user: "user", token: "token" }),
     ...mapGetters({ lang: "lang" })
+  },
+  methods: {
+    loginOut() {
+      MessageBox.confirm("确定要退出登录吗？", "loginOut", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.$emit("loginOut");
+        this.$store.commit("loginOut");
+        this.$router.push("/");
+      });
+    }
   }
 };
 </script>
