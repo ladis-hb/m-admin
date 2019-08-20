@@ -1,8 +1,8 @@
 /* jshint esversion:8 */
 const axios = require("axios");
-const config = require("../config.js");
-const axios_address = config.development ? config.remote_address : "";
-axios.defaults.baseURL = axios_address;
+//const config = require("../config.js");
+//const axios_address = config.development ? config.remote_address : "";
+//axios.defaults.baseURL = axios_address;
 
 //登录请求
 export const requestLogin = params => {

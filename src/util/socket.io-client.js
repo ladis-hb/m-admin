@@ -1,7 +1,9 @@
-const IO = require('socket.io-client')
-const config = require('../config.js')
+/* jshint esversion:8 */
+const IO = require("socket.io-client");
+//const config = require("../config.js");
 
-export const io = IO(config.remote_address)
+//export const io = IO(config.remote_address);
+export const io = IO();
 
 /**
  *
@@ -9,21 +11,21 @@ export const io = IO(config.remote_address)
  * @param {*} {user,token}
  */
 export const socketConnect = async ({ user, token }) => {
-    function register() {
-        io.emit('register', { user, token })
-    }
-    io.on('connect', () => {
-        console.log(`${Date()}:::Socket connect`)
-        register()
-    })
-    io.on('reconnect', () => {
-        console.log(`${Date()}:::Socket reconnect`)
-        register()
-    })
-    io.on('disconnect', () => {
-        console.log(`${Date()}:::Socket disconnect`)
-    })
-}
+  function register() {
+    io.emit("register", { user, token });
+  }
+  io.on("connect", () => {
+    console.log(`${Date()}:::Socket connect`);
+    register();
+  });
+  io.on("reconnect", () => {
+    console.log(`${Date()}:::Socket reconnect`);
+    register();
+  });
+  io.on("disconnect", () => {
+    console.log(`${Date()}:::Socket disconnect`);
+  });
+};
 
 /**
  *
@@ -32,12 +34,12 @@ export const socketConnect = async ({ user, token }) => {
  * @returns  事件结果
  */
 export const onEvent = async events => {
-    return new Promise(res => {
-        io.on(events, data => {
-            res(data)
-        })
-    })
-}
+  return new Promise(res => {
+    io.on(events, data => {
+      res(data);
+    });
+  });
+};
 
 /**
  *
@@ -45,6 +47,6 @@ export const onEvent = async events => {
  * @param {*} events  触发事件
  * @param {*} params  触发参数
  */
-export const emitEvent = async (events,params) =>{
-    io.emit(events,params)
-}
+export const emitEvent = async (events, params) => {
+  io.emit(events, params);
+};
