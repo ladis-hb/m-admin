@@ -8,6 +8,14 @@ const langDefault = {
     en: "User Manage",
     cn: "用户管理"
   },
+  AM: {
+    en: "Alarm Manage",
+    cn: "告警管理"
+  },
+  alarm: {
+    en: "Alarm",
+    cn: "告警"
+  },
   user: {
     cn: "用户",
     en: "user"

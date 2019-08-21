@@ -25,6 +25,9 @@ export default new Vuex.Store({
       power: {},
       io: {},
       th: {}
+    },
+    Alarm: {
+      Alarm_msg: "点击查看报警"
     }
   },
   mutations: {
@@ -73,12 +76,15 @@ export default new Vuex.Store({
         ];
 
         metrics.forEach(key => {
-          devs[key] = power[key][2] || 0;
+          //if (!power[key][2]) console.log(power[key]);
+          devs[key] = power[key][2] || power[key]; // || 0;
         });
         state.devs[devType][devid].push(devs);
       }
-
-      console.log(1);
+    },
+    /* 配置Alarm */
+    setAlarm(state, payload) {
+      state.Alarm = payload;
     }
   },
   actions: {

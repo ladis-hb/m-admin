@@ -41,6 +41,11 @@
           <b-collapse id="nav-collapse" is-nav class="float-rigth mr-1">
             <!-- Right aligned nav items -->
             <b-navbar-nav class="ml-auto text-nowrap">
+              <b-nav-item to="Alarm">
+                <span class="text-light text-wrap"
+                  ><i></i>{{ lang.get("AM") }}</span
+                >
+              </b-nav-item>
               <b-nav-item to="SetMain">
                 <span class="text-light text-wrap"
                   ><i></i>{{ lang.get("DM") }}</span

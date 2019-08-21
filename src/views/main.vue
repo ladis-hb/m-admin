@@ -1,6 +1,20 @@
 <template>
   <b-row id="main">
-    <b-col cols="12" md="6" v-for="(key, id) in filter_devType(dev)" :key="id">
+    <b-col cols="12" @click="toAlarm">
+      <b-alert
+        variant="warning"
+        show
+        class="m-1 p-2 overflow-auto text-nowrap"
+        >{{ Alarm.Alarm_msg }}</b-alert
+      >
+    </b-col>
+    <b-col
+      cols="12"
+      md="6"
+      v-for="(key, id) in filter_devType(dev)"
+      :key="id"
+      :id="key"
+    >
       <b-card
         class="my-2"
         :title="lang.get(key)"
@@ -58,7 +72,7 @@ export default {
     };
   },
   computed: {
-    ...mapState({ user: "user", token: "token", dev: "dev" }),
+    ...mapState({ user: "user", token: "token", dev: "dev", Alarm: "Alarm" }),
     ...mapGetters({ lang: "lang" })
   },
   methods: {
@@ -67,6 +81,10 @@ export default {
     },
     to(key) {
       this.$router.push({ path: `/dev/${key}` });
+    },
+    toAlarm() {
+      console.log("lll");
+      this.$router.push({ path: "/alarm" });
     }
   },
   mounted() {
@@ -75,6 +93,7 @@ export default {
       注册socket连接
       */
       socketConnect({ user: this.user, token: this.token });
+      /* on devsinfo */
       io.on("newDevs", data => {
         this.$store.dispatch("newDevs", data);
         let {
@@ -88,8 +107,13 @@ export default {
           online: true
         });
       });
+      /* on stream */
       io.on("infoStream", data => {
         this.$store.dispatch("infoStream", data);
+      });
+      /* on Alarm */
+      io.on("Alarm", data => {
+        this.$store.commit("setAlarm", data);
       });
     }
     {
@@ -116,7 +140,8 @@ export default {
                 generateTime: ""
               });
           }
-          Message(msg);
+          console.log(msg);
+          //Message(msg);
         })
         .catch(err => {
           Message(err);

@@ -4,14 +4,19 @@ import Router from "vue-router";
 import Home from "./views/Home.vue";
 import Login from "./views/login.vue";
 //import Main from "./views/main.vue";
-//import Devs from "./views/devs.vue";
-//import Register from "./views/userRegister.vue";
-//import Reset from "./views/userReset.vue";
+import Devs from "./views/devs.vue";
+import Register from "./views/userRegister.vue";
+import Reset from "./views/userReset.vue";
+import Setting from "./views/Setting.vue";
+import SetMain from "./views/Setting/SetMain.vue";
+import SetUser from "./views/Setting/SetUser.vue";
+import Alarm from "./views/Alarm.vue";
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
+    /* Home */
     {
       path: "/home",
       name: "Home",
@@ -26,52 +31,51 @@ export default new Router({
         {
           path: "/dev/:id",
           name: "Devs",
-          component: () =>
-            import(/* webpackChunkName: "Devs" */ "./views/devs.vue")
+          component: Devs
         }
       ]
     },
+    /* login */
     {
       path: "/",
       name: "Login",
       component: Login
     },
+    /* register */
     {
       path: "/register",
       name: "Register",
-      component: () =>
-        import(/* webpackChunkName: "Register" */ "./views/userRegister.vue")
+      component: Register
     },
+    /* reset */
     {
       path: "/reset",
       name: "Reset",
-      component: () =>
-        import(/* webpackChunkName: "Reset" */ "./views/userReset.vue")
+      component: Reset
     },
+    /* setting */
     {
       path: "/setting",
       name: "Setting",
-      component: () =>
-        import(/* webpackChunkName: "Setting" */ "./views/Setting.vue"),
+      component: Setting,
       children: [
         {
           path: "/SetMain",
           name: "SetMain",
-          component: () =>
-            import(
-              /* webpackChunkName: "SetMain" */ "./views/Setting/SetMain.vue"
-            )
+          component: SetMain
         },
         {
           path: "/SetUser",
           name: "SetUser",
-          component: () =>
-            import(
-              /* webpackChunkName: "SetMain" */
-              "./views/Setting/SetUser.vue"
-            )
+          component: SetUser
         }
       ]
+    },
+    /* Alarm */
+    {
+      path: "/alarm",
+      name: "Alarm",
+      component: Alarm
     }
   ]
 });

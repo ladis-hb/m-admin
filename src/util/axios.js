@@ -92,3 +92,11 @@ export const modify_user_info_one = ({
 export const Get_user_info_one = ({ user, token }) => {
   return axios.get("/Get/Get_user_info_one", { params: { user, token } });
 };
+/* GetAlarms */
+export const GetAlarms = ({ user, token }) => {
+  return axios.get("/Get/GetAlarms", { params: { user, token } });
+};
+/* confirm_alarm */
+export const confirm_alarm = ({ user, token, alarmId }) => {
+  return axios.get("/Get/confirm_alarm", { params: { user, token, alarmId } });
+};

@@ -23,6 +23,7 @@
               label-for="user"
               label-cols="12"
               label-cols-sm="3"
+              label-align-sm="right"
               :state="stateUser"
               :invalid-feedback="invalidFeedback"
             >
@@ -37,6 +38,7 @@
               label-for="passwd"
               label-cols="12"
               label-cols-sm="3"
+              label-align-sm="right"
               description
             >
               <b-form-input
@@ -50,6 +52,8 @@
               label="记住用户:"
               label-for="keep_passwd"
               label-cols="4"
+              label-cols-sm="3"
+              label-align="right"
             >
               <b-form-checkbox
                 id="keep_passwd"
