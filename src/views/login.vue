@@ -116,7 +116,7 @@ export default {
   methods: {
     login_submit() {
       if (this.user == "" || this.passwd == "") {
-        MessageBox.alert("用户名或密码不能为空", "tip", {
+        MessageBox("用户名或密码不能为空", "tip", {
           confirmButtonText: "确定"
         });
         return;

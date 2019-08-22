@@ -8,10 +8,7 @@ import VeLine from "v-charts/lib/line";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
-import "element-ui/lib/theme-chalk/notification.css";
-import "element-ui/lib/theme-chalk/loading.css";
 import "element-ui/lib/theme-chalk/message-box.css";
-import "element-ui/lib/theme-chalk/message.css";
 import "element-ui/lib/theme-chalk/icon.css";
 
 Vue.use(BootstrapVue);
