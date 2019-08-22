@@ -1,3 +1,8 @@
+/* jshint esversion:8 */
+const localhost = false;
+const proxyAddress = localhost
+  ? "http://localhost:81"
+  : "http://116.62.48.175:81";
 module.exports = {
   publicPath: process.env.NODE_ENV === "production" ? "./" : "/",
   assetsDir: "",
@@ -21,8 +26,7 @@ module.exports = {
     //当您拥有单独的API后端开发服务器并且希望在同一域上发送API请求时，代理某些URL会很有用
     proxy: {
       "/Get": {
-        target:
-          process.env.NODE_ENV === "production" ? "" : "http://localhost:81"
+        target: process.env.NODE_ENV === "production" ? "" : proxyAddress
         //secure: false, // 如果是https接口，需要配置这个参数
         //changeOrigin: true // 如果接口跨域，需要进行这个参数配置
       },
@@ -31,8 +35,7 @@ module.exports = {
           process.env.NODE_ENV === "production" ? "" : "http://localhost:81"
       },*/
       "/socket.io": {
-        target:
-          process.env.NODE_ENV === "production" ? "" : "http://localhost:81"
+        target: process.env.NODE_ENV === "production" ? "" : proxyAddress
       }
     },
     //输出运行进度到控制台。

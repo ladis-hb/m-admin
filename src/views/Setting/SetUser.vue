@@ -185,7 +185,6 @@ export default {
       Get_user_info({ type: "runInfo", user: this.user, token: this.token })
         .then(({ data: result }) => {
           this.User_log = result.data;
-          console.log(this.User_log);
         })
         .catch(err => {
           MessageBox(err, "User error");

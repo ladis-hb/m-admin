@@ -83,87 +83,96 @@ export default {
       this.$router.push({ path: `/dev/${key}` });
     },
     toAlarm() {
-      console.log("lll");
       this.$router.push({ path: "/alarm" });
     }
   },
   mounted() {
-    {
-      /* 
+    this.$nextTick()
+      .then(() => {
+        {
+          /* 
       注册socket连接
       */
-      socketConnect({ user: this.user, token: this.token });
-      /* on devsinfo */
-      io.on("newDevs", data => {
-        this.$store.dispatch("newDevs", data);
-        let {
-          devType,
-          devs: { devid, name, generateTime }
-        } = data;
-        let old = this.devs[devType][devid];
-        this.devs[devType][devid] = Object.assign(old, {
-          name,
-          generateTime,
-          online: true
-        });
-      });
-      /* on stream */
-      io.on("infoStream", data => {
-        this.$store.dispatch("infoStream", data);
-      });
-      /* on Alarm */
-      io.on("Alarm", data => {
-        this.$store.commit("setAlarm", data);
-      });
-    }
-    {
-      /* 
+          socketConnect({ user: this.user, token: this.token });
+          /* on devsinfo */
+          io.on("newDevs", data => {
+            this.$store.dispatch("newDevs", data);
+            let {
+              devType,
+              devs: { devid, name, generateTime }
+            } = data;
+            let old = this.devs[devType][devid];
+            this.devs[devType][devid] = Object.assign(old, {
+              name,
+              generateTime,
+              online: true
+            });
+          });
+          /* on stream */
+          io.on("infoStream", data => {
+            //console.log(data);
+            this.$store.dispatch("infoStream", data);
+          });
+          /* on Alarm */
+          io.on("Alarm", data => {
+            this.$store.commit("setAlarm", data);
+          });
+        }
+        {
+          /* 
       获取用户所有设备列表
       */
-      let main_page = Loading.service({ target: "#main" });
-      Get_user_all_devs({
-        user: this.user,
-        token: this.token
-      })
-        .then(result => {
-          main_page.close();
-          let { code, msg, data } = result.data;
-          if (code != 200) return;
-          let dev = data[0].dev;
-          for (let d of dev) {
-            let { type, devid } = d;
-            if (!this.devs[type][devid])
-              this.$set(this.devs[type], devid, {
-                devid,
-                online: false,
-                name,
-                generateTime: ""
-              });
-          }
-          console.log(msg);
-          //Message(msg);
-        })
-        .catch(err => {
-          Message(err);
-          MessageBox.confirm(`您还没有绑定任何设备，请先添加设备使用`, "err")
-            .then(() => {
-              this.$router.push("/SetMain");
+          let main_page = Loading.service({ target: "#main" });
+          Get_user_all_devs({
+            user: this.user,
+            token: this.token
+          })
+            .then(result => {
+              main_page.close();
+              let { code, msg, data } = result.data;
+              if (code != 200) return;
+              let dev = data[0].dev;
+              for (let d of dev) {
+                let { type, devid } = d;
+                if (!this.devs[type][devid])
+                  this.$set(this.devs[type], devid, {
+                    devid,
+                    online: false,
+                    name,
+                    generateTime: ""
+                  });
+              }
+              console.log(msg);
+              //Message(msg);
             })
-            .catch(() => {
-              this.$router.push("/");
+            .catch(err => {
+              Message(err);
+              MessageBox.confirm(
+                `您还没有绑定任何设备，请先添加设备使用`,
+                "err"
+              )
+                .then(() => {
+                  this.$router.push("/SetMain");
+                })
+                .catch(() => {
+                  this.$router.push("/");
+                });
             });
-        });
-    }
-    {
-      /* 
+        }
+        {
+          /* 
       注册监听，loginout
       */
-      this.$on("loginOut", () => {
-        console.log("loginOut");
-        Message("loginout");
-        io.emit("disconnect");
+          this.$on("loginOut", () => {
+            console.log("loginOut");
+            Message("loginout");
+            io.emit("disconnect");
+          });
+        }
+      })
+      .catch(err => {
+        MessageBox(err, "main error");
       });
-    }
   }
 };
 </script>
