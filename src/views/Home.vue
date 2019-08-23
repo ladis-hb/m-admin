@@ -41,17 +41,17 @@
           <b-collapse id="nav-collapse" is-nav class="float-rigth mr-1">
             <!-- Right aligned nav items -->
             <b-navbar-nav class="ml-auto text-nowrap">
-              <b-nav-item to="Alarm">
+              <b-nav-item :to="{ path: '/alarm' }">
                 <span class="text-light text-wrap"
                   ><i></i>{{ lang.get("AM") }}</span
                 >
               </b-nav-item>
-              <b-nav-item to="SetMain">
+              <b-nav-item :to="{ path: '/SetMain' }">
                 <span class="text-light text-wrap"
                   ><i></i>{{ lang.get("DM") }}</span
                 >
               </b-nav-item>
-              <b-nav-item to="SetUser">
+              <b-nav-item :to="{ path: '/SetUser' }">
                 <span class="text-light text-wrap"
                   ><i></i>{{ lang.get("UM") }}</span
                 >
@@ -68,9 +68,11 @@
       </div>
     </b-navbar>
     <b-container>
-      <keep-alive>
-        <router-view> </router-view>
-      </keep-alive>
+      <transition>
+        <keep-alive exclude="chartline">
+          <router-view> </router-view>
+        </keep-alive>
+      </transition>
     </b-container>
   </div>
 </template>

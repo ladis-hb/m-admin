@@ -2,6 +2,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { language } from "./util/language";
+import { unit } from "./util/unit";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -10,8 +11,9 @@ export default new Vuex.Store({
     user: sessionStorage.getItem("user") || "cairui",
     language,
     lang: "cn",
+    unit,
 
-    devs_line_length: 10,
+    devs_line_length: 500,
     dev: {
       ups: {},
       ac: {},
@@ -26,6 +28,7 @@ export default new Vuex.Store({
       io: {},
       th: {}
     },
+    devsSet: new Set(),
     Alarm: {
       Alarm_msg: "点击查看报警"
     }
@@ -44,43 +47,25 @@ export default new Vuex.Store({
     },
     newDevs(state, payload) {
       let { devType, devs } = payload;
-      let { devid } = devs;
-      if (!state.dev[devType][devid]) Vue.set(state.dev[devType], devid, {});
-      state.dev[devType][devid] = devs;
-
-      if (!state.devs[devType][devid]) Vue.set(state.devs[devType], devid, []);
-      if (state.devs[devType][devid].length > state.devs_line_length)
-        state.devs[devType][devid].shift();
-
-      if (devType != "power") {
-        state.devs[devType][devid].push(devs);
-      } else {
-        let power = JSON.parse(JSON.stringify(devs));
-        let metrics = [
-          "active_power",
-          "reactive_power",
-          "power_factor",
-          "quantity",
-          "input_voltage",
-          "input_voltage_l1",
-          "input_voltage_l2",
-          "input_voltage_l3",
-          "input_current",
-          "input_current_l1",
-          "input_current_l2",
-          "input_current_l3",
-          "input_frequency",
-          "input_frequency_l1",
-          "input_frequency_l2",
-          "input_frequency_l3"
-        ];
-
-        metrics.forEach(key => {
-          //if (!power[key][2]) console.log(power[key]);
-          devs[key] = power[key][2] || power[key]; // || 0;
-        });
-        state.devs[devType][devid].push(devs);
+      let { devid, generateTime } = devs;
+      //add dev
+      if (!state.dev[devType][devid]) {
+        state.devsSet.add(devid);
+        Vue.set(state.dev[devType], devid, {});
+        Vue.set(state.devs[devType], devid, {});
       }
+      Object.entries(devs).map(val => {
+        if (!state.dev[devType][devid][val[0]]) {
+          Vue.set(state.dev[devType][devid], val[0], val[1]);
+          Vue.set(state.devs[devType][devid], val[0], []);
+        } else {
+          state.dev[devType][devid][val[0]] = val[1];
+          state.devs[devType][devid][val[0]].push({
+            [val[0]]: val[1][2] || val[1],
+            generateTime: generateTime.split(" ")[1]
+          });
+        }
+      });
     },
     /* 配置Alarm */
     setAlarm(state, payload) {
@@ -100,6 +85,13 @@ export default new Vuex.Store({
         selang.set(key, val[lang]);
       }
       return selang;
+    },
+    unit: ({ unit }) => {
+      var seunit = new Map();
+      for (let [key, val] of Object.entries(unit)) {
+        seunit.set(key, val);
+      }
+      return seunit;
     }
   }
 });

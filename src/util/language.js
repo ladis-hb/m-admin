@@ -12,6 +12,14 @@ const langDefault = {
     en: "Alarm Manage",
     cn: "告警管理"
   },
+  kW: {
+    cn: "功率",
+    en: "power"
+  },
+  Hz: {
+    cn: "赫兹",
+    en: "Hertz"
+  },
   alarm: {
     en: "Alarm",
     cn: "告警"

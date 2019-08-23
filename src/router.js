@@ -32,6 +32,12 @@ export default new Router({
           path: "/dev/:id",
           name: "Devs",
           component: Devs
+        },
+        {
+          path: "/line",
+          name: "Line",
+          component: () =>
+            import(/* webpackChunkName: "Main" */ "./views/chartline.vue")
         }
       ]
     },

@@ -5,26 +5,30 @@ import router from "./router";
 import store from "./store";
 import BootstrapVue from "bootstrap-vue";
 import VeLine from "v-charts/lib/line";
+import VeGuage from "v-charts/lib/gauge";
+import VeHistogram from "v-charts/lib/histogram";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
-import "element-ui/lib/theme-chalk/message-box.css";
-import "element-ui/lib/theme-chalk/icon.css";
+import "./assets/theme-chalk/message-box.css";
+import "./assets/theme-chalk/icon.css";
 
 Vue.use(BootstrapVue);
 Vue.component(VeLine.name, VeLine);
+Vue.component(VeGuage.name, VeGuage);
+Vue.component(VeHistogram.name, VeHistogram);
 
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
-  //console.log(to);
-  //console.log(from);
+  console.log(to);
+  console.log(from);
   let localUser = sessionStorage.getItem("user");
   //console.log(localUser);
   if (to.name != "Login" && !localUser) {
     next({ path: "/" });
   }
-  if (to.name == "Devs" && !from.name) {
+  if ((to.name == "Devs" || to.name == "Line") && !from.name) {
     next({ path: "/main" });
   }
   next();
