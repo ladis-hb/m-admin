@@ -31,6 +31,9 @@ router.beforeEach((to, from, next) => {
   if ((to.name == "Devs" || to.name == "Line") && !from.name) {
     next({ path: "/main" });
   }
+  if (to.name == "Root") {
+    if (localUser != "root" || !sessionStorage.getItem("token")) next();
+  }
   next();
 });
 new Vue({

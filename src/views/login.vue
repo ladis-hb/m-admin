@@ -123,8 +123,8 @@ export default {
       }
       let loginLoading = Loading.service();
       let loginParams = {
-        username: this.user,
-        password: btoa(this.passwd)
+        user: this.user,
+        passwd: btoa(this.passwd)
       };
       requestLogin(loginParams)
         .then(res => {

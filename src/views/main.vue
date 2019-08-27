@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { io, socketConnect } from "../util/socket.io-client";
+const io = require("socket.io-client")("http://localhost:81");
 import { mapState, mapGetters } from "vuex";
 import { Get_user_all_devs } from "../util/axios";
 import { Loading, MessageBox, Message /* Notification */ } from "element-ui";
@@ -90,11 +90,20 @@ export default {
     this.$nextTick()
       .then(() => {
         {
-          /* 
-      注册socket连接
-      */
-          socketConnect({ user: this.user, token: this.token });
-          /* on devsinfo */
+          let register = () => {
+            io.emit("register", { user: this.user, token: this.token });
+          };
+          io.on("connect", () => {
+            console.log(`${Date()}:::Socket connect`);
+            register();
+          });
+          io.on("reconnect", () => {
+            console.log(`${Date()}:::Socket reconnect`);
+            register();
+          });
+          io.on("disconnect", () => {
+            console.log(`${Date()}:::Socket disconnect`);
+          });
           io.on("newDevs", data => {
             this.$store.dispatch("newDevs", data);
             let {
@@ -102,18 +111,12 @@ export default {
               devs: { devid, name, generateTime }
             } = data;
             let old = this.devs[devType][devid];
-            this.devs[devType][devid] = Object.assign(old, {
+            this.devs[devType][devid] = Object.assign(old || {}, {
               name,
               generateTime,
               online: true
             });
           });
-          /* on stream */
-          io.on("infoStream", data => {
-            //console.log(data);
-            this.$store.dispatch("infoStream", data);
-          });
-          /* on Alarm */
           io.on("Alarm", data => {
             this.$store.commit("setAlarm", data);
           });

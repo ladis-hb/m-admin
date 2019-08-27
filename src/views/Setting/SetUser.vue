@@ -5,7 +5,7 @@
         <separated title="user info"></separated>
         <b-form>
           <b-form-group
-            label="user:"
+            :label="lang.get('user')"
             label-cols="4"
             label-align="right"
             label-text-align="center"
@@ -17,7 +17,19 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group
-            label="mail:"
+            :label="lang.get('name')"
+            label-cols="4"
+            label-align="right"
+            label-text-align="center"
+          >
+            <b-form-input
+              id="name"
+              v-model="accont.name"
+              @click="modify_user_info('name')"
+            ></b-form-input>
+          </b-form-group>
+          <b-form-group
+            :label="lang.get('mail')"
             label-cols="4"
             label-align="right"
             label-text-align="center"
@@ -29,7 +41,7 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group
-            label="tel:"
+            :label="lang.get('tel')"
             label-cols="4"
             label-cols-sm="4"
             label-align="right"
@@ -41,7 +53,7 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group
-            label="compony:"
+            :label="lang.get('compony')"
             label-cols="4"
             label-cols-sm="4"
             label-align="right"
@@ -53,7 +65,7 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group
-            label="address:"
+            :label="lang.get('address')"
             label-for="address"
             label-cols="4"
             label-cols-sm="4"
@@ -111,6 +123,7 @@ export default {
     return {
       accont: {
         user: "xdsc",
+        name: "",
         mail: "xds",
         tel: "",
         compony: "",
@@ -169,8 +182,17 @@ export default {
     Get_user_info_one() {
       Get_user_info_one({ user: this.user, token: this.token })
         .then(({ data }) => {
-          let { address, creatTime, mail, name, orgin, tel } = data.data[0];
-          this.accont.user = name;
+          let {
+            address,
+            creatTime,
+            mail,
+            user,
+            name,
+            orgin,
+            tel
+          } = data.data[0];
+          this.accont.user = user;
+          this.accont.name = name;
           this.accont.mail = mail;
           this.accont.tel = tel;
           this.accont.compony = orgin;

@@ -43,15 +43,21 @@
         >
         </b-table>
       </b-col>
-      <b-button variant="info" class="mx-4" @click="Del_select_items"
-        >删除所选</b-button
+      <b-button class="mx-4" @click="Del_select_items">删除所选</b-button
+      ><b-button variant="info" class="mx-4" @click="Modify_select_items"
+        >修改别名</b-button
       >
     </b-row>
   </b-container>
 </template>
 
 <script>
-import { Get_user_all_devs, addDevid, delete_Devid } from "../../util/axios";
+import {
+  Get_user_all_devs,
+  addDevid,
+  delete_Devid,
+  Modify_devName
+} from "../../util/axios";
 import { mapGetters, mapState } from "vuex";
 import { MessageBox, Message } from "element-ui";
 import separated from "../../components/separated";
@@ -72,6 +78,9 @@ export default {
         type: {
           label: "类型",
           sortable: true
+        },
+        devName: {
+          label: "别名"
         },
         devid: {
           label: "设备Id"
@@ -132,6 +141,25 @@ export default {
         .catch(() => {
           Message("取消删除");
         });
+    },
+    Modify_select_items() {
+      let items = this.Select_items[0];
+      if (!items) return Message("请选择需要修改的设备/单选");
+      let { devid, devName } = items;
+      MessageBox.prompt("别名:", "修改别名", {
+        inputValue: devName
+      }).then(({ value }) => {
+        let arg = { user: this.user, token: this.token, devid, devName: value };
+        Modify_devName(arg)
+          .then(({ data: { code, msg } }) => {
+            if (code != 200) return MessageBox(msg, "tip");
+            this.Get_user_all_devs();
+            return Message("modify devName success");
+          })
+          .catch(err => {
+            MessageBox(err, "error-settingMain");
+          });
+      });
     },
     Get_user_all_devs() {
       Get_user_all_devs({ user: this.user, token: this.token }).then(result => {

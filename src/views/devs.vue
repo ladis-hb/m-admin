@@ -9,7 +9,7 @@
       <section>
         <b-row>
           <b-col cols="12">
-            <div class=" border rounded-sm mb-3 d-flex">
+            <div class=" border rounded-sm mb-1 d-flex">
               <b-col
                 cols="12"
                 sm="4"
@@ -72,7 +72,7 @@
             <section
               v-for="(v1, i1, k1) in filter_key(value)"
               :key="k1"
-              class="my-2"
+              class="my-2 border-bottom"
             >
               <div v-if="typeof v1 == 'object'">
                 <strong>{{ lang.get(i1) }}:</strong>
@@ -91,7 +91,7 @@
                 <b-button
                   variant="info"
                   @click="toline({ type: id, devid: value.devid, attr: i1 })"
-                  class="card-link float-right block el-icon-pie-chart"
+                  class="card-link float-right block el-icon-pie-chart px-1 py-0 pt-1"
                   v-if="Number(v1[2])"
                   >趋势</b-button
                 >
@@ -103,7 +103,7 @@
                 <b-button
                   variant="info"
                   @click="toline({ type: id, devid: value.devid, attr: i1 })"
-                  class="card-link float-right block el-icon-pie-chart"
+                  class="card-link float-right block el-icon-pie-chart  px-1 py-0 pt-1"
                   v-if="Number(v1)"
                   >趋势</b-button
                 >

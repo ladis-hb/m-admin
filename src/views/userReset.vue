@@ -119,7 +119,7 @@ export default {
   methods: {
     GetMailValidation() {
       let getmailLoading = Loading.service({ text: "正在获取验证码" });
-      GetMailValidation({ mail: this.mail, name: "" })
+      GetMailValidation({ mail: this.mail, user: "" })
         .then(({ code, msg }) => {
           getmailLoading.close();
           if (code != 200) return MessageBox.alert(msg, "info");

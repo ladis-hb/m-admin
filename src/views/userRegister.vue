@@ -9,6 +9,18 @@
       >
         <b-form>
           <b-form-group
+            :label="lang.get('name') + ':'"
+            label-for="name"
+            label-cols="12"
+            label-cols-sm="3"
+          >
+            <b-form-input
+              id="name"
+              v-model.trim="name"
+              placeholder="默认与账号同名"
+            ></b-form-input>
+          </b-form-group>
+          <b-form-group
             :label="lang.get('user') + ':'"
             label-for="user"
             label-cols="12"
@@ -109,6 +121,7 @@ import Header from "../components/Header";
 export default {
   data() {
     return {
+      name: "",
       user: "",
       passwd: "",
       passwd2: "",
@@ -142,7 +155,7 @@ export default {
   methods: {
     register_submit() {
       let { company, mail, passwd, passwd2, tel, user } = this.$data;
-      if (user == "") return MessageBox.alert("用户名不能为空！");
+      if (user == "") return MessageBox.alert("账号不能为空！");
       if (passwd == "") return MessageBox.alert("密码不能为空");
       if (mail == "") return MessageBox.alert("邮箱不能为空");
       if (passwd !== passwd2) return MessageBox.alert("两次密码必须一致");
@@ -153,7 +166,8 @@ export default {
         passwd: String(btoa(passwd)),
         passwdck: String(btoa(passwd)),
         tel,
-        name: String(user)
+        name: String(name),
+        user: String(user)
       })
         .then(({ code, msg }) => {
           setTimeout(() => {

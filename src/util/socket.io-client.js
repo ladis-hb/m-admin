@@ -2,7 +2,7 @@
 const IO = require("socket.io-client");
 //const config = require("../config.js");
 
-//export const io = IO(config.remote_address);
+//export const io = IO("http://localhost:81");
 export const io = IO();
 
 /**

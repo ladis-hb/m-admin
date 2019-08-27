@@ -5,12 +5,26 @@ const axios = require("axios");
 //axios.defaults.baseURL = axios_address;
 
 //登录请求
-export const requestLogin = params => {
-  return axios.get(`/Get/login`, { params }).then(res => res.data);
+export const requestLogin = ({ user, passwd }) => {
+  return axios
+    .get(`/Get/login`, { params: { user, passwd } })
+    .then(res => res.data);
 };
 //register
-export const UserRegister = params => {
-  return axios.get(`/Get/register`, { params }).then(res => res.data);
+export const UserRegister = ({
+  orgin,
+  mail,
+  passwd,
+  passwdck,
+  tel,
+  user,
+  name
+}) => {
+  return axios
+    .get(`/Get/register`, {
+      params: { orgin, mail, passwd, passwdck, tel, user, name }
+    })
+    .then(res => res.data);
 };
 //重置密码
 export const Resetpasswd = params => {
@@ -64,9 +78,12 @@ export const Get_user_info = ({ type, user, token }) => {
 export const admin_get_info_list = params => {
   return axios.get("/Get/admin_get_info_list", { params });
 };
-
+//
+export const Get_User_list = ({ user, token }) => {
+  return axios.get("/Get/Get_User_list", { params: { user, token } });
+};
 //admin modify_user_info
-export const modify_user_info = params => {
+export const admin_modify_user_info = params => {
   return axios.get("/Get/modify_user_info", { params });
 };
 /* 
@@ -74,6 +91,11 @@ export const modify_user_info = params => {
 
 */
 //phone pages
+export const Modify_devName = ({ user, token, devid, devName }) => {
+  return axios.get("/Get/Modify_devName", {
+    params: { user, token, devid, devName }
+  });
+};
 export const Get_user_all_devs = ({ user, token }) => {
   return axios.get("/Get/Get_user_all_devs", { params: { user, token } });
 };
@@ -99,4 +121,40 @@ export const GetAlarms = ({ user, token }) => {
 /* confirm_alarm */
 export const confirm_alarm = ({ user, token, alarmId }) => {
   return axios.get("/Get/confirm_alarm", { params: { user, token, alarmId } });
+};
+//disable_select_user
+export const disable_select_user = ({ user, token, selectUser, status }) => {
+  return axios.get("/Get/disable_select_user", {
+    params: { user, token, selectUser, status }
+  });
+};
+//delete_select_user
+export const delete_select_user = ({ user, token, selectUser }) => {
+  return axios.get("/Get/delete_select_user", {
+    params: { user, token, selectUser }
+  });
+};
+//modify_select_user
+export const modify_select_user = ({ user, token, selectUsers }) => {
+  return axios.get("/Get/modify_select_user", {
+    params: { user, token, selectUsers: JSON.stringify(selectUsers) }
+  });
+};
+//Get_devs_list
+export const Get_devs_list = ({ user, token }) => {
+  return axios.get("/Get/Get_devs_list", { params: { user, token } });
+};
+
+/* Search_history_dev */
+export const Search_history_dev = ({
+  user,
+  token,
+  date,
+  devType,
+  devid,
+  attr
+}) => {
+  return axios.get("/Get/Search_history_dev", {
+    params: { user, token, date, devType, devid, attr }
+  });
 };

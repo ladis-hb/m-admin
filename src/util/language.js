@@ -20,6 +20,18 @@ const langDefault = {
     cn: "赫兹",
     en: "Hertz"
   },
+  compony: {
+    en: "compony",
+    cn: "组织"
+  },
+  userGroup: {
+    en: "userGroup",
+    cn: "用户组"
+  },
+  address: {
+    en: "address",
+    cn: "登录地址"
+  },
   alarm: {
     en: "Alarm",
     cn: "告警"

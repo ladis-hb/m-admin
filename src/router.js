@@ -2,7 +2,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
-import Login from "./views/login.vue";
+//import Login from "./views/login.vue";
 //import Main from "./views/main.vue";
 import Devs from "./views/devs.vue";
 import Register from "./views/userRegister.vue";
@@ -11,6 +11,10 @@ import Setting from "./views/Setting.vue";
 import SetMain from "./views/Setting/SetMain.vue";
 import SetUser from "./views/Setting/SetUser.vue";
 import Alarm from "./views/Alarm.vue";
+import chartline from "./views/chartline.vue";
+import Root from "./views/root.vue";
+//import OnLine from "./views/root/online.vue";
+//import UserManage from "./views/root/UserManage.vue";
 
 Vue.use(Router);
 
@@ -36,8 +40,7 @@ export default new Router({
         {
           path: "/line",
           name: "Line",
-          component: () =>
-            import(/* webpackChunkName: "Main" */ "./views/chartline.vue")
+          component: chartline
         }
       ]
     },
@@ -45,7 +48,8 @@ export default new Router({
     {
       path: "/",
       name: "Login",
-      component: Login
+      component: () =>
+        import(/* webpackChunkName: "Main" */ "./views/login.vue")
     },
     /* register */
     {
@@ -82,6 +86,34 @@ export default new Router({
       path: "/alarm",
       name: "Alarm",
       component: Alarm
+    },
+    /* root */
+    {
+      path: "/root",
+      name: "Root",
+      component: Root,
+      children: [
+        {
+          path: "/online",
+          name: "OnLine",
+          component: () =>
+            import(/* webpackChunkName: "Main" */ "./views/root/online.vue")
+        },
+        {
+          path: "/UserManage",
+          name: "UserManage",
+          component: () =>
+            import(/* webpackChunkName: "Main" */ "./views/root/UserManage.vue")
+        },
+        {
+          path: "/DeviceManage",
+          name: "DeviceManage",
+          component: () =>
+            import(
+              /* webpackChunkName: "Main" */ "./views/root/DeviceManage.vue"
+            )
+        }
+      ]
     }
   ]
 });

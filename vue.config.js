@@ -1,5 +1,5 @@
 /* jshint esversion:8 */
-const localhost = false;
+const localhost = true;
 const proxyAddress = localhost
   ? "http://localhost:81"
   : "http://116.62.48.175:81";
@@ -34,9 +34,9 @@ module.exports = {
         target:
           process.env.NODE_ENV === "production" ? "" : "http://localhost:81"
       },*/
-      "/socket.io": {
+      /* "/socket.io": {
         target: process.env.NODE_ENV === "production" ? "" : proxyAddress
-      }
+      } */
     },
     //输出运行进度到控制台。
     progress: true
