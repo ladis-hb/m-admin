@@ -20,10 +20,12 @@
                 <h4>
                   {{ value.name
                   }}<b-spinner
+                    v-if="value.status"
                     variant="success"
                     type="grow"
                     label="Spinning"
                   ></b-spinner>
+                  <p class=" text-danger small" v-else>设备未上线</p>
                 </h4>
                 <strong>设备Id:{{ value.devid }}</strong>
                 <!-- <b-button
@@ -35,11 +37,12 @@
               </b-col>
               <b-col class=" mw-100 overflow-auto d-none d-sm-inline">
                 <Chart-guage
-                  :items="value"
+                  :items="value | chartValue"
                   :devType="id"
                   v-if="['ups', 'power'].includes(id)"
                 ></Chart-guage>
-                <Chart-histogram :items="value" v-else> </Chart-histogram>
+                <Chart-histogram :items="value | chartValue" v-else>
+                </Chart-histogram>
               </b-col>
             </div>
           </b-col>
@@ -130,6 +133,7 @@
 import ChartGuage from "../components/ChartGuage";
 import ChartHistogram from "../components/chartHistogram";
 import { mapState, mapGetters } from "vuex";
+import { Get_user_all_devs, Get_devs_list_single } from "../util/axios";
 export default {
   data() {
     return {
@@ -145,7 +149,7 @@ export default {
     id() {
       return this.$route.params.id;
     },
-    ...mapState({ dev: "dev" }),
+    ...mapState(["dev", "user", "token"]),
     ...mapGetters(["lang", "unit"])
   },
   methods: {
@@ -161,7 +165,56 @@ export default {
     },
     ArrayBool(val) {
       console.log(typeof val);
+    },
+    /* 检查哪些设备不在线，get获取数据库的存档，写入store，当有socket新数据传入会直接复写存档数据 */
+    async check_offline_dev() {
+      let dev_online = (() => {
+        return Object.values(this.dev).map(val => {
+          return Object.keys(val);
+        });
+      })();
+      let online = [];
+      dev_online.map(val => {
+        online = [...online, ...val];
+      });
+      let { data: result } = await Get_user_all_devs({
+        user: this.user,
+        token: this.token
+      });
+      let { data } = result;
+      let [{ dev }] = data;
+      let dev_offline = [];
+      dev.forEach(element => {
+        if (!online.includes(element.devid)) dev_offline.push(element);
+      });
+      dev_offline.forEach(async single => {
+        let {
+          data: { data: singleInfo }
+        } = await Get_devs_list_single({
+          user: this.user,
+          token: this.token,
+          devid: single.devid
+        });
+        let payload = {
+          devType: singleInfo.devType,
+          devs: singleInfo.data,
+          status: false
+        };
+        this.$store.dispatch("newDevs", payload);
+      });
     }
+  },
+  filters: {
+    chartValue(value) {
+      let newValue = {};
+      for (let [key, val] of Object.entries(value)) {
+        if (typeof val != "boolean") newValue[key] = val;
+      }
+      return newValue;
+    }
+  },
+  activated() {
+    this.check_offline_dev();
   }
 };
 </script>

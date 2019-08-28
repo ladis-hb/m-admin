@@ -87,21 +87,27 @@ const Modify_devName = async ctx => {
 const Search_history_dev = async ctx => {
   let { date, devType, devid, attr } = ctx.query;
   let date_start = new Date(date);
+  let date_start_stamp = new Date(date).getTime();
   let date_end = date_start.setDate(date_start.getDate() + 1);
   let result = await ctx.db
     .collection(config.DB_dev_class[devType])
     .find({
       devid,
-      DateTime: { $gt: new Date(date_start) },
-      DateTime: { $lt: new Date(date_end) }
+      DateTime: { $gt: new Date(date_start_stamp), $lt: new Date(date_end) }
     })
-    .project({ _id: 0, [attr]: 1 ,generateTime:1})
+    .project({ _id: 0, [attr]: 1, generateTime: 1 })
     .toArray();
   ctx.body = formartBody(
     "success",
     `获取${devType}设备${devid}::参数:${attr},日期${date}`,
     result
   );
+};
+//Get_devs_list_single
+const Get_devs_list_single = async ctx => {
+  let { devid } = ctx.query;
+  let result = await ctx.db.collection(config.DB_dev_all).findOne({ devid });
+  ctx.body = formartBody("success", ``, result);
 };
 
 module.exports = {
@@ -111,5 +117,6 @@ module.exports = {
   delete_Devid,
   Get_user_all_devs,
   Modify_devName,
-  Search_history_dev
+  Search_history_dev,
+  Get_devs_list_single
 };

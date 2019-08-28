@@ -1,6 +1,5 @@
 /* jshint esversion:8 */
-const { formartBody, formatlog, Validation_user } = require("../util/Format");
-const config = require("../config");
+const { formartBody, Validation_user } = require("../util/Format");
 //userfunction
 const {
   login,
@@ -20,7 +19,8 @@ const {
   delete_Devid,
   Get_user_all_devs,
   Modify_devName,
-  Search_history_dev
+  Search_history_dev,
+  Get_devs_list_single
 } = require("./lib/devs");
 
 //log fun
@@ -138,6 +138,10 @@ module.exports = async (ctx, next) => {
         //Search_history_dev
         case "Search_history_dev":
           await Search_history_dev(ctx);
+          break;
+        //Get_devs_list_single
+        case "Get_devs_list_single":
+          await Get_devs_list_single(ctx);
           break;
       }
     }

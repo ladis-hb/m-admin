@@ -206,14 +206,14 @@ var simulate_th = () => {
         temperature: getRndInteger(),
         humidity: getRndInteger()
       },
-      {
+      /* {
         generateTime: formatDate(),
         name: "th-007",
         devid: "7cxse5c45",
         brand: "ladis",
         temperature: getRndInteger(),
         humidity: getRndInteger()
-      },
+      }, */
       {
         generateTime: formatDate(),
         name: "th-007",
@@ -276,8 +276,6 @@ function maps() {
     axios
       .post(config.dev_api, val())
       .then(res => {
-        console.log(config.dev_api);
-
         console.log(res.data);
       })
       .catch(err => {

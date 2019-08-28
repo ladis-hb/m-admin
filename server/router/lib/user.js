@@ -4,9 +4,7 @@ const {
   formartBody,
   formatPasswd,
   formatMD5,
-  formatDate,
-  formatlog,
-  Validation_user
+  formatDate
 } = require("../../util/Format");
 const MailSend = require("../../util/MailSend");
 
@@ -56,7 +54,7 @@ const login = async ctx => {
     ctx.log = {
       type: config.DB_log_run,
       msg: `用户登录失败-没有检索到用户名`,
-      user
+      user: us
     };
   }
 };
@@ -90,6 +88,7 @@ const register = async ctx => {
       };
     } else {
       let users = {
+        status: true,
         userId: formatMD5(Date.now() + passwd),
         name: name == "" ? user : name,
         user,

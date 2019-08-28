@@ -1,13 +1,13 @@
-module.exports = {
-  development: false,
+/* jshint esversion:8 */
 
-  dev_api: this.development
-    ? "http://127.0.0.1:3000/Api/dev"
-    : "http://127.0.0.1:81/Api/dev",
+let development = false;
+let API_3000 = "http://127.0.0.1:3000/Api/";
+let API_81 = "http://127.0.0.1:81/Api/";
+
+module.exports = {
+  dev_api: development ? `${API_3000}dev` : `${API_81}dev`,
   //
-  Alarm_api: this.development
-    ? "http://127.0.0.1:3000/Api/Alarm"
-    : "http://127.0.0.1:81/Api/Alarm",
+  Alarm_api: development ? `${API_3000}Alarm` : `${API_81}Alarm`,
   //
   port: 81,
   development_port: 3000,

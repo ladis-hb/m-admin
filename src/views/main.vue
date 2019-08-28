@@ -105,6 +105,7 @@ export default {
             console.log(`${Date()}:::Socket disconnect`);
           });
           io.on("newDevs", data => {
+            data.status = true;
             this.$store.dispatch("newDevs", data);
             let {
               devType,

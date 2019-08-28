@@ -144,6 +144,12 @@ export const modify_select_user = ({ user, token, selectUsers }) => {
 export const Get_devs_list = ({ user, token }) => {
   return axios.get("/Get/Get_devs_list", { params: { user, token } });
 };
+//Get_devs_list_single
+export const Get_devs_list_single = ({ user, token, devid }) => {
+  return axios.get("/Get/Get_devs_list_single", {
+    params: { user, token, devid }
+  });
+};
 
 /* Search_history_dev */
 export const Search_history_dev = ({

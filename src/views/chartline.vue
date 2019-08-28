@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <b-row>
+    <b-row v-if="chartData.rows.length && chartData.rows.length > 0">
       <b-col cols="12" class="p-0">
         <separated
           :back="true"
@@ -11,7 +11,7 @@
         <ve-line :data="chartData" :settings="chartSettings"></ve-line>
       </b-col>
     </b-row>
-    <b-row class="mb-4">
+    <b-row class="mb-4 mt-1">
       <b-col cols="12" md="6">
         <b-button @click="show_search = !show_search" v-show="!show_search"
           >查询历史记录</b-button

@@ -46,7 +46,8 @@ export default new Vuex.Store({
       state.token = token;
     },
     newDevs(state, payload) {
-      let { devType, devs } = payload;
+      let { devType, devs, status } = payload;
+      devs.status = status;
       let { devid, generateTime } = devs;
       //add dev
       if (!state.dev[devType][devid]) {
