@@ -34,9 +34,9 @@ module.exports = {
         target:
           process.env.NODE_ENV === "production" ? "" : "http://localhost:81"
       },*/
-      /* "/socket.io": {
+      "/socket.io": {
         target: process.env.NODE_ENV === "production" ? "" : proxyAddress
-      } */
+      }
     },
     //输出运行进度到控制台。
     progress: true

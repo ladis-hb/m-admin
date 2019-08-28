@@ -94,6 +94,8 @@ const Search_history_dev = async ctx => {
     .find({
       devid,
       DateTime: { $gt: new Date(date_start_stamp), $lt: new Date(date_end) }
+      // eslint-disable-next-line no-dupe-keys
+      //DateTime: { $lt: new Date(date_end) }
     })
     .project({ _id: 0, [attr]: 1, generateTime: 1 })
     .toArray();
