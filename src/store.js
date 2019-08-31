@@ -30,7 +30,8 @@ export default new Vuex.Store({
     },
     devsSet: new Set(),
     Alarm: {
-      Alarm_msg: "点击查看报警"
+      Alarm_msg: "点击查看报警",
+      Alarm_Data: []
     }
   },
   mutations: {
@@ -70,7 +71,15 @@ export default new Vuex.Store({
     },
     /* 配置Alarm */
     setAlarm(state, payload) {
-      state.Alarm = payload;
+      state.Alarm.Alarm_Data = payload;
+    },
+    confirm_alarm(state, payload) {
+      let { key, confirm, confirm_user, confirm_time } = payload;
+      state.Alarm.Alarm_Data[key] = Object.assign(state.Alarm.Alarm_Data[key], {
+        confirm,
+        confirm_user,
+        confirm_time
+      });
     }
   },
   actions: {

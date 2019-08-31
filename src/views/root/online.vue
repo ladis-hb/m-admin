@@ -46,7 +46,7 @@
 </template>
 
 <script>
-const io = require("socket.io-client")()//("http://localhost:81");
+const io = require("socket.io-client")(); //("http://localhost:81");
 import { mapState, mapGetters } from "vuex";
 import separated from "../../components/separated.vue";
 export default {

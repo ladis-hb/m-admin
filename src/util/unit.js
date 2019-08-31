@@ -12,6 +12,7 @@ export const unit = {
   output_voltage_l1: "V",
   output_voltage_l2: "V",
   output_voltage_l3: "V",
+  output_load: "%",
   //ac
   refrigeration_temperature: "C",
   refrigeration_stop_deviation: "C",
@@ -42,9 +43,9 @@ export const unit = {
   input_current_l2: "A",
   input_current_l3: "A",
   input_frequency: "Hz",
-  input_frequency_l1: "Hz",
-  input_frequency_l2: "Hz",
-  input_frequency_l3: "Hz",
+  input_frequency_l1: "kW",
+  input_frequency_l2: "kW",
+  input_frequency_l3: "kW",
   //th
   humidity: "%rh"
 };

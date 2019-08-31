@@ -1,6 +1,9 @@
 <template>
   <b-container>
-    <b-row v-if="chartData.rows.length && chartData.rows.length > 0">
+    <b-row
+      v-if="chartData.rows.length && chartData.rows.length > 0"
+      class=" mr-0"
+    >
       <b-col cols="12" class="p-0">
         <separated
           :back="true"
@@ -11,7 +14,7 @@
         <ve-line :data="chartData" :settings="chartSettings"></ve-line>
       </b-col>
     </b-row>
-    <b-row class="mb-4 mt-1">
+    <b-row class="mb-4 mt-1 mr-0">
       <b-col cols="12" md="6">
         <b-button @click="show_search = !show_search" v-show="!show_search"
           >查询历史记录</b-button
@@ -101,7 +104,15 @@ export default {
       })
         .then(({ data: { code, msg, data } }) => {
           if (code != 200) return MessageBox(msg, code);
+          let len = data.length - 1;
+          data = data.slice(len - 200, len);
+          if (devType == "power") {
+            data.forEach((dev, key) => {
+              data[key][attr] = dev[attr][2];
+            });
+          }
           this.search_chartData.rows = data;
+          console.log(this.search_chartData.rows);
         })
         .catch(err => {
           MessageBox(err, "error");

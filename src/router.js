@@ -15,6 +15,7 @@ import chartline from "./views/chartline.vue";
 import Root from "./views/root.vue";
 //import OnLine from "./views/root/online.vue";
 //import UserManage from "./views/root/UserManage.vue";
+//import DeviceUPS from "./views/Device/UPS.vue";
 
 Vue.use(Router);
 
@@ -41,6 +42,24 @@ export default new Router({
           path: "/line",
           name: "Line",
           component: chartline
+        },
+        {
+          path: "/Device/ups",
+          name: "ups",
+          component: () =>
+            import(/* webpackChunkName: "Main" */ "./views/Device/UPS.vue")
+        },
+        {
+          path: "/Device/power",
+          name: "power",
+          component: () =>
+            import(/* webpackChunkName: "Main" */ "./views/Device/POWER.vue")
+        },
+        {
+          path: "/Device/ac",
+          name: "ac",
+          component: () =>
+            import(/* webpackChunkName: "Main" */ "./views/Device/AC.vue")
         }
       ]
     },

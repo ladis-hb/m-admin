@@ -111,8 +111,7 @@ var simulate_ups = () => {
       residual_capacity: getRndInteger(3),
       battery_voltage: getRndInteger(4),
       battery_voltage_negative: getRndInteger(9),
-      smoke: false,
-      access_contral: false,
+
       load_ratio: getRndInteger(21),
       output_frequency: getRndInteger(25),
       input_voltage_l1: getRndInteger(2),
@@ -120,7 +119,26 @@ var simulate_ups = () => {
       input_voltage_l3: getRndInteger(),
       output_voltage_l1: getRndInteger(),
       output_voltage_l2: getRndInteger(),
-      output_voltage_l3: getRndInteger()
+      output_voltage_l3: getRndInteger(),
+      //输出负载
+      output_load: getRndInteger(),
+      //状态量
+      smoke: true,
+      access_contral: false,
+      leak: true,
+      shutdown_active: true,
+      //	测试模式
+      Test_mode: true,
+      //电池测试
+      Battery_test: true,
+      //UPS工情
+      UPS_work_situation: true,
+      //	旁路模式
+      bypass_mode: true,
+      //电池电压状态
+      Battery_voltage_state: true,
+      //市电状态
+      grid_state: true
     }
   };
 };
@@ -136,6 +154,7 @@ var simulate_col = () => {
       devid: "21s5a8d41",
       brand: "ladis",
       refrigeration_temperature: getRndInteger(),
+      humidity: getRndInteger(),
       mode: ["stand", "run", "stop"],
       refrigeration_stop_deviation: getRndInteger(),
       evaporation_start_temperature: getRndInteger(),

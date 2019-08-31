@@ -6,17 +6,18 @@ import store from "./store";
 import BootstrapVue from "bootstrap-vue";
 import VeLine from "v-charts/lib/line";
 import VeGuage from "v-charts/lib/gauge";
-import VeHistogram from "v-charts/lib/histogram";
+//import VeHistogram from "v-charts/lib/histogram";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import "./assets/theme-chalk/message-box.css";
 import "./assets/theme-chalk/icon.css";
+import "./assets/icon/iconfont.css";
 
 Vue.use(BootstrapVue);
 Vue.component(VeLine.name, VeLine);
 Vue.component(VeGuage.name, VeGuage);
-Vue.component(VeHistogram.name, VeHistogram);
+//Vue.component(VeHistogram.name, VeHistogram);
 
 Vue.config.productionTip = false;
 

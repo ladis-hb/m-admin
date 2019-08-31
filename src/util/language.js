@@ -219,6 +219,10 @@ const langDefault = {
   Validation: {
     en: "Validation",
     cn: "验证码"
+  },
+  other: {
+    en: "other",
+    cn: "其它"
   }
 };
 
@@ -286,6 +290,38 @@ const ups = {
   output_voltage_l3: {
     en: "output_voltage_l3",
     cn: "输出电压L3"
+  },
+  output_load: {
+    en: "output_load",
+    cn: "输出负载"
+  },
+  leak: {
+    en: "leak",
+    cn: "漏水"
+  },
+  shutdown_active: {
+    en: "shutdown_active",
+    cn: "关闭活动"
+  },
+  Test_mode: {
+    en: "Test_mode",
+    cn: "测试模式"
+  },
+  Battery_test: {
+    en: "Battery_test",
+    cn: "电池测试"
+  },
+  UPS_work_situation: {
+    en: "UPS_work_situation",
+    cn: "UPS工情"
+  },
+  Battery_voltage_state: {
+    en: "Battery_voltage_state",
+    cn: "电池电压状态"
+  },
+  grid_state: {
+    en: "grid_state",
+    cn: "市电状态"
   }
 };
 
@@ -432,6 +468,18 @@ const power = {
   input_frequency_l3: {
     cn: "输入频率_C",
     en: "input_frequency_l3"
+  },
+  Three_phaseInputVoltage: {
+    en: "Three_phaseInputVoltage",
+    cn: "三相输入电压"
+  },
+  Three_phaseInputCurrent: {
+    en: "Three_phaseInputCurrent",
+    cn: "三相输入电流"
+  },
+  Three_phaseActivePower: {
+    en: "Three_phaseActivePower",
+    cn: "三相有功功率"
   }
 };
 

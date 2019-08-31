@@ -1,89 +1,196 @@
 <template>
-  <b-row id="main">
-    <b-col cols="12" @click="toAlarm">
-      <b-alert
-        variant="warning"
-        show
-        class="m-1 p-2 overflow-auto text-nowrap"
-        >{{ Alarm.Alarm_msg }}</b-alert
-      >
-    </b-col>
-    <b-col
-      cols="12"
-      md="6"
-      v-for="(key, id) in filter_devType(dev)"
-      :key="id"
-      :id="key"
-    >
-      <b-card
-        class="my-2"
-        :title="lang.get(key)"
-        sub-title="所有设备"
-        @click="to(key)"
-      >
-        <b-card-body class="px-0">
-          <ul class="p-0">
-            <li
-              v-for="(val, id) in devs[key]"
-              :key="id"
-              class="el-icon-link w-100"
-              v-b-tooltip.hover
-              :title="id"
+  <b-container class=" bg-light d-flex flex-column h-100">
+    <b-row id="homePage">
+      <b-col id="Switch_quantity" cols="12" class=" border-bottom ">
+        <b-row class="p-2">
+          <b-col cols="4" class=" text-center p-0">
+            <switch-quantity
+              title="烟感"
+              :variantBg="devFirst(dev.ups, 'smoke')"
+            ></switch-quantity>
+          </b-col>
+          <b-col cols="4" class=" text-center p-0">
+            <switch-quantity
+              title="漏水"
+              :variantBg="devFirst(dev.ups, 'leak')"
+            ></switch-quantity>
+          </b-col>
+          <b-col cols="4" class=" text-center p-0">
+            <switch-quantity
+              title="门磁"
+              :variantBg="devFirst(dev.ups, 'access_contral')"
+            ></switch-quantity>
+          </b-col>
+        </b-row>
+      </b-col>
+    </b-row>
+
+    <b-row class=" overflow-hidden Alarm">
+      <div id="Alarm" class=" overflow-auto mh-100 w-100">
+        <b-list-group class="alarm-list-mh overflow-auto " id="alarm-list">
+          <b-list-group-item
+            v-for="(val, key) in Alarm.Alarm_Data.slice(0, 20)"
+            :key="key"
+            v-b-toggle="'alarm' + key"
+            to="Alarm"
+          >
+            <div>
+              <b-badge
+                class="mr-2"
+                pill
+                :variant="val.confirm ? 'success' : 'warning'"
+                >{{ val.confirm ? "已确认" : "未确认" }}</b-badge
+              >
+              <b class="m-0">
+                {{ val.Alarm_msg }}
+              </b>
+            </div>
+            <small>{{ val.Alarm_time }}</small>
+            <!-- <b-collapse
+              :id="'alarm' + key"
+              accordion="my-accordion2"
+              role="tabpanel"
+              class=" alarm-collapse"
             >
-              <span class="text-center">{{ val.name || id }}</span>
-              <div class=" float-right ">
-                <div v-show="val.online">
-                  <span class="mr-2">已连接</span>
-                  <b-spinner
-                    variant="success"
-                    type="grow"
-                    label="Spinning"
-                    small
-                  ></b-spinner>
-                </div>
-                <div v-show="!val.online">
-                  <span class="mr-2">尝试连接</span>
-                  <b-spinner variant="info" label="Spinning" small></b-spinner>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </b-card-body>
-      </b-card>
-    </b-col>
-  </b-row>
+              <separated :title="'设备Id:' + val.DeviceId"></separated>
+              <ul>
+                <li>报警设备:{{ val.Alarm_device }}</li>
+                <li>告警信息:{{ val.Alarm_msg }}</li>
+                <li>告警类型:{{ val.Alarm_type }}</li>
+                <li>告警级别:{{ val.Alarm_level }}</li>
+                <li>确认:{{ val.confirm ? "已确认" : "未确认" }}</li>
+                <li>确认人:{{ val.confirm_user }}</li>
+                <li>确认时间:{{ val.confirm_time }}</li>
+                <li class=" text-nowrap overflow-auto" v-show="!val.confirm">
+                  索引:{{ val._id }}
+                </li>
+              </ul>
+              <b-button
+                variant="info"
+                v-show="!val.confirm"
+                block
+                @click.prevent="confirm_alarm(val._id, key)"
+                >确认</b-button
+              >
+            </b-collapse> -->
+          </b-list-group-item>
+        </b-list-group>
+      </div>
+    </b-row>
+    <b-row id="Critical" class=" m-0  border-top mt-auto">
+      <b-col cols="6" md="3" class="m-0 p-0">
+        <span class="text-Critical"
+          ><i class="iconfont text-success">&#xe602;</i>UPS负载:{{
+            devFirst(dev.ups, "output_load")
+          }}%</span
+        >
+      </b-col>
+      <b-col cols="6" md="3" class="m-0 p-0">
+        <span class="text-Critical"
+          ><i class="iconfont text-primary">&#xe600;</i>UPS功率:{{
+            devFirst(dev.ups, "output_frequency")
+          }}%</span
+        >
+      </b-col>
+
+      <b-col cols="6" md="3" class="m-0 p-0">
+        <span class="text-Critical"
+          ><i class="iconfont text-success">&#xe603;</i>电池电压:{{
+            devFirst(dev.ups, "battery_voltage")
+          }}V</span
+        >
+      </b-col>
+      <b-col cols="6" md="3" class="m-0 p-0">
+        <span class="text-Critical"
+          ><i class="iconfont text-info">&#xe605;</i>电池容量:{{
+            devFirst(dev.ups, "output_load")
+          }}Kw</span
+        >
+      </b-col>
+      <b-col cols="6" md="3" class="m-0 p-0">
+        <span class="text-Critical"
+          ><i class="iconfont text-success">&#xe604;</i>冷通道温度:{{
+            devFirst(dev.th, "temperature")
+          }}&#8451;</span
+        >
+      </b-col>
+      <b-col cols="6" md="3" class="m-0 p-0">
+        <span class="text-Critical"
+          ><i class="iconfont text-primary">&#xe601;</i>冷通道湿度:{{
+            devFirst(dev.th, "humidity")
+          }}%</span
+        >
+      </b-col>
+      <b-col cols="6" md="3" class="m-0 p-0">
+        <span class="text-Critical"
+          ><i class="iconfont text-danger">&#xe604;</i>热通道温度:{{
+            devFirst(dev.th, "temperature", 1)
+          }}&#8451;</span
+        >
+      </b-col>
+      <b-col cols="6" md="3" class="m-0 p-0">
+        <span class="text-Critical"
+          ><i class="iconfont text-warning">&#xe601;</i>热通道湿度:{{
+            devFirst(dev.th, "humidity", 1)
+          }}%</span
+        >
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
-const io = require("socket.io-client")()//("http://localhost:81");
+const io = require("socket.io-client")(); //("http://localhost:81");
 import { mapState, mapGetters } from "vuex";
-import { Get_user_all_devs } from "../util/axios";
-import { Loading, MessageBox, Message /* Notification */ } from "element-ui";
+import { Message, MessageBox } from "element-ui";
+import SwitchQuantity from "../components/switchQuantity";
+//import separated from "../components/separated";
+import { GetAlarms, confirm_alarm } from "../util/axios";
 export default {
-  data() {
-    return {
-      devs: {
-        ups: {},
-        ac: {},
-        power: {},
-        io: {},
-        th: {}
-      }
-    };
+  components: {
+    SwitchQuantity
+    //separated
   },
   computed: {
     ...mapState({ user: "user", token: "token", dev: "dev", Alarm: "Alarm" }),
-    ...mapGetters({ lang: "lang" })
+    ...mapGetters(["lang", "unit"])
   },
   methods: {
-    filter_devType(dev) {
-      return Object.keys(dev);
+    devFirst(value, key, n) {
+      if (!value) return false;
+      let valRow = Object.values(value)[n || 0];
+      if (!valRow) return false;
+      if (!key) return valRow;
+      return valRow[key] || false;
     },
     to(key) {
       this.$router.push({ path: `/dev/${key}` });
     },
-    toAlarm() {
-      this.$router.push({ path: "/alarm" });
+    /* GetAlarms */
+    GetAlarms() {
+      GetAlarms({ user: this.user, token: this.token })
+        .then(({ data: { code, data: result, msg } }) => {
+          if (code != 200) return MessageBox(msg);
+          this.$store.commit("setAlarm", result);
+        })
+        .catch(err => {
+          MessageBox(err, "error_Alarm");
+        });
+    },
+    confirm_alarm(alarmId, key) {
+      confirm_alarm({ user: this.user, token: this.token, alarmId })
+        .then(({ data }) => {
+          Message(data.msg);
+          this.$store.commit("confirm_alarm", {
+            key: key,
+            confirm: true,
+            confirm_user: this.user,
+            confirm_time: new Date()
+          });
+        })
+        .catch(err => {
+          MessageBox(err, "error");
+        });
     }
   },
   mounted() {
@@ -107,61 +214,20 @@ export default {
           io.on("newDevs", data => {
             data.status = true;
             this.$store.dispatch("newDevs", data);
-            let {
-              devType,
-              devs: { devid, name, generateTime }
-            } = data;
-            let old = this.devs[devType][devid];
-            this.devs[devType][devid] = Object.assign(old || {}, {
-              name,
-              generateTime,
-              online: true
-            });
           });
           io.on("Alarm", data => {
-            this.$store.commit("setAlarm", data);
+            //this.$store.commit("setAlarm", data);
+            MessageBox.confirm(data.Alarm_msg, "新的告警消息", {
+              confirmButtonText: "点击查看",
+              cancelButtonText: "取消",
+              type: "warning"
+            }).then(() => {
+              this.$router.push({ name: "Alarm" });
+            });
           });
         }
         {
-          /* 
-      获取用户所有设备列表
-      */
-          let main_page = Loading.service({ target: "#main" });
-          Get_user_all_devs({
-            user: this.user,
-            token: this.token
-          })
-            .then(result => {
-              main_page.close();
-              let { code, msg, data } = result.data;
-              if (code != 200) return;
-              let dev = data[0].dev;
-              for (let d of dev) {
-                let { type, devid } = d;
-                if (!this.devs[type][devid])
-                  this.$set(this.devs[type], devid, {
-                    devid,
-                    online: false,
-                    name,
-                    generateTime: ""
-                  });
-              }
-              console.log(msg);
-              //Message(msg);
-            })
-            .catch(err => {
-              Message(err);
-              MessageBox.confirm(
-                `您还没有绑定任何设备，请先添加设备使用`,
-                "err"
-              )
-                .then(() => {
-                  this.$router.push("/SetMain");
-                })
-                .catch(() => {
-                  this.$router.push("/");
-                });
-            });
+          this.GetAlarms();
         }
         {
           /* 
@@ -181,4 +247,15 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.text-Critical {
+  font-size: 15px;
+  text-align: center;
+  white-space: nowrap;
+}
+@media screen and (max-width: 375px) {
+  .Alarm {
+    max-height: 180px;
+  }
+}
+</style>

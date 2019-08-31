@@ -1,36 +1,14 @@
 <template>
-  <div>
+  <b-container fluid class="m-0 p-0 h-100 d-flex flex-column overflow-hidden">
     <b-navbar
       toggleable="lg"
       type="dark"
       variant="info"
       sticky
-      class="navbar-m"
+      class=" align-items-start"
     >
-      <b-navbar-brand :to="{ path: '/main' }" class="d-block"
-        >Ladis</b-navbar-brand
-      >
-      <div class="navber-m-2">
-        <div class="min-vw">
-          <b-navbar-nav class="head-list overflow-auto">
-            <b-nav-item :to="{ path: '/dev/ups' }" class="mr-3">
-              <span class="text-light">{{ lang.get("ups") }}</span>
-            </b-nav-item>
-            <b-nav-item :to="{ path: '/dev/ac' }" class="mr-3">
-              <span class="text-light">{{ lang.get("ac") }}</span>
-            </b-nav-item>
-            <b-nav-item :to="{ path: '/dev/power' }" class="mr-3">
-              <span class="text-light">{{ lang.get("power") }}</span>
-            </b-nav-item>
-            <b-nav-item :to="{ path: '/dev/io' }" class="mr-3">
-              <span class="text-light">{{ lang.get("io") }}</span>
-            </b-nav-item>
-            <b-nav-item :to="{ path: '/dev/th' }" class="mr-3">
-              <span class="text-light">{{ lang.get("th") }}</span>
-            </b-nav-item>
-          </b-navbar-nav>
-        </div>
-
+      <b-navbar-brand :to="{ path: '/main' }">Ladis</b-navbar-brand>
+      <div class="navber-m-2 ml-auto">
         <div
           class="navber-m-3 float-right d-inline-flex flex-column head-right"
         >
@@ -67,14 +45,31 @@
         </div>
       </div>
     </b-navbar>
-    <b-container>
+    <div class=" overflow-auto h-100 clearfix">
       <transition>
         <keep-alive exclude="chartline">
           <router-view> </router-view>
         </keep-alive>
       </transition>
-    </b-container>
-  </div>
+    </div>
+    <b-nav fill class=" mt-auto bg-info">
+      <b-nav-item :to="{ path: '/dev/ups' }">
+        <span class="text-light">{{ lang.get("ups") }}</span>
+      </b-nav-item>
+      <b-nav-item :to="{ path: '/dev/ac' }">
+        <span class="text-light">{{ lang.get("ac") }}</span>
+      </b-nav-item>
+      <b-nav-item :to="{ path: '/dev/power' }">
+        <span class="text-light">{{ lang.get("power") }}</span>
+      </b-nav-item>
+      <b-nav-item :to="{ path: '/dev/io' }">
+        <span class="text-light">{{ lang.get("io") }}</span>
+      </b-nav-item>
+      <b-nav-item :to="{ path: '/dev/th' }">
+        <span class="text-light">{{ lang.get("th") }}</span>
+      </b-nav-item>
+    </b-nav>
+  </b-container>
 </template>
 
 <script>
@@ -125,10 +120,13 @@ export default {
 }
 .navber-m-2 {
   display: flex;
-  width: 100%;
 }
 .ber-m-3 {
   display: flex;
   flex-direction: column;
+}
+.nav-link {
+  display: block;
+  padding: 10px 0rem;
 }
 </style>
