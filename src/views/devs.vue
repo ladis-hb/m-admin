@@ -83,6 +83,7 @@ export default {
     },
     //到device
     toDevice(id, devid) {
+      if (id == "io") return;
       this.$router.push({ name: id, params: { devid } });
     },
     /* toline({ type, devid, attr }) {

@@ -69,7 +69,7 @@
           </b-form-group>
           <b-form-group class="p-3" v-show="boolValidation">
             <b-button @click="reset_submit" block variant="info">{{
-              lang.get("registered")
+              lang.get("reset")
             }}</b-button>
           </b-form-group>
         </b-form>

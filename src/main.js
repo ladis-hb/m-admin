@@ -22,14 +22,15 @@ Vue.component(VeGuage.name, VeGuage);
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
-  //console.log(to);
-  //console.log(from);
+  console.log(to);
+  console.log(from);
   let localUser = sessionStorage.getItem("user");
   //console.log(localUser);
   if (to.name != "Login" && !localUser) {
     next({ path: "/" });
   }
-  if ((to.name == "Devs" || to.name == "Line") && !from.name) {
+  let r = ["ups", "power", "ac", "th", "Devs", "Line"];
+  if (r.includes(to.name) && !from.name) {
     next({ path: "/main" });
   }
   if (to.name == "Root") {

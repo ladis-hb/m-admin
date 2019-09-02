@@ -47,5 +47,5 @@ export const unit = {
   input_frequency_l2: "kW",
   input_frequency_l3: "kW",
   //th
-  humidity: "%rh"
+  humidity: "%"
 };

@@ -60,6 +60,12 @@ export default new Router({
           name: "ac",
           component: () =>
             import(/* webpackChunkName: "Main" */ "./views/Device/AC.vue")
+        },
+        {
+          path: "/Device/th",
+          name: "th",
+          component: () =>
+            import(/* webpackChunkName: "Main" */ "./views/Device/TH.vue")
         }
       ]
     },

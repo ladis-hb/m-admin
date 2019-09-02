@@ -112,7 +112,7 @@ export default {
             });
           }
           this.search_chartData.rows = data;
-          console.log(this.search_chartData.rows);
+          //console.log(this.search_chartData.rows);
         })
         .catch(err => {
           MessageBox(err, "error");
