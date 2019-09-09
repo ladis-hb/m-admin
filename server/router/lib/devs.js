@@ -77,6 +77,9 @@ const Modify_devName = async ctx => {
       { user, "dev.devid": devid },
       { $set: { "dev.$.devName": devName } }
     );
+  ctx.db
+    .collection(config.DB_dev_all)
+    .updateOne({ devid }, { "data.name": devName });
   ctx.body = formartBody("success", "modify devName", result.result);
   ctx.log = {
     type: config.DB_log_dev,

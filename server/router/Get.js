@@ -7,7 +7,9 @@ const {
   getmail_Verification_code,
   resetpasswd,
   modify_user_info_one,
-  Get_user_info_one
+  Get_user_info_one,
+  Setfinal,
+  Getfinal
 } = require("./lib/user");
 
 //devs fun
@@ -142,6 +144,12 @@ module.exports = async (ctx, next) => {
         //Get_devs_list_single
         case "Get_devs_list_single":
           await Get_devs_list_single(ctx);
+          break;
+        case "Setfinal":
+          await Setfinal(ctx);
+          break;
+        case "Getfinal":
+          await Getfinal(ctx);
           break;
       }
     }

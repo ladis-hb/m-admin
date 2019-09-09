@@ -37,6 +37,7 @@ module.exports = {
 
   DB_user_users: "users",
   DB_user_dev: "user_dev",
+  DB_user_final: "user_final",
 
   DB_log_run: "log_run",
   DB_log_error: "log_error",

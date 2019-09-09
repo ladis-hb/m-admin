@@ -1,7 +1,7 @@
 <template>
   <b-row class=" w-100 ml-0">
     <section class=" w-100 border-bottom d-flex flex-row p-2 px-3">
-      <h4>{{ device.name || "" }}</h4>
+      <h4>{{ device.name || device.devid }}</h4>
       <strong class=" ml-auto text-center">{{ device.generateTime }}</strong>
     </section>
 

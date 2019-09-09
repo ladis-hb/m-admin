@@ -62,7 +62,7 @@
       <b-nav-item :to="{ path: '/dev/power' }">
         <span class="text-light">{{ lang.get("power") }}</span>
       </b-nav-item>
-      <b-nav-item :to="{ path: '/dev/io' }">
+      <b-nav-item :to="{ path: '/Device/io' }">
         <span class="text-light">{{ lang.get("io") }}</span>
       </b-nav-item>
       <b-nav-item :to="{ path: '/dev/th' }">

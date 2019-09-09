@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <b-row>
-      <separated :title="th.name"></separated>
+      <separated :title="th.name || th.devid"></separated>
       <b-col cols="6">
         <div class="ths">
           <i class=" iconfont text-success">&#xe604;</i

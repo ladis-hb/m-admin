@@ -6,19 +6,19 @@
           <b-col cols="4" class=" text-center p-0">
             <switch-quantity
               title="烟感"
-              :variantBg="devFirst(dev.ups, 'smoke')"
+              :variantBg="devFirst(dev.io, 'smoke')"
             ></switch-quantity>
           </b-col>
           <b-col cols="4" class=" text-center p-0">
             <switch-quantity
               title="漏水"
-              :variantBg="devFirst(dev.ups, 'leak')"
+              :variantBg="devFirst(dev.io, 'leak')"
             ></switch-quantity>
           </b-col>
           <b-col cols="4" class=" text-center p-0">
             <switch-quantity
               title="门磁"
-              :variantBg="devFirst(dev.ups, 'access_contral')"
+              :variantBg="devFirst(dev.io, 'access_contral')"
             ></switch-quantity>
           </b-col>
         </b-row>

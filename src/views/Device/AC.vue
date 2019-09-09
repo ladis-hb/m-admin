@@ -1,7 +1,9 @@
 <template>
   <b-container class=" h-100">
     <b-row id="ac_flow_chart">
-      <b-col cols="12"><separated :title="ac.name"></separated></b-col>
+      <b-col cols="12"
+        ><separated :title="ac.name || ac.devid"></separated
+      ></b-col>
       <b-col cols="12" class=" mb-4">
         <div class="py-3 px-2 bg-dark d-flex flex-row justify-content-center">
           <b-img :src="airFlow" class=" img-flow"></b-img>

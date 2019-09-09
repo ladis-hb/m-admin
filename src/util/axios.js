@@ -164,3 +164,14 @@ export const Search_history_dev = ({
     params: { user, token, date, devType, devid, attr }
   });
 };
+/* 
+配置IO状态常量
+*/
+export const Setfinal = ({ user, token, final }) => {
+  return axios.get("/Get/Setfinal", {
+    params: { user, token, final: JSON.stringify(final) }
+  });
+};
+export const Getfinal = ({ user, token }) => {
+  return axios.get("/Get/Getfinal", { params: { user, token } });
+};

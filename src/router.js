@@ -66,6 +66,12 @@ export default new Router({
           name: "th",
           component: () =>
             import(/* webpackChunkName: "Main" */ "./views/Device/TH.vue")
+        },
+        {
+          path: "/Device/io",
+          name: "io",
+          component: () =>
+            import(/* webpackChunkName: "Main" */ "./views/Device/IO.vue")
         }
       ]
     },

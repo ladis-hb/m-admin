@@ -101,7 +101,7 @@ var simulate_ups = () => {
     dataType: "One",
     data: {
       generateTime: formatDate(),
-      name: "ups-00787",
+      name: "ups-one",
       devid: "1a24d35sa",
       brand: "ladis",
       temperature: "25",
@@ -150,7 +150,7 @@ var simulate_col = () => {
     dataType: "One",
     data: {
       generateTime: formatDate(),
-      name: "ac-007",
+      name: "ac-one",
       devid: "21s5a8d41",
       brand: "ladis",
       refrigeration_temperature: getRndInteger(),
@@ -181,33 +181,19 @@ var simulate_io = () => {
   return {
     type: "io",
     updateTime: formatDate(),
-    dataType: "Many",
-    data: [
-      {
-        generateTime: formatDate(),
-        name: "io-007777",
-        devid: "15awx3233",
-        brand: "ladis",
-        power_status: true,
-        input_status: false
-      },
-      {
-        generateTime: formatDate(),
-        name: "io-007",
-        devid: "a35d453x4",
-        brand: "ladis",
-        power_status: true,
-        input_status: false
-      },
-      {
-        generateTime: formatDate(),
-        name: "io-007",
-        devid: "dcsc42545615",
-        brand: "ladis",
-        power_status: true,
-        input_status: false
-      }
-    ]
+    dataType: "One",
+    data: {
+      generateTime: formatDate(),
+      name: "io-Control",
+      devid: "15awx3233",
+      brand: "ladis",
+      power_status: true,
+      input_status: false,
+      //状态量
+      smoke: true,
+      access_contral: false,
+      leak: true
+    }
   };
 };
 
@@ -219,7 +205,7 @@ var simulate_th = () => {
     data: [
       {
         generateTime: formatDate(),
-        name: "th-007",
+        name: "th-First",
         devid: "csd654c5d6",
         brand: "ladis",
         temperature: getRndInteger(),
@@ -235,7 +221,7 @@ var simulate_th = () => {
       }, */
       {
         generateTime: formatDate(),
-        name: "th-007",
+        name: "th-second",
         devid: "cdscfdsrf8",
         brand: "ladis",
         temperature: getRndInteger(),
@@ -252,7 +238,7 @@ var simulate_power = () => {
     dataType: "One",
     data: {
       generateTime: formatDate(),
-      name: "power-007",
+      name: "power-threed",
       devid: "9sdd",
       brand: "ladis",
       active_power: [10, 1, getRndInteger()],

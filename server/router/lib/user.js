@@ -201,11 +201,36 @@ const Get_user_info_one = async ctx => {
     .toArray();
   ctx.body = formartBody("success", "", result);
 };
+/* 修改用户io常量 */
+const Setfinal = async ctx => {
+  let { user, final } = ctx.query;
+  let { smoke, leak, access_contral, IO_alarm } = JSON.parse(final);
+  let result = await ctx.db.collection(config.DB_user_final).updateOne(
+    { user },
+    {
+      $set: { smoke, leak, access_contral, IO_alarm, modifyTime: new Date() }
+    },
+    { upsert: true }
+  );
+  ctx.body = formartBody("success", "result", result.result);
+};
+/* Getfinal */
+const Getfinal = async ctx => {
+  let { user } = ctx.query;
+  let result = await ctx.db
+    .collection(config.DB_user_final)
+    .find({ user })
+    .project({ _id: 0, smoke: 1, leak: 1, access_contral: 1, IO_alarm: 1 })
+    .toArray();
+  ctx.body = formartBody("success", "Getfinal", result[0]);
+};
 module.exports = {
   login,
   register,
   getmail_Verification_code,
   resetpasswd,
   modify_user_info_one,
-  Get_user_info_one
+  Get_user_info_one,
+  Setfinal,
+  Getfinal
 };

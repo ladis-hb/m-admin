@@ -1,31 +1,35 @@
 <template>
-  <b-row class="m-0 overflow-auto">
-    <b-col
-      cols="12"
-      md="6"
-      v-for="(value, i0, key) in dev[id]"
-      :key="key"
-      class=" mt-2 overflow-auto"
-      @click="toDevice(id, value.devid)"
-    >
-      <b-card :title="value.name || ''" :sub-title="value.devid"
-        ><b-card-body>
-          <argument-block
-            v-for="(val, key) of filter_show_value(value)"
-            :val="val"
-            :keys="key"
-            :key="key"
-            class=" d-block"
-          ></argument-block> </b-card-body
-      ></b-card>
-    </b-col>
-  </b-row>
+  <b-container>
+    <b-row class="m-0 overflow-auto">
+      <b-col
+        cols="12"
+        v-for="(value, i0, key) in dev[id]"
+        :key="key"
+        class=" mt-2 overflow-auto"
+        @click="toDevice(id, value.devid)"
+      >
+        <b-card
+          :title="'设备名称：' + value.name || value.devid"
+          :sub-title="'设备ID：' + value.devid"
+          ><b-card-body>
+            <!-- <argument-block
+              v-for="(val, key) of filter_show_value(value)"
+              :val="val"
+              :keys="key"
+              :key="key"
+              class=" d-block"
+            ></argument-block> -->
+          </b-card-body></b-card
+        >
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
 import { mapState, mapGetters } from "vuex";
 import { Get_user_all_devs, Get_devs_list_single } from "../util/axios";
-import argumentBlock from "../components/argumentBlock";
+//import argumentBlock from "../components/argumentBlock";
 export default {
   data() {
     return {
@@ -63,7 +67,7 @@ export default {
     };
   },
   components: {
-    argumentBlock
+    //argumentBlock
   },
   computed: {
     id() {
