@@ -1,5 +1,7 @@
 /* jshint esversion:8 */
+/* 由于安卓端程序变更，api暂时弃用，测试用例位于../util/update_data.js + Alarm_Test_Data.js */
 const config = require("../config");
+const event = require("../event/index");
 module.exports = async (ctx, next) => {
   let {
     params: { id }
@@ -15,7 +17,7 @@ module.exports = async (ctx, next) => {
               case "One":
                 {
                   //针对文档更新Array，$push or $addToSet
-                  ctx.event.emit("devs", { devs: data, type });
+                  event.emit("devs", { devs: data, type });
                   data.DateTime = new Date();
                   ctx.db.collection(config.DB_dev_class[type]).insertOne(data);
                   ctx.db
@@ -41,7 +43,7 @@ module.exports = async (ctx, next) => {
                   //updateOne({ devid: val.devid }, { $addToSet: { dataArray: {$each:[data]} } }, { upsert: true })
                   for (let val of data) {
                     val.DateTime = new Date();
-                    ctx.event.emit("devs", { devs: val, type });
+                    event.emit("devs", { devs: val, type });
                     ctx.db.collection(config.DB_dev_class[type]).insertOne(val);
                     ctx.db
                       .collection(config.DB_dev_all)
@@ -157,9 +159,9 @@ module.exports = async (ctx, next) => {
           } = ctx.request.body;
           //console.log(ctx.request.body);
           //
-          const type = ["超下限", "告警恢复", "告警"];
+          /*   const type = ["超下限", "告警恢复", "告警"];
           const dev = ["ups", "ac", "power", "io", "th"];
-          const level = [0, 1, 2];
+          const level = [0, 1, 2]; */
           //
           let Alarms = {
             DeviceId,

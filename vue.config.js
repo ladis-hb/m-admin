@@ -20,7 +20,7 @@ module.exports = {
     //默认情况下，dev-server将通过HTTP提供。它可以选择通过HTTPS在HTTP / 2上提供：
     //https: true,
     //告诉dev-server在服务器启动后打开浏览器。将其设置true为打开默认浏览器。
-    open: "Google Chrome",
+    //open: "Google Chrome",
     //当存在编译器错误或警告时，在浏览器中显示全屏覆盖。默认情况下禁用。如果只想显示编译器错误：
     overlay: false,
     //当您拥有单独的API后端开发服务器并且希望在同一域上发送API请求时，代理某些URL会很有用

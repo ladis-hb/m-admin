@@ -72,6 +72,7 @@ const formatDate = () => {
  * @returns
  */
 const Validation_user = async (ctx, data) => {
+  let status = false;
   let { user, token } = data;
   let s = await ctx.db
     .collection(config.DB_user_users)
@@ -81,7 +82,7 @@ const Validation_user = async (ctx, data) => {
   let result = {
     status,
     user,
-    userGroup: s.userGroup
+    userGroup: s.userGroup || ""
   };
   return result;
 };

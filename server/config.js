@@ -6,6 +6,7 @@ let API_81 = "http://127.0.0.1:81/Api/";
 
 module.exports = {
   dev_api: development ? `${API_3000}dev` : `${API_81}dev`,
+  socket_dev_api: `http://localhost:81`,
   //
   Alarm_api: development ? `${API_3000}Alarm` : `${API_81}Alarm`,
   //

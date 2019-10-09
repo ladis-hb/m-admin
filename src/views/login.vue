@@ -148,6 +148,7 @@ export default {
         })
         .catch(err => {
           MessageBox.alert(err, "Error");
+          loginLoading, close();
         });
     }
   },

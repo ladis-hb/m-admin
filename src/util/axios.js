@@ -1,9 +1,5 @@
 /* jshint esversion:8 */
 const axios = require("axios");
-//const config = require("../config.js");
-//const axios_address = config.development ? config.remote_address : "";
-//axios.defaults.baseURL = axios_address;
-
 //登录请求
 export const requestLogin = ({ user, passwd }) => {
   return axios
@@ -56,31 +52,29 @@ export const getLog = params => {
 };
 
 //add devid
-export const addDevid = ({ devid, devType, user, token }) => {
-  return axios.get("/Get/addDevid", {
-    params: { devid, devType, user, token }
-  });
+export const addDevid = ({ devid, devType }) => {
+  return axios.get("/Get/addDevid", assginArgument({ devid, devType }));
 };
 //get devid_list
-export const Get_devid_list = ({ user, token }) => {
-  return axios.get("/Get/Get_devid_list", { params: { user, token } });
+export const Get_devid_list = () => {
+  return axios.get("/Get/Get_devid_list", assginArgument());
 };
 //del devid
-export const delete_Devid = ({ user, token, devid }) => {
-  return axios.get("/Get/delete_Devid", { params: { user, token, devid } });
+export const delete_Devid = ({ devid }) => {
+  return axios.get("/Get/delete_Devid", assginArgument({ devid }));
 };
 
 //log info
-export const Get_user_info = ({ type, user, token }) => {
-  return axios.get("/Get/Get_user_info", { params: { type, user, token } });
+export const Get_user_info = ({ type }) => {
+  return axios.get("/Get/Get_user_info", assginArgument({ type }));
 };
 //admin - user
 export const admin_get_info_list = params => {
   return axios.get("/Get/admin_get_info_list", { params });
 };
 //
-export const Get_User_list = ({ user, token }) => {
-  return axios.get("/Get/Get_User_list", { params: { user, token } });
+export const Get_User_list = () => {
+  return axios.get("/Get/Get_User_list", assginArgument());
 };
 //admin modify_user_info
 export const admin_modify_user_info = params => {
@@ -91,87 +85,89 @@ export const admin_modify_user_info = params => {
 
 */
 //phone pages
-export const Modify_devName = ({ user, token, devid, devName }) => {
-  return axios.get("/Get/Modify_devName", {
-    params: { user, token, devid, devName }
-  });
+export const Modify_devName = ({ devid, devName }) => {
+  return axios.get("/Get/Modify_devName", assginArgument({ devid, devName }));
 };
-export const Get_user_all_devs = ({ user, token }) => {
-  return axios.get("/Get/Get_user_all_devs", { params: { user, token } });
+export const Get_user_all_devs = () => {
+  return axios.get("/Get/Get_user_all_devs", assginArgument());
 };
 
-export const modify_user_info_one = ({
-  user,
-  token,
-  modifyType,
-  modifyVal
-}) => {
-  return axios.get("/Get/modify_user_info_one", {
-    params: { user, token, modifyType, modifyVal }
-  });
+export const modify_user_info_one = ({ modifyType, modifyVal }) => {
+  return axios.get(
+    "/Get/modify_user_info_one",
+    assginArgument({ modifyType, modifyVal })
+  );
 };
 
-export const Get_user_info_one = ({ user, token }) => {
-  return axios.get("/Get/Get_user_info_one", { params: { user, token } });
+export const Get_user_info_one = () => {
+  return axios.get("/Get/Get_user_info_one", assginArgument());
 };
 /* GetAlarms */
-export const GetAlarms = ({ user, token }) => {
-  return axios.get("/Get/GetAlarms", { params: { user, token } });
+export const GetAlarms = () => {
+  return axios.get("/Get/GetAlarms", assginArgument());
 };
 /* confirm_alarm */
-export const confirm_alarm = ({ user, token, alarmId }) => {
-  return axios.get("/Get/confirm_alarm", { params: { user, token, alarmId } });
+export const confirm_alarm = ({ alarmId }) => {
+  return axios.get("/Get/confirm_alarm", assginArgument({ alarmId }));
 };
 //disable_select_user
-export const disable_select_user = ({ user, token, selectUser, status }) => {
-  return axios.get("/Get/disable_select_user", {
-    params: { user, token, selectUser, status }
-  });
+export const disable_select_user = ({ selectUser, status }) => {
+  return axios.get(
+    "/Get/disable_select_user",
+    assginArgument({ selectUser, status })
+  );
 };
 //delete_select_user
-export const delete_select_user = ({ user, token, selectUser }) => {
-  return axios.get("/Get/delete_select_user", {
-    params: { user, token, selectUser }
-  });
+export const delete_select_user = ({ selectUser }) => {
+  return axios.get(
+    "/Get/delete_select_user",
+    assginArgument({ selectUser: JSON.stringify(selectUser) })
+  );
 };
 //modify_select_user
-export const modify_select_user = ({ user, token, selectUsers }) => {
-  return axios.get("/Get/modify_select_user", {
-    params: { user, token, selectUsers: JSON.stringify(selectUsers) }
-  });
+export const modify_select_user = ({ selectUsers }) => {
+  return axios.get(
+    "/Get/modify_select_user",
+    assginArgument({ selectUsers: JSON.stringify(selectUsers) })
+  );
 };
 //Get_devs_list
-export const Get_devs_list = ({ user, token }) => {
-  return axios.get("/Get/Get_devs_list", { params: { user, token } });
+export const Get_devs_list = () => {
+  return axios.get("/Get/Get_devs_list", assginArgument());
 };
 //Get_devs_list_single
-export const Get_devs_list_single = ({ user, token, devid }) => {
-  return axios.get("/Get/Get_devs_list_single", {
-    params: { user, token, devid }
-  });
+export const Get_devs_list_single = ({ devid }) => {
+  return axios.get("/Get/Get_devs_list_single", assginArgument({ devid }));
 };
 
 /* Search_history_dev */
-export const Search_history_dev = ({
-  user,
-  token,
-  date,
-  devType,
-  devid,
-  attr
-}) => {
-  return axios.get("/Get/Search_history_dev", {
-    params: { user, token, date, devType, devid, attr }
-  });
+export const Search_history_dev = ({ date, devType, devid, attr }) => {
+  return axios.get(
+    "/Get/Search_history_dev",
+    assginArgument({ date, devType, devid, attr })
+  );
 };
 /* 
 配置IO状态常量
 */
-export const Setfinal = ({ user, token, final }) => {
-  return axios.get("/Get/Setfinal", {
-    params: { user, token, final: JSON.stringify(final) }
-  });
+export const Setfinal = ({ final }) => {
+  return axios.get(
+    "/Get/Setfinal",
+    assginArgument({ final: JSON.stringify(final) })
+  );
 };
-export const Getfinal = ({ user, token }) => {
-  return axios.get("/Get/Getfinal", { params: { user, token } });
+export const Getfinal = () => {
+  return axios.get("/Get/Getfinal", assginArgument());
 };
+
+/**
+ *
+ *
+ * @param {*} [arg={}]
+ * @returns
+ */
+function assginArgument(arg = {}) {
+  let token = sessionStorage.getItem("token") || "";
+  let user = sessionStorage.getItem("user") || "cairui";
+  return { params: Object.assign({ token, user }, arg) };
+}

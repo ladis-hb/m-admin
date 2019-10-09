@@ -1,5 +1,5 @@
 <template>
-  <b-container class=" mh-100">
+  <b-container class=" mh-100" fluid>
     <Header :title="lang.get('alarm')"></Header>
     <b-row>
       <b-col cols="12" class=" mh-100">
