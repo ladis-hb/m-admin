@@ -97,15 +97,15 @@ export default {
           io.emit("register", { user: this.user, token: this.token });
         };
         io.on("connect", () => {
-          console.log(`${Date()}:::Socket connect`);
+          //console.log(`${Date()}:::Socket connect`);
           register();
         });
         io.on("reconnect", () => {
-          console.log(`${Date()}:::Socket reconnect`);
+          //console.log(`${Date()}:::Socket reconnect`);
           register();
         });
         io.on("disconnect", () => {
-          console.log(`${Date()}:::Socket disconnect`);
+          //console.log(`${Date()}:::Socket disconnect`);
         });
         io.on("lineInfo", r => {
           let {
@@ -113,7 +113,7 @@ export default {
             result, //: { type, msg, user, generateTime },
             data
           } = r;
-          //console.log(r);
+          ////console.log(r);
           if (!["user", "dev"].includes(type)) return;
           this.socket.info.unshift(result);
           switch (type) {

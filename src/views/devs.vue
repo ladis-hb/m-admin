@@ -101,7 +101,7 @@ export default {
       return newValue;
     },
     ArrayBool(val) {
-      console.log(typeof val);
+      //console.log(typeof val);
     }, */
     /* 检查哪些设备不在线，get获取数据库的存档，写入store，当有socket新数据传入会直接复写存档数据 */
     async check_offline_dev() {

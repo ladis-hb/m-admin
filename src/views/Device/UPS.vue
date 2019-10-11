@@ -113,7 +113,7 @@ export default {
     ...mapGetters(["lang", "unit"]),
     ...mapState(["dev"]),
     device() {
-      console.log(this.dev.ups[this.devid]);
+      //console.log(this.dev.ups[this.devid]);
 
       return this.dev.ups[this.devid];
     },

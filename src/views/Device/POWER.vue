@@ -107,7 +107,7 @@ export default {
     ...mapGetters(["lang", "unit"]),
     ...mapState(["dev"]),
     device() {
-      //console.log(this.dev.power[this.devid]);
+      ////console.log(this.dev.power[this.devid]);
       return this.dev.power[this.devid];
     },
     core() {

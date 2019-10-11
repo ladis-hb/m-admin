@@ -165,7 +165,7 @@ export default {
       return this.dev.ac[this.devid];
     },
     th() {
-      console.log(this.dev.th);
+      //console.log(this.dev.th);
 
       return Object.values(this.dev.th);
     },
