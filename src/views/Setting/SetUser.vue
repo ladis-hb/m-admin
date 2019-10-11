@@ -131,19 +131,11 @@ export default {
         creatTime: ""
       },
       User_log: [],
-      fields: {
-        generateTime: {
-          label: "生成时间",
-          sortable: true
-        },
-        status: {
-          label: "登录状态",
-          sortable: true
-        },
-        msg: {
-          label: "登录信息"
-        }
-      }
+      fields: [
+        { key: "generateTime", label: "生成时间", sortable: true },
+        { key: "status", label: "登录状态", sortable: true },
+        { key: "msg", label: "登录信息" }
+      ]
     };
   },
   components: {

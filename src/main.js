@@ -29,7 +29,7 @@ router.beforeEach((to, from, next) => {
   if (to.name != "Login" && !localUser) {
     next({ path: "/" });
   }
-  let r = ["ups", "power", "ac", "th", "Devs", "Line"];
+  let r = ["ups", "power", "ac", "th", "Devs", "Line", "io"];
   if (r.includes(to.name) && !from.name) {
     next({ path: "/main" });
   }

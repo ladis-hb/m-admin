@@ -55,46 +55,27 @@ export default {
     return {
       socket: {
         info: [],
-        info_fields: {
-          generateTime: {
+        info_fields: [
+          {
+            key: "generateTime",
             label: "生成时间",
             sortable: true,
 
             variant: "primary"
           },
-          type: {
-            label: "消息类型",
-            sortable: true
-          },
+          { key: "type", label: "消息类型", sortable: true },
 
-          msg: {
-            label: "Message"
-          },
-          user: {
-            label: "用户",
-            sortable: true
-          }
-        },
+          { key: "msg", label: "Message" },
+          { key: "user", label: "用户", sortable: true }
+        ],
         onlinelist_devs: [],
-        devs_fields: {
-          devType: {
-            label: "设备类型",
-            sortable: "true"
-          },
-          devid: {
-            label: "设备Id"
-          },
-          user: {
-            label: "所属用户"
-          }
-        },
+        devs_fields: [
+          { key: "devType", label: "设备类型", sortable: "true" },
+          { key: "devid", label: "设备Id" },
+          { key: "user", label: "所属用户" }
+        ],
         onlinelist_users: [],
-        users_fields: {
-          user: {
-            label: "用户",
-            sortable: true
-          }
-        }
+        users_fields: [{ key: "user", label: "用户", sortable: true }]
       },
       online: true
     };

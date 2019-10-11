@@ -93,22 +93,12 @@ export default {
     this.Get_devs_list();
   },
   created() {
-    this.devs_fields = {
-      devid: {
-        label: this.lang.get("devid"),
-        variant: "info"
-      },
-      devType: {
-        label: this.lang.get("devType"),
-        sortable: true
-      },
-      updateTime: {
-        label: this.lang.get("generateTime")
-      },
-      user: {
-        label: "所属用户"
-      }
-    };
+    this.devs_fields = [
+      { key: "devid", label: this.lang.get("devid"), variant: "info" },
+      { key: "devType", label: this.lang.get("devType"), sortable: true },
+      { key: "updateTime", label: this.lang.get("generateTime") },
+      { key: "user", label: "所属用户" }
+    ];
   }
 };
 </script>

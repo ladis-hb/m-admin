@@ -22,13 +22,6 @@
         类型:Date
         说明：数据生成时间
 
-    dataType:
-        必选:true
-        类型:String
-        说明：数据打包格式
-        可选项：['One','Many'] 
-              One:单条数据
-              Many:多条json合成的数组
 
     data：
         必选:true
@@ -42,12 +35,10 @@
     
 
 输入示例：
-
-json={
-  type: 'ups',
-  updateTime: new Date(),
-  dataType: 'One',  
-  data:{  
+{ client: "4f08b4b8ae02f521be60", //环控客户端id
+  data:{ //设备数据
+    type: 'ups',
+    data:{  
     generateTime: formatDate(),
     name: 'ups-007',
     devid: 1,
@@ -71,24 +62,8 @@ json={
     output_voltage_l3: getRndInteger()
   }  
 }
+}
 
-返回数据：
- 后台收到post一定会响应，有返回status：200
-
-{ code: 201,                            ||code返回200，201,202，203
-  msg: 'Data submission successful',    ||返回处理消息
-  res:                                  ||res 包含数据库返回的消息
-   { insertedCount: 3,                  || 影响的行数
-     insertedIds:                        || 数据库为每条insert数据生成的_id
-      { '0': '5d43e984cac69347f792f7b6',
-        '1': '5d43e984cac69347f792f7b7',
-        '2': '5d43e984cac69347f792f7b8' } } }
-OR
-{ code: 200,
-  msg: 'Data submission successful',
-  res:
-   { insertedCount: 1,
-     insertedIds: { '0': '5d43e984cac69347f792f7b5' } } }
 
 */
 /* jshint esversion:8 */
@@ -99,8 +74,6 @@ const { formatDate } = require("./Format");
 var simulate_ups = () => {
   return {
     type: "ups",
-    updateTime: formatDate(),
-    dataType: "One",
     data: {
       generateTime: formatDate(),
       name: "ups-one",
@@ -148,8 +121,6 @@ var simulate_ups = () => {
 var simulate_col = () => {
   return {
     type: "ac",
-    updateTime: formatDate(),
-    dataType: "One",
     data: {
       generateTime: formatDate(),
       name: "ac-one",
@@ -192,7 +163,7 @@ var simulate_io = () => {
       power_status: true,
       input_status: false,
       //状态量
-      smoke: true,
+      smoke: false,
       access_contral: false,
       leak: true
     }
@@ -202,42 +173,33 @@ var simulate_io = () => {
 var simulate_th = () => {
   return {
     type: "th",
-    updateTime: formatDate(),
-    dataType: "Many",
-    data: [
-      {
-        generateTime: formatDate(),
-        name: "th-First",
-        devid: "csd654c5d6",
-        brand: "ladis",
-        temperature: getRndInteger(),
-        humidity: getRndInteger()
-      },
-      /* {
-        generateTime: formatDate(),
-        name: "th-007",
-        devid: "7cxse5c45",
-        brand: "ladis",
-        temperature: getRndInteger(),
-        humidity: getRndInteger()
-      }, */
-      {
-        generateTime: formatDate(),
-        name: "th-second",
-        devid: "cdscfdsrf8",
-        brand: "ladis",
-        temperature: getRndInteger(),
-        humidity: getRndInteger()
-      }
-    ]
+    data: {
+      generateTime: formatDate(),
+      name: "th-First",
+      devid: "csd654c5d6",
+      brand: "ladis",
+      temperature: getRndInteger(),
+      humidity: getRndInteger()
+    }
+  };
+};
+var simulate_th2 = () => {
+  return {
+    type: "th",
+    data: {
+      generateTime: formatDate(),
+      name: "th-second",
+      devid: "thcasdfcsefcs",
+      brand: "ladis",
+      temperature: getRndInteger(),
+      humidity: getRndInteger()
+    }
   };
 };
 
 var simulate_power = () => {
   return {
     type: "power",
-    updateTime: formatDate(),
-    dataType: "One",
     data: {
       generateTime: formatDate(),
       name: "power-threed",
@@ -272,6 +234,7 @@ var simulate_dev = [
   simulate_io,
   simulate_power,
   simulate_th,
+  simulate_th2,
   simulate_ups
 ];
 maps();

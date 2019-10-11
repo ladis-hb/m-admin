@@ -1,42 +1,46 @@
 /* jshint esversion:8 */
-const config = require("../config.js");
-const { formatDate } = require("../util/Format.js");
+const { log_devs, log_other, log_error, log_run } = require("../mongoose/log");
 module.exports = function() {
   return async (ctx, next) => {
-    if (ctx.query.length > 0) {
-      ctx.log = {};
-    }
     await next();
-    if (!ctx.log) return true;
-    if (!ctx.log.type) return true;
-    let generateTime = formatDate();
-    let { type, status, msg, query, user } = ctx.log;
-    type = type || config.DB_log_other;
-    status = status || ctx.params.id;
-    query = query || ctx.query;
-    user = user || ctx.query.user;
-    {
-      if (
-        ![
-          config.DB_log_other,
-          config.DB_log_dev,
-          config.DB_log_error,
-          config.DB_log_run,
-          config.DB_log_socket
-        ].includes(type)
-      )
-        type = config.DB_log_other;
+    if (!ctx.body.resultID) return;
+    let { resultID } = ctx.body;
+    console.log(resultID);
+
+    let query = {
+      status: ctx.body.stat,
+      msg: ctx.body.msg,
+      user: ctx.query.user || "null",
+      query: ctx.body
+    };
+
+    if (resultID === 100) {
+      let user_log = new log_other(query);
+      user_log.save();
     }
-    //console.log({ type, generateTime, status, msg, query, user });
-    ctx.db
-      .collection(type)
-      .insertOne({
-        generateTime,
-        status,
-        msg,
-        query,
-        user,
-        updateTime: new Date()
-      });
+    if (resultID > 100 && resultID < 200) {
+      let user_log = new log_run(query);
+      user_log.save();
+    }
+    if (resultID > 199 && resultID < 300) {
+      let user_log = new log_devs(query);
+      user_log.save();
+    }
+    if (resultID > 299 && resultID < 400) {
+      let user_log = new log_run(query);
+      user_log.save();
+    }
+    if (resultID > 399 && resultID < 500) {
+      let user_log = new log_other(query);
+      user_log.save();
+    }
+    if (resultID > 299 && resultID < 400) {
+      let user_log = new log_run(query);
+      user_log.save();
+    }
+    if (ctx.body.code === -1) {
+      let user_log = new log_error(query);
+      user_log.save();
+    }
   };
 };

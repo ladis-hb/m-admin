@@ -32,7 +32,7 @@
       <separated title="模拟量"></separated>
       <b-col cols="12">
         <b-table-lite :items="filter_simulate" :fields="fields_simulate">
-          <template slot="[operate]" slot-scope="data">
+          <template v-slot:cell(operate)="data">
             <b-button
               variant="info"
               @click="

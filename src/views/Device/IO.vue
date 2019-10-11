@@ -163,6 +163,8 @@ export default {
     ...mapState(["dev", "user", "token"]),
     IO() {
       let io = Object.values(this.dev.io);
+      console.log(io);
+
       if (io[0]) return io[0];
       else return false;
     },

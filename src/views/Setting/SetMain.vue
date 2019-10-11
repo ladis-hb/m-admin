@@ -74,18 +74,11 @@ export default {
         { value: "th", text: "TH" }
       ],
       Dev_list: [],
-      fields: {
-        type: {
-          label: "类型",
-          sortable: true
-        },
-        devName: {
-          label: "别名"
-        },
-        devid: {
-          label: "设备Id"
-        }
-      },
+      fields: [
+        { key: "type", label: "类型", sortable: true },
+        { key: "devName", label: "别名" },
+        { key: "devid", label: "设备Id" }
+      ],
       Select_items: []
     };
   },
@@ -99,7 +92,6 @@ export default {
   methods: {
     addDevid() {
       let { Devid, DevType } = this.$data;
-      console.log(this.user);
       if (Devid == "" || DevType == "") return MessageBox.alert("参数不能为空");
       addDevid({
         devid: Devid,

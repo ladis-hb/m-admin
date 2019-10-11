@@ -28,7 +28,7 @@ module.exports = (mail, title, subject, body) => {
   if (title == "注册") body = `注册验证码：<strong>${body}</strong>`;
   if (title == "重置密码") body = `重置验证码：<strong>${body}</strong>`;
   subject = subject ? subject + title : "test";
-  mailOptions = {
+  let mailOptions = {
     from: `"${title}" <260338538@qq.com>`, // sender address
     to: mail, // list of receivers
     subject, // Subject line

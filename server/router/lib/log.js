@@ -6,9 +6,9 @@ const Run_log_warring = async ctx => {
   let run = await ctx.db
     .collection(config.DB_log_run)
     .findMany()
-    .limit(limit)
+    .limit(50)
     .sort({ generateTime: -1 });
-  ctx.body = formartBody("success", "run log find new date," + limit, run);
+  ctx.body = formartBody("success", "run log find new date," + 50, run);
 };
 
 const Get_user_info = async ctx => {

@@ -52,7 +52,7 @@
           :items="filter_simulate"
           :fields="fields_simulate"
         >
-          <template slot="[operate]" slot-scope="data">
+          <template v-slot:cell(operate)="data">
             <b-button
               variant="info"
               @click="

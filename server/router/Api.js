@@ -1,14 +1,15 @@
 /* jshint esversion:8 */
 /* 由于安卓端程序变更，api暂时弃用，测试用例位于../util/update_data.js + Alarm_Test_Data.js */
-const config = require("../config");
+
 const event = require("../event/index");
+const { Alarm } = require("../mongoose/alarm");
 module.exports = async (ctx, next) => {
   let {
     params: { id }
   } = ctx;
   if (["dev", "Alarm"].includes(id)) {
     switch (id) {
-      case "dev":
+      /* case "dev":
         {
           var { type, updateTime, data, dataType } = ctx.request.body;
 
@@ -77,7 +78,7 @@ module.exports = async (ctx, next) => {
                 }
                 break;
             }
-            /* 判断IO状态量，状态异常send Alarm */
+            // 判断IO状态量，状态异常send Alarm
             if (type == "io") {
               let { devid, smoke, leak, access_contral } = data;
               let userlist = await ctx.db
@@ -146,10 +147,10 @@ module.exports = async (ctx, next) => {
             ctx.log = ctx.body;
           }
         }
-        break;
+         break;*/
       case "Alarm":
         {
-          let {
+          /* let {
             DeviceId,
             Alarm_msg,
             Alarm_type,
@@ -157,12 +158,6 @@ module.exports = async (ctx, next) => {
             Alarm_level,
             Alarm_time
           } = ctx.request.body;
-          //console.log(ctx.request.body);
-          //
-          /*   const type = ["超下限", "告警恢复", "告警"];
-          const dev = ["ups", "ac", "power", "io", "th"];
-          const level = [0, 1, 2]; */
-          //
           let Alarms = {
             DeviceId,
             Alarm_time,
@@ -175,18 +170,17 @@ module.exports = async (ctx, next) => {
             confirm_user: "",
             confirm_time: null
           };
-          //
-          ctx.event.emit("Alarm", Alarms);
-          //
-          let result = await ctx.db
-            .collection(config.DB_Alarm)
-            .insertOne(Alarms);
-          ctx.status = 200;
-          ctx.body = {
-            code: 200,
-            msg: `Alarm submission successful`,
-            req: result.result
-          };
+          // */
+          let alarminfo = new Alarm(ctx.request.body);
+          alarminfo.save((err, res) => {
+            //console.log(res);
+            event.emit("Alarm", res);
+            ctx.body = {
+              code: 200,
+              msg: `Alarm submission successful`,
+              req: res
+            };
+          });
         }
         break;
     }
