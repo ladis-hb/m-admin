@@ -3,7 +3,7 @@ const { log_devs, log_other, log_error, log_run } = require("../mongoose/log");
 module.exports = function() {
   return async (ctx, next) => {
     await next();
-    if (ctx.body.resultID) {
+    if (ctx.body && ctx.body.resultID) {
       let { resultID } = ctx.body;
       //console.log(resultID);
 
