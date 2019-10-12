@@ -1,13 +1,18 @@
 /* jshint esversion:8 */
-const config = require("../../config");
 const { formartBody } = require("../../util/Format");
+const {
+  log_devs,
+  log_error,
+  log_run,
+  log_socket
+} = require("../../mongoose/log");
 
 const Run_log_warring = async ctx => {
-  let run = await ctx.db
-    .collection(config.DB_log_run)
-    .findMany()
+  let run = await log_run
+    .find()
     .limit(50)
-    .sort({ generateTime: -1 });
+    .sort({ generateTime: -1 })
+    .exec();
   ctx.body = formartBody("success", "run log find new date," + 50, run);
 };
 
@@ -17,27 +22,27 @@ const Get_user_info = async ctx => {
   let q = user == "admin" || user == "no record" ? {} : { user: user };
   switch (type) {
     case "runInfo":
-      collection = config.DB_log_run;
+      collection = log_run;
       break;
     case "errorInfo":
-      collection = config.DB_log_error;
+      collection = log_error;
       break;
 
     case "devInfo":
-      collection = config.DB_log_dev;
+      collection = log_devs;
       break;
 
     case "socketInfo":
-      collection = config.DB_log_socket;
+      collection = log_socket;
       break;
   }
 
-  let run = await ctx.db
-    .collection(collection)
+  let run = await collection
     .find(q)
     .sort({ generateTime: -1 })
-    .project({ _id: 0, query: 0 })
-    .toArray();
+    .select("-query")
+    .exec();
+
   ctx.body = formartBody("success", "", run);
 };
 

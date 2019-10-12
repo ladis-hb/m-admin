@@ -1,7 +1,6 @@
 /* jshint esversion:8 */
-const crypto = require("crypto");
+const { Users } = require("../mongoose/user");
 const config = require("../config");
-const mongodb = require("mongodb");
 /**
  *
  *
@@ -74,9 +73,7 @@ const formatDate = () => {
 const Validation_user = async (ctx, data) => {
   let status = false;
   let { user, token } = data;
-  let s = await ctx.db
-    .collection(config.DB_user_users)
-    .findOne({ user, token });
+  let s = await Users.findOne({ user, token });
   if (s) status = true;
   else status = false;
   let result = {
@@ -87,16 +84,16 @@ const Validation_user = async (ctx, data) => {
   return result;
 };
 const Validation_root_Group = async (ctx, operationUser) => {
-  let validation = await ctx.db
-    .collection(config.DB_user_users)
-    .findOne({ user: operationUser, userGroup: "root" });
+  let validation = await Users.findOne({
+    user: operationUser,
+    userGroup: "root"
+  });
   if (validation) return true;
   else return false;
 };
 /* 
 ObjectId
 */
-const ObjectId = mongodb.ObjectId;
 
 module.exports = {
   formartBody,
@@ -104,6 +101,5 @@ module.exports = {
   formatMD5,
   formatDate,
   Validation_user,
-  ObjectId,
   Validation_root_Group
 };

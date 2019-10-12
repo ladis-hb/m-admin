@@ -22,8 +22,8 @@ Vue.component(VeGuage.name, VeGuage);
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
-  console.log(to);
-  console.log(from);
+  /* console.log(to);
+  console.log(from); */
   let localUser = sessionStorage.getItem("user");
   //console.log(localUser);
   if (to.name != "Login" && !localUser) {

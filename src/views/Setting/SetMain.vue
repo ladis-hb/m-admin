@@ -53,10 +53,10 @@
 
 <script>
 import {
-  Get_user_all_devs,
   addDevid,
   delete_Devid,
-  Modify_devName
+  Modify_devName,
+  Get_devid_list
 } from "../../util/axios";
 import { mapGetters, mapState } from "vuex";
 import { MessageBox, Message } from "element-ui";
@@ -154,10 +154,10 @@ export default {
       });
     },
     Get_user_all_devs() {
-      Get_user_all_devs({ user: this.user, token: this.token }).then(result => {
+      Get_devid_list().then(result => {
         let { code, data } = result.data;
         if (code != 200) return;
-        this.Dev_list = data[0].dev;
+        this.Dev_list = data.dev;
       });
     },
     delete_Devid(devid) {

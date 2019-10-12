@@ -53,11 +53,12 @@ const ReceiveData = async ({ data, socketid }) => {
     if (!Devs) return;
     Devs.save();
     event.emit("devs", { devs: deviceData, type });
-    Dev_all.updateOne(
-      { devid: deviceData.devid, devType: type },
-      { data: deviceData },
-      { upsert: true }
-    );
+    let all = new Dev_all({
+      devid: deviceData.devid,
+      devType: type,
+      data: deviceData
+    });
+    all.save();
   }
 };
 

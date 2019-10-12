@@ -1,16 +1,15 @@
 /* jshint esversion:8 */
-const config = require("../../config");
 const event = require("../../event/index");
 const { User_dev } = require("../../mongoose/user");
-const { Dev_all } = require("../../mongoose/dev");
+const { Dev_all, Dev_list } = require("../../mongoose/dev");
 const formatResult = require("../../util/formatResult");
 
 const Dev_all_info = async ctx => {
-  let devArray = await User_dev.findOne({ user: ctx.query.user });
+  let devArray = await User_dev.GetUserDevs(ctx.query.user);
   if (devArray) {
     let devs = {};
     //遍历user_dev表，汇总分类设备
-    devArray.dev.forEach(val => {
+    devArray.forEach(val => {
       if (!devs[val.type]) devs[val.type] = [];
       devs[val.type].push(val.devid);
     });
@@ -39,8 +38,8 @@ const addDevid = async ctx => {
   });
 };
 
-const Get_devid_list = async (ctx, u) => {
-  await User_dev.findOne({ user: u }, { dev: 1 }).then(res => {
+const Get_devid_list = async ctx => {
+  await User_dev.findOne({ user: ctx.query.user }).then(res => {
     ctx.body = formatResult(202, res);
   });
 };
@@ -57,9 +56,7 @@ const delete_Devid = async ctx => {
 //new
 const Get_user_all_devs = async ctx => {
   let { user } = ctx.query;
-  let result = await User_dev.findOne({ user })
-    .select("dev")
-    .exec();
+  let result = await User_dev.GetUserDevs(user);
   ctx.body = formatResult(210, result);
 };
 const Modify_devName = async ctx => {
@@ -77,16 +74,15 @@ const Search_history_dev = async ctx => {
   let date_start = new Date(date);
   let date_start_stamp = new Date(date).getTime();
   let date_end = date_start.setDate(date_start.getDate() + 1);
-  let result = await ctx.db
-    .collection(config.DB_dev_class[devType])
-    .find({
-      devid,
-      DateTime: { $gt: new Date(date_start_stamp), $lt: new Date(date_end) }
-      // eslint-disable-next-line no-dupe-keys
-      //DateTime: { $lt: new Date(date_end) }
-    })
-    .project({ _id: 0, [attr]: 1, generateTime: 1 })
-    .toArray();
+  let result = await Dev_list[devType]
+    .find({ devid })
+    .where("DateTime")
+    .gte(new Date(date_start_stamp))
+    .lte(new Date(date_end))
+    .select({ _id: 0, [attr]: 1, generateTime: 1 })
+    .limit(100)
+    .exec();
+
   ctx.body = formatResult(
     100,
     result,

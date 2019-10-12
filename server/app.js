@@ -3,7 +3,7 @@ const Koa = require("koa");
 const KoaStatic = require("koa-static");
 const path = require("path");
 const Logger = require("koa-logger");
-const mongo = require("koa-mongo");
+//const mongo = require("koa-mongo");
 const body = require("koa-body");
 const error = require("koa-error");
 
@@ -15,7 +15,7 @@ const app = new Koa();
 app.use(error());
 app.use(saveLog());
 app.use(Logger());
-app.use(mongo({ db: config.DB_dev }));
+//app.use(mongo({ db: config.DB_dev }));
 app.use(body());
 app.use(async (ctx, next) => {
   ctx.set("Access-Control-Allow-Origin", "*");

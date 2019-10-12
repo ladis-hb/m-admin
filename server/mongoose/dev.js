@@ -132,6 +132,13 @@ const Dev_io = mongoose.model("dev_io", Schema_Dev_io, "Dev_io");
 const Dev_th = mongoose.model("dev_th", Schema_Dev_th, "Dev_th");
 const Dev_Alarm = mongoose.model("dev_Alarm", Schema_Dev_Alarm, "Dev_Alarm");
 
+const Dev_list = {
+  ups: Dev_ups,
+  ac: Dev_ac,
+  power: Dev_power,
+  io: Dev_io,
+  th: Dev_th
+};
 module.exports = {
   Dev_all,
   Dev_ac,
@@ -139,5 +146,6 @@ module.exports = {
   Dev_power,
   Dev_io,
   Dev_th,
-  Dev_Alarm
+  Dev_Alarm,
+  Dev_list
 };

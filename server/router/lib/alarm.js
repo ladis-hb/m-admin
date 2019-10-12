@@ -1,17 +1,13 @@
-/* jshint esversion:8 */ /* 
-const config = require("../../config");
-const { formartBody, ObjectId } = require("../../util/Format"); */
+/* jshint esversion:8 */
+
 const { User_dev } = require("../../mongoose/user");
 const { Alarm } = require("../../mongoose/alarm");
 const formatResult = require("../../util/formatResult");
 const GetAlarms = async ctx => {
   let { user } = ctx.query;
   /* get user`s all devs */
-  let { dev } = await User_dev.findOne({ user });
+  let userDevs = await User_dev.GetUserDevs(user);
 
-  let userDevs = dev.map(val => {
-    return val.devid;
-  });
   let result = await Alarm.find({ DeviceId: { $in: userDevs } })
     .sort({ _id: -1 })
     .limit(200)

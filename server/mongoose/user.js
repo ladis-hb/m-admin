@@ -11,6 +11,20 @@ const Schema_User_dev = new Schema({
   ]
 });
 
+Schema_User_dev.statics.GetUserDevs = async function(user) {
+  let arr = await this.findOne({ user }, "dev");
+  return arr.dev.map(val => {
+    return val.devid;
+  });
+};
+
+Schema_User_dev.statics.GetDevidUsers = async function(devid) {
+  let arr = await this.find({ "dev.devid": devid }, "user");
+  return arr.map(val => {
+    return val.user;
+  });
+};
+
 const Schema_User_final = new Schema({
   user: String,
   access_contral: Boolean,
