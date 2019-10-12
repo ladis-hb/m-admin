@@ -1,6 +1,7 @@
 /* jshint esversion:8 */
 const { Users } = require("../mongoose/user");
 const config = require("../config");
+const crypto = require("crypto");
 /**
  *
  *
