@@ -101,7 +101,7 @@ export default {
   data() {
     return {
       user_items: [],
-      user_fields: {},
+      user_fields: [],
       select_item: {},
       select_index: 0
     };
@@ -188,38 +188,26 @@ export default {
     this.Get_User_list();
   },
   created() {
-    this.user_fields = {
-      statu: {
+    this.user_fields = [
+      {
+        key: "statu",
         label: this.lang.get("status"),
         sortable: true,
         variant: "info"
       },
-      user: {
-        label: this.lang.get("user")
-      },
-      name: {
-        label: this.lang.get("name")
-      },
-      mail: {
-        label: this.lang.get("mail")
-      },
-      tel: {
-        label: this.lang.get("tel")
-      },
-      orgin: {
-        label: this.lang.get("compony")
-      },
-      userGroup: {
-        label: this.lang.get("userGroup")
-      },
-      creatTime: {
+      { key: "user", label: this.lang.get("user") },
+      { key: "name", label: this.lang.get("name") },
+      { key: "mail", label: this.lang.get("mail") },
+      { key: "tel", label: this.lang.get("tel") },
+      { key: "orgin", label: this.lang.get("compony") },
+      { key: "userGroup", label: this.lang.get("userGroup") },
+      {
+        key: "creatTime",
         label: this.lang.get("generateTime"),
         sortable: true
       },
-      modifyTime: {
-        label: this.lang.get("updatetime")
-      }
-    };
+      { key: "modifyTime", label: this.lang.get("updatetime") }
+    ];
   }
 };
 </script>

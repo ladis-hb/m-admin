@@ -154,7 +154,7 @@ export default {
   },
   mounted() {
     if (localStorage.getItem("keep_passwd") == "1") {
-      //console.log(localStorage.getItem("user"));
+      ////console.log(localStorage.getItem("user"));
       this.user = localStorage.getItem("user");
       this.keep_passwd = true;
     }

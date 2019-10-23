@@ -205,11 +205,11 @@ export default {
             register();
           });
           io.on("reconnect", () => {
-            console.log(`${Date()}:::Socket reconnect`);
+            //console.log(`${Date()}:::Socket reconnect`);
             register();
           });
           io.on("disconnect", () => {
-            console.log(`${Date()}:::Socket disconnect`);
+            //console.log(`${Date()}:::Socket disconnect`);
           });
           io.on("newDevs", data => {
             data.status = true;
@@ -234,7 +234,7 @@ export default {
       注册监听，loginout
       */
           this.$on("loginOut", () => {
-            console.log("loginOut");
+            //console.log("loginOut");
             Message("loginout");
             io.emit("disconnect");
           });

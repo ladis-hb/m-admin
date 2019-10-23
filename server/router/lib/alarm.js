@@ -1,37 +1,27 @@
 /* jshint esversion:8 */
-const config = require("../../config");
-const { formartBody,ObjectId } = require("../../util/Format");
+
+const { User_dev } = require("../../mongoose/user");
+const { Alarm } = require("../../mongoose/alarm");
+const formatResult = require("../../util/formatResult");
 const GetAlarms = async ctx => {
   let { user } = ctx.query;
   /* get user`s all devs */
-  let [{ dev: userDevsArray }] = await ctx.db
-    .collection(config.DB_user_dev)
-    .find({ user })
-    .project({ _id: 0, dev: 1 })
-    .toArray();
+  let userDevs = await User_dev.GetUserDevs(user);
 
-  let userDevs = userDevsArray.map(val => {
-    return val.devid;
-  });
-  let result = await ctx.db
-    .collection(config.DB_Alarm)
-    .find({ DeviceId: { $in: userDevs } })
+  let result = await Alarm.find({ DeviceId: { $in: userDevs } })
     .sort({ _id: -1 })
     .limit(200)
-    .toArray();
-  ctx.body = formartBody("success", "alarm", result);
+    .exec();
+  ctx.body = formatResult(400, result);
 };
 /* confirm_alarm */
 const confirm_alarm = async ctx => {
   let { user, alarmId } = ctx.query;
-  let result = await ctx.db
-    .collection(config.DB_Alarm)
-    .updateOne(
-      { _id: ObjectId(alarmId) },
-      { $set: { confirm: true, confirm_user: user, confirm_time: new Date() } }
-    );
-  ctx.body = formartBody("success", "报警消息已确认", result.result);
-  ctx.log = { type: config.DB_log_dev, msg: "确认报警消息" };
+  let result = await Alarm.findByIdAndUpdate(
+    { _id: alarmId },
+    { $set: { confirm: true, confirm_user: user, confirm_time: new Date() } }
+  );
+  ctx.body = formatResult(402, result);
 };
 
 module.exports = { GetAlarms, confirm_alarm };

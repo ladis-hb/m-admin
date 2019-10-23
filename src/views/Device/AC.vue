@@ -12,7 +12,9 @@
           >
             <span
               ><i class=" iconfont text-primary">&#xe604;</i
-              ><b class=" text-light">{{ th[0].temperature }}&#8451;</b></span
+              ><b class=" text-light"
+                >{{ th[0].temperature || "temperature" }}&#8451;</b
+              ></span
             >
             <span
               ><i class=" iconfont text-primary">&#xe601;</i
@@ -21,14 +23,16 @@
             <br />
             <br />
             <br />
-            <span
+            <!-- <span
               ><i class=" iconfont text-warning">&#xe604;</i
-              ><b class=" text-light">{{ th[1].temperature }}&#8451;</b></span
+              ><b class=" text-light"
+                >{{ th[1].temperature || "temperature" }}&#8451;</b
+              ></span
             >
             <span
               ><i class=" iconfont text-warning">&#xe601;</i
               ><b class=" text-light">{{ th[1].humidity }}&#8451;</b></span
-            >
+            > -->
           </div>
         </div>
       </b-col>
@@ -85,7 +89,7 @@
     <b-row>
       <separated title="模拟量"></separated>
       <b-table :items="items" :fields="ac_fields">
-        <template slot="[operate]" slot-scope="data">
+        <template v-slot:cell(operate)="data">
           <b-button
             variant="info"
             @click="
@@ -161,6 +165,8 @@ export default {
       return this.dev.ac[this.devid];
     },
     th() {
+      //console.log(this.dev.th);
+
       return Object.values(this.dev.th);
     },
     temperatureColor() {

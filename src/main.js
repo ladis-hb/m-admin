@@ -32,14 +32,14 @@ const i18n = new VueI18n({
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
-  console.log(to);
-  console.log(from);
+  /* console.log(to);
+  console.log(from); */
   let localUser = sessionStorage.getItem("user");
   //console.log(localUser);
   if (to.name != "Login" && !localUser) {
     next({ path: "/" });
   }
-  let r = ["ups", "power", "ac", "th", "Devs", "Line"];
+  let r = ["ups", "power", "ac", "th", "Devs", "Line", "io"];
   if (r.includes(to.name) && !from.name) {
     next({ path: "/main" });
   }

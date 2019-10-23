@@ -53,10 +53,10 @@
 
 <script>
 import {
-  Get_user_all_devs,
   addDevid,
   delete_Devid,
-  Modify_devName
+  Modify_devName,
+  Get_devid_list
 } from "../../util/axios";
 import { mapGetters, mapState } from "vuex";
 import { MessageBox, Message } from "element-ui";
@@ -74,18 +74,11 @@ export default {
         { value: "th", text: "TH" }
       ],
       Dev_list: [],
-      fields: {
-        type: {
-          label: "类型",
-          sortable: true
-        },
-        devName: {
-          label: "别名"
-        },
-        devid: {
-          label: "设备Id"
-        }
-      },
+      fields: [
+        { key: "type", label: "类型", sortable: true },
+        { key: "devName", label: "别名" },
+        { key: "devid", label: "设备Id" }
+      ],
       Select_items: []
     };
   },
@@ -99,7 +92,6 @@ export default {
   methods: {
     addDevid() {
       let { Devid, DevType } = this.$data;
-      console.log(this.user);
       if (Devid == "" || DevType == "") return MessageBox.alert("参数不能为空");
       addDevid({
         devid: Devid,
@@ -162,10 +154,10 @@ export default {
       });
     },
     Get_user_all_devs() {
-      Get_user_all_devs({ user: this.user, token: this.token }).then(result => {
+      Get_devid_list().then(result => {
         let { code, data } = result.data;
         if (code != 200) return;
-        this.Dev_list = data[0].dev;
+        this.Dev_list = data.dev;
       });
     },
     delete_Devid(devid) {

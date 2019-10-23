@@ -1,13 +1,11 @@
-const Router = require('koa-router')
-const router = new Router()
+const Router = require("koa-router");
+const router = new Router();
 
-const Get = require('./Get')
-const Api = require('./Api')
+const Get = require("./Get");
+const Api = require("./Api");
 
-router.get('/Get/:id',Get)
+router.get("/Get/:id", Get);
 
-router.post('/Api/:id',Api)
+router.post("/Api/:id", Api);
 
-
-
-module.exports = router
+module.exports = router;

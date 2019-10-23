@@ -78,13 +78,13 @@ export default {
   },
   methods: {
     //刷选出要显示的字段
-    filter_show_value(value) {
+    /* filter_show_value(value) {
       let valueMap = {};
       for (let [key, val] of Object.entries(value)) {
         if (this.device[this.id].has(key)) valueMap[key] = val;
       }
       return valueMap;
-    },
+    }, */
     //到device
     toDevice(id, devid) {
       if (id == "io") return;
@@ -101,37 +101,29 @@ export default {
       return newValue;
     },
     ArrayBool(val) {
-      console.log(typeof val);
+      //console.log(typeof val);
     }, */
     /* 检查哪些设备不在线，get获取数据库的存档，写入store，当有socket新数据传入会直接复写存档数据 */
     async check_offline_dev() {
-      let dev_online = (() => {
-        return Object.values(this.dev).map(val => {
-          return Object.keys(val);
-        });
-      })();
+      //获取socket在线设备id
       let online = [];
-      dev_online.map(val => {
-        online = [...online, ...val];
+      Object.values(this.dev).forEach(val => {
+        online = [...online, ...Object.keys(val)];
       });
-      let { data: result } = await Get_user_all_devs({
-        user: this.user,
-        token: this.token
+      //获取用户所有设备
+      let {
+        data: { data: dev }
+      } = await Get_user_all_devs();
+      //刷选出不在线设备
+      let dev_offline = dev.filter(id => {
+        return !online.includes(id);
       });
-      let { data } = result;
-      let [{ dev }] = data;
-      let dev_offline = [];
-      dev.forEach(element => {
-        if (!online.includes(element.devid)) dev_offline.push(element);
-      });
-      dev_offline.forEach(async single => {
+      //获取所有不在线设备的数据单利
+      dev_offline.forEach(async devid => {
         let {
           data: { data: singleInfo }
-        } = await Get_devs_list_single({
-          user: this.user,
-          token: this.token,
-          devid: single.devid
-        });
+        } = await Get_devs_list_single({ devid });
+        if (!singleInfo) return console.log(devid + "不存在");
         let payload = {
           devType: singleInfo.devType,
           devs: singleInfo.data,

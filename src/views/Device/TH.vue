@@ -16,7 +16,7 @@
       </b-col>
       <b-col cols="12">
         <b-table :fields="th_fiedls" :items="items">
-          <template slot="[operate]" slot-scope="data">
+          <template v-slot:cell(operate)="data">
             <b-button
               variant="info"
               @click="

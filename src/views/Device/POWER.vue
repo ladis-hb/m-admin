@@ -52,7 +52,7 @@
           :items="filter_simulate"
           :fields="fields_simulate"
         >
-          <template slot="[operate]" slot-scope="data">
+          <template v-slot:cell(operate)="data">
             <b-button
               variant="info"
               @click="
@@ -107,7 +107,7 @@ export default {
     ...mapGetters(["lang", "unit"]),
     ...mapState(["dev"]),
     device() {
-      //console.log(this.dev.power[this.devid]);
+      ////console.log(this.dev.power[this.devid]);
       return this.dev.power[this.devid];
     },
     core() {

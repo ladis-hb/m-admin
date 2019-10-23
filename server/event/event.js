@@ -1,23 +1,19 @@
 /* jshint esversion:8 */
-const MongoClient = require("mongodb").MongoClient;
-const Client = MongoClient.connect("mongodb://localhost:27017/devs", {
-  useNewUrlParser: true
-});
+const { User_dev, Users } = require("../mongoose/user");
+const { log_socket } = require("../mongoose/log");
 const format = require("../util/Format");
-const config = require("../config");
 const { devsMap, userMap, rootSet } = require("../store");
-const io = require("../socket/index");
+const { io } = require("../socket/index");
 const event = require("../event/index");
 
 const on = () => {
   //监听连接事件，
-
   event.on("Alarm", async data => {
     if (!devsMap.get(data.DeviceId)) return false;
     let { user } = devsMap.get(data.DeviceId) || null;
     if (!user) return;
     user.forEach(u => {
-      io.io.to(userMap.get(u)).emit("Alarm", data);
+      io.to(userMap.get(u)).emit("Alarm", data);
     });
   });
   //
@@ -29,18 +25,15 @@ const on = () => {
       let { user, devType } = devsMap.get(id);
       user.forEach(async u => {
         if (userMap.has(u)) {
-          io.io.to(userMap.get(u)).emit("newDevs", { devType, devs });
+          io.to(userMap.get(u)).emit("newDevs", { devType, devs });
         }
       });
     } else {
       //设备map没有则连接数据库检索，set设备map
-      let db = await Client;
-      let devs_list = await db
-        .db(config.DB_dev)
-        .collection(config.DB_user_dev)
-        .find({ "dev.devid": id })
-        .project({ _id: 0, user: 1 })
-        .toArray();
+      let devs_list = await User_dev.find({ "dev.devid": id })
+        .select("user")
+        .exec();
+      //user is array
       let user = devs_list.map(u => {
         return u.user;
       });
@@ -57,7 +50,6 @@ const on = () => {
   event.on("adddevs", async data => {
     //console.log(`add设备::${JSON.stringify(data)}`);
     let { devid, devType, user } = data;
-
     let { user: devUser } = devsMap.get(devid);
     devUser.add(user);
     devsMap.set(devid, { devType, user: devUser });
@@ -117,38 +109,24 @@ const on = () => {
     }
     rootSet.forEach(u => {
       if (userMap.has(u)) {
-        io.io.to(userMap.get(u)).emit("lineInfo", sendInfo);
+        io.to(userMap.get(u)).emit("lineInfo", sendInfo);
       }
     });
   });
   function Save_log({ type, msg, user, generateTime }) {
     console.log(msg);
-    Client.then(db => {
-      db.db("devs")
-        .collection(config.DB_log_socket)
-        .insertOne({
-          line: type,
-          msg,
-          generateTime,
-          user: user || "no record"
-        });
-    }).catch(err => {
-      console.log(err);
+    let log = new log_socket({
+      status: type,
+      msg,
+      generateTime,
+      user: user || "no record"
     });
+    log.save();
   }
-  function Get_root_user() {
-    return Client.then(async db => {
-      let user = await db
-        .db("devs")
-        .collection(config.DB_user_users)
-        .find({ userGroup: "root" })
-        .project({ _id: 0, user: 1 })
-        .toArray();
-      return user.map(u => {
-        return u.user;
-      });
-    }).catch(err => {
-      console.log(err);
+  async function Get_root_user() {
+    let roots = await Users.find({ userGroup: "root" }).select("user");
+    return roots.map(u => {
+      return u.user;
     });
   }
 };

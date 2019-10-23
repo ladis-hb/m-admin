@@ -48,7 +48,7 @@ export default new Vuex.Store({
     },
     newDevs(state, payload) {
       let { devType, devs, status } = payload;
-      devs.status = status;
+      devs.status = status || false;
       let { devid, generateTime } = devs;
       //add dev
       if (!state.dev[devType][devid]) {

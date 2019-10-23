@@ -81,7 +81,7 @@ const config = require("../config");
 
 const Alarm = () => {
   return {
-    DeviceId:"1a24d35sa",
+    DeviceId: "1a24d35sa",
     Alarm_msg: getRndInteger(msg),
     Alarm_type: getRndInteger(type),
     Alarm_device: getRndInteger(dev),

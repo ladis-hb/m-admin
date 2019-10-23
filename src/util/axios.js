@@ -121,7 +121,7 @@ export const disable_select_user = ({ selectUser, status }) => {
 export const delete_select_user = ({ selectUser }) => {
   return axios.get(
     "/Get/delete_select_user",
-    assginArgument({ selectUser: JSON.stringify(selectUser) })
+    assginArgument({ selectUser: selectUser })
   );
 };
 //modify_select_user
