@@ -9,11 +9,11 @@
       >
         <b-card class="shadow w-500">
           <div class="d-flex flex-row-reverse flex-nowrap mb-4">
-            <b-link class="m-1 ml-2 text-info" to="Reset">{{
-              lang.get("reset")
-            }}</b-link>
+            <b-link class="m-1 ml-2 text-info" to="Reset">
+              {{ $t("login.7mc7hf") }}
+            </b-link>
             <b-link class="m-1  text-info" to="Register">{{
-              lang.get("registered")
+              $t("login.g12379")
             }}</b-link>
             <h4 class="text-success login-left">{{ lang.get("login") }}</h4>
           </div>
