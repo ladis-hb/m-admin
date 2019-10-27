@@ -20,7 +20,6 @@ Vue.component(VeLine.name, VeLine);
 Vue.component(VeGuage.name, VeGuage);
 //Vue.component(VeHistogram.name, VeHistogram);
 Vue.use(VueI18n);
-
 const i18n = new VueI18n({
   locale: "en",
   messages: {

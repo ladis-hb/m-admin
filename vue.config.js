@@ -1,5 +1,5 @@
 /* jshint esversion:8 */
-const localhost = false;
+const localhost = true;
 const proxyAddress = localhost
   ? "http://localhost:81"
   : "http://116.62.48.175:81";

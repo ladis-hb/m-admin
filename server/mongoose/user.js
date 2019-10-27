@@ -13,9 +13,13 @@ const Schema_User_dev = new Schema({
 
 Schema_User_dev.statics.GetUserDevs = async function(user) {
   let arr = await this.findOne({ user }, "dev");
-  return arr.dev.map(val => {
-    return val.devid;
-  });
+  try {
+    return arr.dev.map(val => {
+      return val.devid;
+    });
+  } catch (error) {
+    return [];
+  }
 };
 
 Schema_User_dev.statics.GetDevidUsers = async function(devid) {

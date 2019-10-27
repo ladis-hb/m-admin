@@ -1,21 +1,21 @@
 <template>
-  <b-container class=" bg-light d-flex flex-column h-100">
+  <b-container class="bg-light d-flex flex-column h-100">
     <b-row id="homePage">
-      <b-col id="Switch_quantity" cols="12" class=" border-bottom ">
+      <b-col id="Switch_quantity" cols="12" class="border-bottom">
         <b-row class="p-2">
-          <b-col cols="4" class=" text-center p-0">
+          <b-col cols="4" class="text-center p-0">
             <switch-quantity
               title="烟感"
               :variantBg="devFirst(dev.io, 'smoke')"
             ></switch-quantity>
           </b-col>
-          <b-col cols="4" class=" text-center p-0">
+          <b-col cols="4" class="text-center p-0">
             <switch-quantity
               title="漏水"
               :variantBg="devFirst(dev.io, 'leak')"
             ></switch-quantity>
           </b-col>
-          <b-col cols="4" class=" text-center p-0">
+          <b-col cols="4" class="text-center p-0">
             <switch-quantity
               title="门磁"
               :variantBg="devFirst(dev.io, 'access_contral')"
@@ -25,9 +25,9 @@
       </b-col>
     </b-row>
 
-    <b-row class=" overflow-hidden Alarm">
-      <div id="Alarm" class=" overflow-auto mh-100 w-100">
-        <b-list-group class="alarm-list-mh overflow-auto " id="alarm-list">
+    <b-row class="overflow-hidden Alarm">
+      <div id="Alarm" class="overflow-auto mh-100 w-100">
+        <b-list-group class="alarm-list-mh overflow-auto" id="alarm-list">
           <b-list-group-item
             v-for="(val, key) in Alarm.Alarm_Data.slice(0, 20)"
             :key="key"
@@ -41,9 +41,7 @@
                 :variant="val.confirm ? 'success' : 'warning'"
                 >{{ val.confirm ? "已确认" : "未确认" }}</b-badge
               >
-              <b class="m-0">
-                {{ val.Alarm_msg }}
-              </b>
+              <b class="m-0">{{ val.Alarm_msg }}</b>
             </div>
             <small>{{ val.Alarm_time }}</small>
             <!-- <b-collapse
@@ -72,75 +70,66 @@
                 @click.prevent="confirm_alarm(val._id, key)"
                 >确认</b-button
               >
-            </b-collapse> -->
+            </b-collapse>-->
           </b-list-group-item>
         </b-list-group>
       </div>
     </b-row>
-    <b-row id="Critical" class=" m-0  border-top mt-auto">
+    <b-row id="Critical" class="m-0 border-top mt-auto">
       <b-col cols="6" md="3" class="m-0 p-0">
-        <span class="text-Critical"
-          ><i class="iconfont text-success">&#xe602;</i>UPS负载:{{
-            devFirst(dev.ups, "output_load")
-          }}%</span
-        >
+        <span class="text-Critical">
+          <i class="iconfont text-success">&#xe602;</i>
+          UPS负载:{{ devFirst(dev.ups, "output_load") }}%
+        </span>
       </b-col>
       <b-col cols="6" md="3" class="m-0 p-0">
-        <span class="text-Critical"
-          ><i class="iconfont text-primary">&#xe600;</i>UPS功率:{{
-            devFirst(dev.ups, "output_frequency")
-          }}%</span
-        >
+        <span class="text-Critical">
+          <i class="iconfont text-primary">&#xe600;</i>
+          UPS功率:{{ devFirst(dev.ups, "output_frequency") }}%
+        </span>
       </b-col>
 
       <b-col cols="6" md="3" class="m-0 p-0">
-        <span class="text-Critical"
-          ><i class="iconfont text-success">&#xe603;</i>电池电压:{{
-            devFirst(dev.ups, "battery_voltage")
-          }}V</span
-        >
+        <span class="text-Critical">
+          <i class="iconfont text-success">&#xe603;</i>
+          电池电压:{{ devFirst(dev.ups, "battery_voltage") }}V
+        </span>
       </b-col>
       <b-col cols="6" md="3" class="m-0 p-0">
-        <span class="text-Critical"
-          ><i class="iconfont text-info">&#xe605;</i>电池容量:{{
-            devFirst(dev.ups, "output_load")
-          }}Kw</span
-        >
+        <span class="text-Critical">
+          <i class="iconfont text-info">&#xe605;</i>
+          电池容量:{{ devFirst(dev.ups, "output_load") }}Kw
+        </span>
       </b-col>
       <b-col cols="6" md="3" class="m-0 p-0">
-        <span class="text-Critical"
-          ><i class="iconfont text-success">&#xe604;</i>冷通道温度:{{
-            devFirst(dev.th, "temperature")
-          }}&#8451;</span
-        >
+        <span class="text-Critical">
+          <i class="iconfont text-success">&#xe604;</i>
+          冷通道温度:{{ devFirst(dev.th, "temperature") }}&#8451;
+        </span>
       </b-col>
       <b-col cols="6" md="3" class="m-0 p-0">
-        <span class="text-Critical"
-          ><i class="iconfont text-primary">&#xe601;</i>冷通道湿度:{{
-            devFirst(dev.th, "humidity")
-          }}%</span
-        >
+        <span class="text-Critical">
+          <i class="iconfont text-primary">&#xe601;</i>
+          冷通道湿度:{{ devFirst(dev.th, "humidity") }}%
+        </span>
       </b-col>
       <b-col cols="6" md="3" class="m-0 p-0">
-        <span class="text-Critical"
-          ><i class="iconfont text-danger">&#xe604;</i>热通道温度:{{
-            devFirst(dev.th, "temperature", 1)
-          }}&#8451;</span
-        >
+        <span class="text-Critical">
+          <i class="iconfont text-danger">&#xe604;</i>
+          热通道温度:{{ devFirst(dev.th, "temperature", 1) }}&#8451;
+        </span>
       </b-col>
       <b-col cols="6" md="3" class="m-0 p-0">
-        <span class="text-Critical"
-          ><i class="iconfont text-warning">&#xe601;</i>热通道湿度:{{
-            devFirst(dev.th, "humidity", 1)
-          }}%</span
-        >
+        <span class="text-Critical">
+          <i class="iconfont text-warning">&#xe601;</i>
+          热通道湿度:{{ devFirst(dev.th, "humidity", 1) }}%
+        </span>
       </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
-const io = require("socket.io-client")(); //("http://localhost:81");
 import { mapState, mapGetters } from "vuex";
 import { Message, MessageBox } from "element-ui";
 import SwitchQuantity from "../components/switchQuantity";
@@ -196,49 +185,7 @@ export default {
   mounted() {
     this.$nextTick()
       .then(() => {
-        {
-          let register = () => {
-            io.emit("register", { user: this.user, token: this.token });
-          };
-          io.on("connect", () => {
-            console.log(`${Date()}:::Socket connect`);
-            register();
-          });
-          io.on("reconnect", () => {
-            //console.log(`${Date()}:::Socket reconnect`);
-            register();
-          });
-          io.on("disconnect", () => {
-            //console.log(`${Date()}:::Socket disconnect`);
-          });
-          io.on("newDevs", data => {
-            data.status = true;
-            this.$store.dispatch("newDevs", data);
-          });
-          io.on("Alarm", data => {
-            //this.$store.commit("setAlarm", data);
-            MessageBox.confirm(data.Alarm_msg, "新的告警消息", {
-              confirmButtonText: "点击查看",
-              cancelButtonText: "取消",
-              type: "warning"
-            }).then(() => {
-              this.$router.push({ name: "Alarm" });
-            });
-          });
-        }
-        {
-          this.GetAlarms();
-        }
-        {
-          /* 
-      注册监听，loginout
-      */
-          this.$on("loginOut", () => {
-            //console.log("loginOut");
-            Message("loginout");
-            io.emit("disconnect");
-          });
-        }
+        this.GetAlarms();
       })
       .catch(err => {
         MessageBox(err, "main error");

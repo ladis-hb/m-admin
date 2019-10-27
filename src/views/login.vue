@@ -9,12 +9,12 @@
       >
         <b-card class="shadow w-500">
           <div class="d-flex flex-row-reverse flex-nowrap mb-4">
-            <b-link class="m-1 ml-2 text-info" to="Reset">
-              {{ $t("login.7mc7hf") }}
-            </b-link>
-            <b-link class="m-1  text-info" to="Register">{{
-              $t("login.g12379")
+            <b-link class="m-1 ml-2 text-info" to="Reset">{{
+              $t("login.7mc7hf")
             }}</b-link>
+            <b-link class="m-1 text-info" to="Register">
+              {{ $t("login.g12379") }}
+            </b-link>
             <h4 class="text-success login-left">{{ lang.get("login") }}</h4>
           </div>
           <b-form>
@@ -30,7 +30,7 @@
               <b-form-input
                 id="user"
                 v-model.trim="user"
-                placeholder=""
+                placeholder
               ></b-form-input>
             </b-form-group>
             <b-form-group
@@ -45,7 +45,7 @@
                 id="passwd"
                 type="password"
                 v-model.trim="passwd"
-                placeholder=""
+                placeholder
               ></b-form-input>
             </b-form-group>
             <b-form-group
@@ -67,8 +67,10 @@
                 @click="login_submit"
                 block
                 variant="info"
-                >{{ lang.get("login") }}<span></span
-              ></b-button>
+              >
+                {{ lang.get("login") }}
+                <span></span>
+              </b-button>
             </b-form-group>
           </b-form>
         </b-card>
@@ -83,6 +85,8 @@ import { requestLogin } from "../util/axios";
 import { btoa } from "../util/tool";
 import { mapGetters } from "vuex";
 import Header from "../components/Header";
+
+import { MySocket } from "../util/MySocket";
 
 export default {
   data() {
@@ -143,6 +147,7 @@ export default {
               localStorage.setItem("keep_passwd", "1");
               localStorage.setItem("user", user);
             }
+            MySocket(this, { user, token });
             this.$router.push(route);
           }
         })

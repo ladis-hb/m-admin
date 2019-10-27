@@ -11,8 +11,7 @@
         head-variant="dark"
         primary-key="generateTime"
         sticky-header="400px"
-      >
-      </b-table>
+      ></b-table>
     </b-col>
     <b-col cols="12">
       <separated title="Socket Online User"></separated>
@@ -25,8 +24,7 @@
         head-variant="dark"
         primary-key="generateTime"
         sticky-header="400px"
-      >
-      </b-table>
+      ></b-table>
     </b-col>
     <b-col cols="12">
       <separated title="Socket Online Device"></separated>
@@ -39,14 +37,13 @@
         head-variant="dark"
         primary-key="generateTime"
         sticky-header="400px"
-      >
-      </b-table>
+      ></b-table>
     </b-col>
   </b-row>
 </template>
 
 <script>
-const io = require("socket.io-client")(); //("http://localhost:81");
+import { io } from "../../util/MySocket";
 import { mapState, mapGetters } from "vuex";
 import separated from "../../components/separated.vue";
 export default {
@@ -91,22 +88,6 @@ export default {
   mounted() {
     this.$nextTick().then(() => {
       {
-        /*
-      注册socket连接
-      */ let register = () => {
-          io.emit("register", { user: this.user, token: this.token });
-        };
-        io.on("connect", () => {
-          //console.log(`${Date()}:::Socket connect`);
-          register();
-        });
-        io.on("reconnect", () => {
-          //console.log(`${Date()}:::Socket reconnect`);
-          register();
-        });
-        io.on("disconnect", () => {
-          //console.log(`${Date()}:::Socket disconnect`);
-        });
         io.on("lineInfo", r => {
           let {
             type,
