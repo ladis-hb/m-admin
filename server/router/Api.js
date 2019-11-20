@@ -1,15 +1,131 @@
 /* jshint esversion:8 */
-/* 由于安卓端程序变更，api暂时弃用，测试用例位于../util/update_data.js + Alarm_Test_Data.js */
-
 const event = require("../event/index");
 const { Alarm } = require("../mongoose/alarm");
+const DevMongo = require("../mongoose/dev");
 module.exports = async (ctx, next) => {
-  let {
-    params: { id }
-  } = ctx;
+  let { id } = ctx.params;
+  let body = ctx.request.body;
+
   if (["dev", "Alarm"].includes(id)) {
     switch (id) {
-      /* case "dev":
+      case "dev":
+        {
+          let { data, date, devType, deviceCode, name } = body;
+          let clientID = deviceCode.split("@")[0];
+          if (!["io", "th", "ac", "ups", "em"].includes(devType)) return false;
+          let result = { deviceCode, result: {}, msg: "success", stat: false };
+          let TempData = {};
+          switch (devType) {
+            case "ups":
+              {
+                TempData = {
+                  generateTime: date,
+                  name,
+                  brand: data["Ups Model"],
+                  devid: deviceCode,
+                  temperature:
+                    data["Max Temperature of the detecting pointers"],
+                  phase: data["Phase"],
+                  battery_voltage: data["Battery voltage"],
+                  output_frequency: data["Output frequency"],
+                  output_load: data["Output load percent"],
+                  DateTime: new Date(date),
+                  "Battery group number": data["Battery group number"],
+                  "Battery standard voltage per unit":
+                    data["Battery standard voltage per unit"],
+                  "Battery capacity": data["Battery capacity"],
+                  "Nominal O/P Voltage": data["Nominal O/P Voltage"],
+                  "Output power factor": data["Output power factor"],
+                  "Nominal I/P Voltage": data["Nominal I/P Voltage"],
+                  "Positive BUS voltage": data["Positive BUS voltage"],
+                  "Negative BUS voltage": data["Negative BUS voltage"],
+                  "Output voltage": data["Output voltage"],
+                  "Rating Output Frequency": data["Rating Output Frequency"],
+                  "Battery remain time": data["Battery remain time"],
+                  "Input voltage": data["Input voltage"],
+                  "Rating Output Voltage": data["Rating Output Voltage"],
+                  "Rating Output Current": data["Rating Output Current"],
+                  "Input frequency": data["Input frequency"],
+                  "Battery piece number": data["Battery piece number"],
+                  DevType: data["DevType"],
+                  "P Battery voltage": data["P Battery voltage"],
+                  "Output current": data["Output current"],
+                  "Ups Mode": data["Ups Mode"],
+                  "Rating Voltage": data["Rating Voltage"],
+                  "N Battery voltage": data["N Battery voltage"]
+                };
+                let ups = new DevMongo.Dev_ups(TempData);
+                result.result = await ups.save();
+              }
+              break;
+            case "th":
+              {
+                TempData = {
+                  generateTime: date,
+                  name: name,
+                  devid: deviceCode,
+                  temperature: [...data["Temperature"]].slice(0, 4).join(""),
+                  humidity: [...data["Humidity"]].slice(0, 4).join(""),
+                  DateTime: new Date(date)
+                };
+                let th = new DevMongo.Dev_th(TempData);
+                result.result = await th.save();
+              }
+              break;
+
+            case "em":
+              {
+                let EffectiveVoltage = [...data["EffectiveVoltage"]];
+                EffectiveVoltage =
+                  EffectiveVoltage.slice(0, EffectiveVoltage.length - 1).join(
+                    ""
+                  ) || 0;
+                let ActivePower = [...data["ActivePower"]];
+                ActivePower =
+                  ActivePower.slice(0, ActivePower.length - 2).join("") || 0;
+                let EffectiveCurrent = [...data["EffectiveCurrent"]];
+                EffectiveCurrent =
+                  EffectiveCurrent.slice(0, EffectiveCurrent - 1).join("") || 0;
+                //
+                TempData = {
+                  generateTime: date,
+                  name: name,
+                  devid: deviceCode,
+                  EffectiveVoltage,
+                  ActivePower,
+                  EffectiveCurrent,
+                  DateTime: new Date(date)
+                };
+                let em = new DevMongo.Dev_power(TempData);
+                result.result = await em.save();
+              }
+              break;
+            case "ac":
+              break;
+          }
+
+          //所有数据写入dev_all
+          DevMongo.Dev_all.updateOne(
+            {
+              devType: devType,
+              devid: deviceCode
+            },
+            { $set: { data: TempData } },
+            { upsert: true }
+          );
+          DevMongo.Dev_Table.updateOne(
+            { clientID },
+            { $addToSet: { devlist: deviceCode } },
+            { upsert: true }
+          );
+          if (result.result._id) {
+            result.stat = true;
+            result.result = {};
+          }
+          ctx.body = result;
+        }
+
+        /* 
         {
           var { type, updateTime, data, dataType } = ctx.request.body;
 
@@ -146,34 +262,16 @@ module.exports = async (ctx, next) => {
             };
             ctx.log = ctx.body;
           }
-        }
-         break;*/
+        } */
+        break;
       case "Alarm":
         {
-          /* let {
-            DeviceId,
-            Alarm_msg,
-            Alarm_type,
-            Alarm_device,
-            Alarm_level,
-            Alarm_time
-          } = ctx.request.body;
-          let Alarms = {
-            DeviceId,
-            Alarm_time,
-            Alarm_msg,
-            Alarm_device,
-            Alarm_level,
-            Alarm_type,
-            DateTime: Date.now(),
-            confirm: false,
-            confirm_user: "",
-            confirm_time: null
-          };
-          // */
+          //console.log(ctx.request.body);
+
           let alarminfo = new Alarm(ctx.request.body);
           alarminfo.save((err, res) => {
-            //console.log(res);
+            console.log(err);
+
             event.emit("Alarm", res);
             ctx.body = {
               code: 200,

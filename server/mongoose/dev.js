@@ -38,7 +38,28 @@ const Schema_Dev_ups = new Schema({
   bypass_mode: Boolean,
   Battery_voltage_state: Boolean,
   grid_state: Boolean,
-  DateTime: { type: Date, default: new Date() }
+  DateTime: { type: Date, default: new Date() },
+  "Battery group number": String,
+  "Battery standard voltage per unit": String,
+  "Battery capacity": Number,
+  "Nominal O/P Voltage": Number,
+  "Output power factor": Number,
+  "Nominal I/P Voltage": Number,
+  "Positive BUS voltage": Number,
+  "Negative BUS voltage": Number,
+  "Output voltage": Number,
+  "Rating Output Frequency": Number,
+  "Battery remain time": Number,
+  "Input voltage": Number,
+  "Rating Output Current": Number,
+  "Input frequency": Number,
+  "Battery piece number": Number,
+  DevType: String,
+  "P Battery voltage": String,
+  "Output current": Number,
+  "Ups Mode": String,
+  "Rating Voltage": Number,
+  "N Battery voltage": String
 });
 
 const Schema_Dev_ac = new Schema({
@@ -88,7 +109,10 @@ const Schema_Dev_power = new Schema({
   input_frequency_l1: [Number],
   input_frequency_l2: [Number],
   input_frequency_l3: [Number],
-  DateTime: { type: Date, default: new Date() }
+  DateTime: { type: Date, default: new Date() },
+  EffectiveVoltage: Number,
+  ActivePower: Number,
+  EffectiveCurrent: Number
 });
 
 const Schema_Dev_io = new Schema({
@@ -124,6 +148,11 @@ const Schema_Dev_Alarm = new Schema({
   confirm_user: { type: String, default: "" },
   confirm_time: { type: Date }
 });
+
+const Schema_Dev_Table = new Schema({
+  clientID: String,
+  devlist: [String]
+});
 const Dev_all = mongoose.model("dev_all", Schema_Dev_all, "Dev_all");
 const Dev_ups = mongoose.model("dev_ups", Schema_Dev_ups, "Dev_ups");
 const Dev_ac = mongoose.model("dev_ac", Schema_Dev_ac, "Dev_ac");
@@ -131,6 +160,7 @@ const Dev_power = mongoose.model("dev_power", Schema_Dev_power, "Dev_power");
 const Dev_io = mongoose.model("dev_io", Schema_Dev_io, "Dev_io");
 const Dev_th = mongoose.model("dev_th", Schema_Dev_th, "Dev_th");
 const Dev_Alarm = mongoose.model("dev_Alarm", Schema_Dev_Alarm, "Dev_Alarm");
+const Dev_Table = mongoose.model("dev_table", Schema_Dev_Table);
 
 const Dev_list = {
   ups: Dev_ups,
@@ -147,5 +177,6 @@ module.exports = {
   Dev_io,
   Dev_th,
   Dev_Alarm,
-  Dev_list
+  Dev_list,
+  Dev_Table
 };

@@ -3,11 +3,12 @@ const { mongoose, Schema } = require("./index");
 
 const Schema_Dev_Alarm = new Schema({
   DeviceId: String,
+  Dev_name: String,
   Alarm_time: { type: Date, default: new Date() },
   Alarm_msg: String,
-  Alarm_device: { type: String, enum: ["ups", "ac", "power", "io", "th"] },
+  Alarm_device: { type: String, enum: ["ups", "ac", "em", "io", "th"] },
   Alarm_level: { type: Number, enum: [0, 1, 2] },
-  Alarm_type: { type: String, enum: ["超下限", "告警恢复", "告警"] },
+  Alarm_type: { type: String }, //, enum: ["超下限", "告警恢复", "告警"] },
   DateTime: { type: Number, default: Date.now() },
   confirm: Boolean,
   confirm_user: { type: String, default: "" },
