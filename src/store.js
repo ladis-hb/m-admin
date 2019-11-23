@@ -46,8 +46,22 @@ export default new Vuex.Store({
       state.user = user;
       state.token = token;
     },
+    //添加新数据
     newDevs(state, payload) {
-      let { devType, devs, status } = payload;
+      let {
+        result: { devType, devid, data },
+        status
+      } = payload;
+      data.status = status || false;
+      let dev = state.dev[devType][devid];
+      if (!dev) Vue.set(state.dev[devType], devid, {});
+      state.dev[devType][devid] = data;
+      //
+      let devs = state.devs[devType][devid];
+      if (!devs) Vue.set(state.devs[devType], devid, []);
+      state.devs[devType][devid].push(data);
+
+      /* let { devType, devs, status } = payload;
       devs.status = status || false;
       let { devid, generateTime } = devs;
       //add dev
@@ -67,7 +81,7 @@ export default new Vuex.Store({
             generateTime: generateTime.split(" ")[1]
           });
         }
-      });
+      }); */
     },
     /* 配置Alarm */
     setAlarm(state, payload) {
@@ -83,10 +97,30 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async newDevs({ commit }, payload) {
-      commit("newDevs", await payload);
+    //socket监听设备接受数据
+    async socket_devUpdate({ commit }, result) {
+      commit("newDevs", Object.assign(result, { status: true }));
     },
-    async infoStream(/* { commit }, payload */) {}
+    //监听socket连接事件，连接成功就注册设备
+    async socket_connect({ state }) {
+      if (!state.user || state.user == "") return;
+      this._vm.$socket.client.emit("register", {
+        user: state.user,
+        token: state.token
+      });
+    },
+    //socket监听报警事件
+    async socket_DevAlarm({ _vm }, { result }) {
+      _vm.$MessageBox
+        .confirm(result.Alarm_msg, "新的告警消息", {
+          confirmButtonText: "点击查看",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+        .then(() => {
+          _vm.$router.push({ name: "Alarm" });
+        });
+    }
   },
   getters: {
     lang: ({ lang, language }) => {

@@ -151,7 +151,16 @@ const Schema_Dev_Alarm = new Schema({
 
 const Schema_Dev_Table = new Schema({
   clientID: String,
-  devlist: [String]
+  devlist: [String],
+  AlarmSendSelect: String,
+  http_uri: String,
+  mail: String,
+  webConnect: String,
+  main_query: String,
+  tel: String,
+  handle_wait_slim: String,
+  SocketID: String,
+  websocket_uri: String
 });
 const Dev_all = mongoose.model("dev_all", Schema_Dev_all, "Dev_all");
 const Dev_ups = mongoose.model("dev_ups", Schema_Dev_ups, "Dev_ups");

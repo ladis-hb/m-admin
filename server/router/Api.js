@@ -6,126 +6,130 @@ module.exports = async (ctx, next) => {
   let { id } = ctx.params;
   let body = ctx.request.body;
 
-  if (["dev", "Alarm"].includes(id)) {
-    switch (id) {
-      case "dev":
-        {
-          let { data, date, devType, deviceCode, name } = body;
-          let clientID = deviceCode.split("@")[0];
-          if (!["io", "th", "ac", "ups", "em"].includes(devType)) return false;
-          let result = { deviceCode, result: {}, msg: "success", stat: false };
-          let TempData = {};
-          switch (devType) {
-            case "ups":
-              {
-                TempData = {
-                  generateTime: date,
-                  name,
-                  brand: data["Ups Model"],
-                  devid: deviceCode,
-                  temperature:
-                    data["Max Temperature of the detecting pointers"],
-                  phase: data["Phase"],
-                  battery_voltage: data["Battery voltage"],
-                  output_frequency: data["Output frequency"],
-                  output_load: data["Output load percent"],
-                  DateTime: new Date(date),
-                  "Battery group number": data["Battery group number"],
-                  "Battery standard voltage per unit":
-                    data["Battery standard voltage per unit"],
-                  "Battery capacity": data["Battery capacity"],
-                  "Nominal O/P Voltage": data["Nominal O/P Voltage"],
-                  "Output power factor": data["Output power factor"],
-                  "Nominal I/P Voltage": data["Nominal I/P Voltage"],
-                  "Positive BUS voltage": data["Positive BUS voltage"],
-                  "Negative BUS voltage": data["Negative BUS voltage"],
-                  "Output voltage": data["Output voltage"],
-                  "Rating Output Frequency": data["Rating Output Frequency"],
-                  "Battery remain time": data["Battery remain time"],
-                  "Input voltage": data["Input voltage"],
-                  "Rating Output Voltage": data["Rating Output Voltage"],
-                  "Rating Output Current": data["Rating Output Current"],
-                  "Input frequency": data["Input frequency"],
-                  "Battery piece number": data["Battery piece number"],
-                  DevType: data["DevType"],
-                  "P Battery voltage": data["P Battery voltage"],
-                  "Output current": data["Output current"],
-                  "Ups Mode": data["Ups Mode"],
-                  "Rating Voltage": data["Rating Voltage"],
-                  "N Battery voltage": data["N Battery voltage"]
-                };
-                let ups = new DevMongo.Dev_ups(TempData);
-                result.result = await ups.save();
-              }
-              break;
-            case "th":
-              {
-                TempData = {
-                  generateTime: date,
-                  name: name,
-                  devid: deviceCode,
-                  temperature: [...data["Temperature"]].slice(0, 4).join(""),
-                  humidity: [...data["Humidity"]].slice(0, 4).join(""),
-                  DateTime: new Date(date)
-                };
-                let th = new DevMongo.Dev_th(TempData);
-                result.result = await th.save();
-              }
-              break;
-
-            case "em":
-              {
-                let EffectiveVoltage = [...data["EffectiveVoltage"]];
-                EffectiveVoltage =
-                  EffectiveVoltage.slice(0, EffectiveVoltage.length - 1).join(
-                    ""
-                  ) || 0;
-                let ActivePower = [...data["ActivePower"]];
-                ActivePower =
-                  ActivePower.slice(0, ActivePower.length - 2).join("") || 0;
-                let EffectiveCurrent = [...data["EffectiveCurrent"]];
-                EffectiveCurrent =
-                  EffectiveCurrent.slice(0, EffectiveCurrent - 1).join("") || 0;
-                //
-                TempData = {
-                  generateTime: date,
-                  name: name,
-                  devid: deviceCode,
-                  EffectiveVoltage,
-                  ActivePower,
-                  EffectiveCurrent,
-                  DateTime: new Date(date)
-                };
-                let em = new DevMongo.Dev_power(TempData);
-                result.result = await em.save();
-              }
-              break;
-            case "ac":
-              break;
-          }
-
-          //所有数据写入dev_all
-          DevMongo.Dev_all.updateOne(
+  if (!["dev", "Alarm", "uploadSetting"].includes(id)) return;
+  switch (id) {
+    case "dev":
+      {
+        let { data, date, devType, deviceCode, name } = body;
+        if (typeof data == "string") data = JSON.parse(data);
+        let clientID = deviceCode.split("@")[0];
+        if (!["io", "th", "ac", "ups", "em"].includes(devType)) return false;
+        let result = { deviceCode, result: {}, msg: "success", stat: false };
+        let TempData = {};
+        switch (devType) {
+          case "ups":
             {
-              devType: devType,
-              devid: deviceCode
-            },
-            { $set: { data: TempData } },
-            { upsert: true }
-          );
-          DevMongo.Dev_Table.updateOne(
-            { clientID },
-            { $addToSet: { devlist: deviceCode } },
-            { upsert: true }
-          );
-          if (result.result._id) {
-            result.stat = true;
-            result.result = {};
-          }
-          ctx.body = result;
+              TempData = {
+                generateTime: date,
+                name,
+                brand: data["Ups Model"],
+                devid: deviceCode,
+                temperature: data["Max Temperature of the detecting pointers"],
+                phase: data["Phase"],
+                battery_voltage: data["Battery voltage"],
+                output_frequency: data["Output frequency"],
+                output_load: data["Output load percent"],
+                DateTime: new Date(date),
+                "Battery group number": data["Battery group number"],
+                "Battery standard voltage per unit":
+                  data["Battery standard voltage per unit"],
+                "Battery capacity": data["Battery capacity"],
+                "Nominal O/P Voltage": data["Nominal O/P Voltage"],
+                "Output power factor": data["Output power factor"],
+                "Nominal I/P Voltage": data["Nominal I/P Voltage"],
+                "Positive BUS voltage": data["Positive BUS voltage"],
+                "Negative BUS voltage": data["Negative BUS voltage"],
+                "Output voltage": data["Output voltage"],
+                "Rating Output Frequency": data["Rating Output Frequency"],
+                "Battery remain time": data["Battery remain time"],
+                "Input voltage": data["Input voltage"],
+                "Rating Output Voltage": data["Rating Output Voltage"],
+                "Rating Output Current": data["Rating Output Current"],
+                "Input frequency": data["Input frequency"],
+                "Battery piece number": data["Battery piece number"],
+                DevType: data["DevType"],
+                "P Battery voltage": data["P Battery voltage"],
+                "Output current": data["Output current"],
+                "Ups Mode": data["Ups Mode"],
+                "Rating Voltage": data["Rating Voltage"],
+                "N Battery voltage": data["N Battery voltage"]
+              };
+              let ups = new DevMongo.Dev_ups(TempData);
+              result.result = await ups.save();
+            }
+            break;
+          case "th":
+            {
+              TempData = {
+                generateTime: date,
+                name: name,
+                devid: deviceCode,
+                temperature: [...data["Temperature"]].slice(0, 4).join(""),
+                humidity: [...data["Humidity"]].slice(0, 4).join(""),
+                DateTime: new Date(date)
+              };
+              let th = new DevMongo.Dev_th(TempData);
+              result.result = await th.save();
+            }
+            break;
+
+          case "em":
+            {
+              let EffectiveVoltage = [...data["EffectiveVoltage"]];
+              EffectiveVoltage =
+                EffectiveVoltage.slice(0, EffectiveVoltage.length - 1).join(
+                  ""
+                ) || 0;
+              let ActivePower = [...data["ActivePower"]];
+              ActivePower =
+                ActivePower.slice(0, ActivePower.length - 2).join("") || 0;
+              let EffectiveCurrent = [...data["EffectiveCurrent"]];
+              EffectiveCurrent =
+                EffectiveCurrent.slice(0, EffectiveCurrent - 1).join("") || 0;
+              //
+              TempData = {
+                generateTime: date,
+                name: name,
+                devid: deviceCode,
+                EffectiveVoltage,
+                ActivePower,
+                EffectiveCurrent,
+                DateTime: new Date(date)
+              };
+              let em = new DevMongo.Dev_power(TempData);
+              result.result = await em.save();
+            }
+            break;
+          case "ac":
+            break;
         }
 
-        /* 
+        //所有数据写入dev_all
+        DevMongo.Dev_all.findOneAndUpdate(
+          {
+            devType: devType,
+            devid: deviceCode
+          },
+          { $set: { data: TempData } },
+          { upsert: true }
+        ).then(result => {
+          event.emit("devUpdate", { clientID, result });
+        });
+        DevMongo.Dev_Table.updateOne(
+          { clientID },
+          { $addToSet: { devlist: deviceCode } },
+          { upsert: true }
+        ); /* .then(res => {
+          //console.log(res);
+        }); */
+        if (result.result._id) {
+          result.stat = true;
+          result.result = {};
+        }
+        ctx.body = result;
+      }
+
+      /* 
         {
           var { type, updateTime, data, dataType } = ctx.request.body;
 
@@ -263,25 +267,67 @@ module.exports = async (ctx, next) => {
             ctx.log = ctx.body;
           }
         } */
-        break;
-      case "Alarm":
-        {
-          //console.log(ctx.request.body);
-
-          let alarminfo = new Alarm(ctx.request.body);
-          alarminfo.save((err, res) => {
-            console.log(err);
-
-            event.emit("Alarm", res);
-            ctx.body = {
-              code: 200,
-              msg: `Alarm submission successful`,
-              req: res
-            };
+      break;
+    //接受告警信息
+    case "Alarm":
+      {
+        let alarminfo = new Alarm(ctx.request.body);
+        alarminfo.save((err, result) => {
+          if (err) return console.log(err);
+          event.emit("DevAlarm", {
+            clientID: result["DeviceId"].split("@")[0],
+            result
           });
-        }
-        break;
-    }
+          ctx.body = {
+            code: 200,
+            msg: `Alarm submission successful`,
+            req: result
+          };
+        });
+      }
+      break;
+    //接受客户个性化配置
+    case "uploadSetting":
+      {
+        let {
+          AlarmSendSelect,
+          http_uri,
+          mail,
+          webConnect,
+          main_query,
+          MacStr,
+          tel,
+          handle_wait_slim,
+          SocketID,
+          websocket_uri
+        } = body;
+        DevMongo.Dev_Table.updateOne(
+          { clientID: MacStr.split("@")[0] },
+          {
+            $set: {
+              AlarmSendSelect,
+              http_uri,
+              mail,
+              webConnect,
+              main_query,
+              tel,
+              handle_wait_slim,
+              SocketID,
+              websocket_uri
+            }
+          },
+          { upsert: true }
+        ).then(/* res => {
+          //console.log(res);
+        }); */);
+        ctx.body = {
+          code: 200,
+          msg: `Setting submission successful`,
+          req: body
+        };
+      }
+      break;
   }
+
   await next();
 };

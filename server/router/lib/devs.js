@@ -1,7 +1,7 @@
 /* jshint esversion:8 */
 const event = require("../../event/index");
 const { User_dev } = require("../../mongoose/user");
-const { Dev_all, Dev_list } = require("../../mongoose/dev");
+const { Dev_all, Dev_list, Dev_Table } = require("../../mongoose/dev");
 const formatResult = require("../../util/formatResult");
 
 const Dev_all_info = async ctx => {
@@ -27,21 +27,37 @@ const Dev_all_info = async ctx => {
 };
 
 const addDevid = async ctx => {
-  let { devid, devType, user } = ctx.query;
+  let { devid, user } = ctx.query;
   await User_dev.updateOne(
     { user },
-    { $addToSet: { dev: { type: devType, devid, devName: devid } } },
+    { $addToSet: { dev: { devid, devName: devid } } },
     { upsert: true }
   ).then(res => {
     ctx.body = formatResult(201, res);
-    event.emit("adddevs", { devid, devType, user });
+    event.emit("UserAddClient", { devid, user });
   });
 };
 
 const Get_devid_list = async ctx => {
-  await User_dev.findOne({ user: ctx.query.user }).then(res => {
-    ctx.body = formatResult(202, res);
+  let user = ctx.query.user;
+  let clientIDs = await User_dev.GetUserDevs(user);
+  let result = clientIDs.map(async clientID => {
+    let { devlist } = await Dev_Table.findOne({ clientID }, "devlist");
+    let devlistInfos = await Dev_all.find({ devid: { $in: devlist } });
+    let devlistSrize = devlistInfos.map(coll => {
+      return {
+        devType: coll.devType,
+        devid: coll.devid,
+        devName: coll.data.name
+      };
+    });
+    return {
+      clientID,
+      devlist,
+      devlistSrize
+    };
   });
+  ctx.body = formatResult(202, await Promise.all(result));
 };
 
 const delete_Devid = async ctx => {

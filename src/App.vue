@@ -1,12 +1,13 @@
 <template>
-  <div id="app" class="h-100">
+  <div id="app">
     <router-view />
   </div>
 </template>
 
 <style lang="scss">
 html,
-body {
+body,
+#app {
   height: 100%;
 }
 </style>

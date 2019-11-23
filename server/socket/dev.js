@@ -1,4 +1,5 @@
 /* jshint esversion:8 */
+//Socket版Api，因为李文符想法改了，切回http-Api
 const { ClientSocketMap, DevClientMap } = require("../store");
 const event = require("../event/index");
 const { devsMap } = require("../store");

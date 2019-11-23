@@ -86,7 +86,7 @@ import { btoa } from "../util/tool";
 import { mapGetters } from "vuex";
 import Header from "../components/Header";
 
-import { MySocket } from "../util/MySocket";
+//import { MySocket } from "../util/MySocket";
 
 export default {
   data() {
@@ -147,7 +147,8 @@ export default {
               localStorage.setItem("keep_passwd", "1");
               localStorage.setItem("user", user);
             }
-            MySocket(this, { user, token });
+            //this.$socket.emit("register", { user, token });
+            //MySocket(this, { user, token });
             this.$router.push(route);
           }
         })

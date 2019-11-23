@@ -7,16 +7,40 @@ const { io } = require("../socket/index");
 const event = require("../event/index");
 
 const on = () => {
-  //监听连接事件，
-  event.on("Alarm", async data => {
-    if (!devsMap.get(data.DeviceId)) return false;
-    let { user } = devsMap.get(data.DeviceId) || null;
-    if (!user) return;
-    user.forEach(u => {
-      io.to(userMap.get(u)).emit("Alarm", data);
+  //监听API数据上传事件
+  event.on("devUpdate", async ({ clientID, result }) => {
+    let userArray = await DevsMapValue(clientID);
+    userArray.forEach(async user => {
+      if (userMap.has(user))
+        io.to(userMap.get(user)).emit("devUpdate", { clientID, result });
     });
   });
+  //监听连接事件，
+  event.on("DevAlarm", async ({ clientID, result }) => {
+    let userArray = await DevsMapValue(clientID);
+    userArray.forEach(async user => {
+      if (userMap.has(user))
+        io.to(userMap.get(user)).emit("DevAlarm", { clientID, result });
+    });
+  });
+  //监听用户添加环控主机
+  event.on("UserAddClient", async ({ devid, user }) => {
+    let userArray = await DevsMapValue(devid);
+    if (![...userArray].includes(user))
+      devsMap.set(devid, new Set([...userArray, user]));
+    /* 
+    let { devid, devType, user } = data;
+    let { user: devUser } = devsMap.get(devid);
+    devUser.add(user);
+    devsMap.set(devid, { devType, user: devUser });
+    event.emit("onlien", {
+      type: "addDevice",
+      msg: `用户${user}添加设备${devType}，设备号:${devid}`,
+      user
+    }); */
+  });
   //
+  /*
   event.on("devs", async data => {
     let { devs, type } = data;
     let id = devs.devid;
@@ -75,6 +99,7 @@ const on = () => {
   });
 
   //online
+   */
   event.on("onlien", async result => {
     await result;
     result.generateTime = format.formatDate();
@@ -128,6 +153,17 @@ const on = () => {
     return roots.map(u => {
       return u.user;
     });
+  }
+  //获取devsmap key,如果没有key，set新key，value
+  async function DevsMapValue(clientID) {
+    //判断devsmap是否包含客户端id
+    if (!devsMap.has(clientID)) {
+      //获取含义clientid的用户
+      let userArray = await User_dev.GetDevidUsers(clientID);
+      if (!userArray && userArray.length < 1) return [];
+      devsMap.set(clientID, new Set(userArray));
+    }
+    return devsMap.get(clientID);
   }
 };
 

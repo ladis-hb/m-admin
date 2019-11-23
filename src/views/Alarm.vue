@@ -1,11 +1,11 @@
 <template>
-  <b-container class=" mh-100" fluid>
+  <b-container class=" h-100" fluid>
     <Header :title="lang.get('alarm')"></Header>
     <b-row>
-      <b-col cols="12" class=" mh-100">
+      <b-col cols="12" class=" h-100 overflow-auto">
         <separated :title="lang.get('AM')"></separated>
 
-        <b-list-group class="alarm-list-mh overflow-auto" id="alarm-list">
+        <b-list-group class="alarm-list-mh" id="alarm-list">
           <b-list-group-item
             v-for="(val, key) in Alarms"
             :key="key"

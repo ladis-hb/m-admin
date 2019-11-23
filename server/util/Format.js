@@ -80,7 +80,7 @@ const Validation_user = async (ctx, data) => {
   let result = {
     status,
     user,
-    userGroup: s.userGroup || ""
+    userGroup: (s && s.userGroup) || ""
   };
   return result;
 };

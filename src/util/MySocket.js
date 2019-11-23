@@ -19,14 +19,20 @@ export const MySocket = function(vue, { user, token }) {
   });
   io.on("disconnect", () => {
     console.log(`${Date()}:::Socket disconnect`);
+    register();
   });
-  io.on("newDevs", data => {
+  /* io.on("newDevs", data => {
     data.status = true;
     vue.$store.dispatch("newDevs", data);
+  }); */
+  io.on("devUpdate", ({ result }) => {
+    //console.log(result);
+    result.status = true;
+    vue.$store.dispatch("newDevs", result);
   });
-  io.on("Alarm", data => {
+  io.on("DevAlarm", ({ result }) => {
     //this.$store.commit("setAlarm", data);
-    MessageBox.confirm(data.Alarm_msg, "新的告警消息", {
+    MessageBox.confirm(result.Alarm_msg, "新的告警消息", {
       confirmButtonText: "点击查看",
       cancelButtonText: "取消",
       type: "warning"

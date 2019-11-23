@@ -40,5 +40,15 @@ module.exports = {
     },
     //输出运行进度到控制台。
     progress: true
+  },
+  chainWebpack: config => {
+    config.module
+      .rule("eslint")
+      .use("eslint-loader")
+      .loader("eslint-loader")
+      .tap(options => {
+        options.fix = true;
+        return options;
+      });
   }
 };

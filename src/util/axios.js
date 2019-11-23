@@ -52,8 +52,8 @@ export const getLog = params => {
 };
 
 //add devid
-export const addDevid = ({ devid, devType }) => {
-  return axios.get("/Get/addDevid", assginArgument({ devid, devType }));
+export const addDevid = ({ devid }) => {
+  return axios.get("/Get/addDevid", assginArgument({ devid }));
 };
 //get devid_list
 export const Get_devid_list = () => {

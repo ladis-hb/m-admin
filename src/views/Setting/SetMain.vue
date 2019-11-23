@@ -1,10 +1,10 @@
 <template>
   <b-container class="set-devs">
     <b-row>
-      <separated title="add devs"></separated>
-      <b-col cols="12" sm="6">
+      <separated title="添加主机"></separated>
+      <b-col cols="12" sm="8">
         <b-form-group
-          label="设备Id:"
+          label="环控主机MacId:"
           label-for="Devid"
           label-cols="12"
           label-cols-sm="2"
@@ -12,41 +12,47 @@
           <b-form-input id="Devid" v-model.trim="Devid"></b-form-input>
         </b-form-group>
       </b-col>
-      <b-col cols="12" sm="4">
-        <b-form-group
-          label="设备类型:"
-          lable-for="DevType"
-          label-cols="12"
-          label-cols-sm="3"
-        >
-          <b-form-select v-model="DevType" :options="DevTypes"> </b-form-select>
-        </b-form-group>
+
+      <b-col cols="6" sm="2">
+        <b-button variant="info" block @click="addDevid">Add Device</b-button>
       </b-col>
-      <b-col cols="12" sm="2">
-        <b-button variant="info" block @click="addDevid">Sumbit</b-button>
+      <b-col cols="6" sm="2">
+        <b-button variant="dark" block @click="DeleteDevid"
+          >Delete Device</b-button
+        >
       </b-col>
     </b-row>
     <b-row>
-      <separated title="dev list"></separated>
-      <b-col cols="12" class="table-mx overflow-auto">
-        <b-table
-          :items="Dev_list"
-          :fields="fields"
-          hover
-          sticky-header
-          head-variant="dark"
-          Borderless
-          selectable
-          select-mode="multi"
-          selected-variant="info"
-          @row-selected="onRowSelected"
-        >
-        </b-table>
+      <separated title="主机设备清单"></separated>
+      <b-col cols="12" class="table-mx">
+        <b-list-group>
+          <b-list-group-item
+            v-for="(client, key) in Dev_list"
+            :key="key"
+            button
+            v-b-toggle="client.clientID"
+          >
+            <i
+              >客户端ID：{{ client.clientID }}，设备数量:{{
+                client.devlistSrize.length
+              }}</i
+            >
+
+            <b-collapse :id="client.clientID" visible accordion="my-accordion">
+              <b-list-group>
+                <b-list-group-item
+                  v-for="(devs, key) in client.devlistSrize"
+                  :key="key"
+                >
+                  <p>设备类型:{{ devs.devType }}</p>
+                  <p>设备名称:{{ devs.devName }}</p>
+                  <p>设备ID：{{ devs.devid }}</p>
+                </b-list-group-item>
+              </b-list-group>
+            </b-collapse>
+          </b-list-group-item>
+        </b-list-group>
       </b-col>
-      <b-button class="mx-4" @click="Del_select_items">删除所选</b-button
-      ><b-button variant="info" class="mx-4" @click="Modify_select_items"
-        >修改别名</b-button
-      >
     </b-row>
   </b-container>
 </template>
@@ -55,7 +61,7 @@
 import {
   addDevid,
   delete_Devid,
-  Modify_devName,
+  //Modify_devName,
   Get_devid_list
 } from "../../util/axios";
 import { mapGetters, mapState } from "vuex";
@@ -65,21 +71,12 @@ export default {
   data() {
     return {
       Devid: "",
-      DevType: "",
-      DevTypes: [
-        { value: "ups", text: "UPS" },
-        { value: "ac", text: "AC" },
-        { value: "power", text: "POWER" },
-        { value: "io", text: "IO" },
-        { value: "th", text: "TH" }
-      ],
       Dev_list: [],
       fields: [
         { key: "type", label: "类型", sortable: true },
         { key: "devName", label: "别名" },
         { key: "devid", label: "设备Id" }
-      ],
-      Select_items: []
+      ]
     };
   },
   components: {
@@ -91,13 +88,10 @@ export default {
   },
   methods: {
     addDevid() {
-      let { Devid, DevType } = this.$data;
-      if (Devid == "" || DevType == "") return MessageBox.alert("参数不能为空");
+      let { Devid } = this.$data;
+      if (Devid == "") return MessageBox.alert("参数不能为空");
       addDevid({
-        devid: Devid,
-        devType: DevType,
-        user: this.user,
-        token: this.token
+        devid: Devid
       })
         .then(({ data: { code, msg } }) => {
           if (code != 200) return MessageBox(msg, "tip");
@@ -109,32 +103,26 @@ export default {
           MessageBox(err, "error");
         });
     },
-    /* devslist触发事件，获取选中的option，允许多选 */
-    onRowSelected(item) {
-      this.Select_items = item;
-    },
-    Del_select_items() {
-      let items_devsid = this.Select_items.map(val => {
-        return val.devid;
+    DeleteDevid() {
+      let { Devid } = this.$data;
+      let all = this.Dev_list.map(el => {
+        return el.clientID;
       });
-      MessageBox.confirm(
-        `是否要删除设备：${items_devsid.join("/")}`,
-        "删除设备",
-        {
-          type: "warning"
+
+      if (Devid == "" || !all.includes(Devid))
+        return MessageBox.alert("参数不能为空或不存在的设备号");
+      this.$MessageBox(`是否需要删除设备${Devid}?`, "Delete Device").then(
+        () => {
+          delete_Devid({
+            devid: Devid
+          }).then(({ data: { code, msg } }) => {
+            if (code != 200) return MessageBox(msg, "tip");
+            return this.$Message(msg);
+          });
         }
-      )
-        .then(() => {
-          for (let id of items_devsid) {
-            this.delete_Devid(id);
-          }
-          this.Get_user_all_devs();
-        })
-        .catch(() => {
-          Message("取消删除");
-        });
+      );
     },
-    Modify_select_items() {
+    /* Modify_select_items() {
       let items = this.Select_items[0];
       if (!items) return Message("请选择需要修改的设备/单选");
       let { devid, devName } = items;
@@ -152,22 +140,13 @@ export default {
             MessageBox(err, "error-settingMain");
           });
       });
-    },
+    }, */
     Get_user_all_devs() {
       Get_devid_list().then(result => {
         let { code, data } = result.data;
         if (code != 200) return;
-        this.Dev_list = data.dev;
+        this.Dev_list = data;
       });
-    },
-    delete_Devid(devid) {
-      delete_Devid({ user: this.user, token: this.token, devid })
-        .then(() => {
-          Message(`删除了设备${devid}`);
-        })
-        .catch(err => {
-          MessageBox.alert(err, "error");
-        });
     }
   },
 

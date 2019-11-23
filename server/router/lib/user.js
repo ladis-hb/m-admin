@@ -73,7 +73,7 @@ const register = async ctx => {
         address: ctx.ip.split(":").reverse()[0]
       });
       await users.save().then(res => {
-        ctx.body = formatResult(115, res);
+        ctx.body = formatResult(110, res);
       });
     }
   }

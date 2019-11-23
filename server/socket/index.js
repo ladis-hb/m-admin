@@ -3,7 +3,7 @@ const IO = require("koa-socket-2");
 const io = new IO();
 
 const event = require("../event/index");
-const { ReceiveData } = require("../socket/dev");
+//const { ReceiveData } = require("../socket/dev");
 const {
   userMap,
   socketIdMap,
@@ -21,7 +21,7 @@ module.exports = {
         type: "onlien",
         msg: `新的Socket用户连接，Socket.id: ${socket.id}`
       });
-      let socketID = socket.id;
+      //let socketID = socket.id;
       //监听web端客户注册
       socket.on("register", data => {
         let { user } = data;
@@ -68,9 +68,9 @@ module.exports = {
         });
       });
       //设备注册，发送数据事件
-      socket.on("receiveData", data => {
+      /* socket.on("receiveData", data => {
         ReceiveData({ data: data, socketid: socketID });
-      });
+      }); */
     });
   }
 };

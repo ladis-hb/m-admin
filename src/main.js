@@ -7,6 +7,9 @@ import BootstrapVue from "bootstrap-vue";
 import VeLine from "v-charts/lib/line";
 import VeGuage from "v-charts/lib/gauge";
 import VueI18n from "vue-i18n";
+import VueSocketIOExt from "vue-socket.io-extended";
+import io from "socket.io-client";
+import { Message, MessageBox } from "element-ui";
 //import VeHistogram from "v-charts/lib/histogram";
 
 import "bootstrap/dist/css/bootstrap.css";
@@ -14,6 +17,9 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 import "./assets/theme-chalk/message-box.css";
 import "./assets/theme-chalk/icon.css";
 import "./assets/icon/iconfont.css";
+//socket.io
+const socket = io("http://192.168.1.119:81");
+Vue.use(VueSocketIOExt, socket, { store });
 
 Vue.use(BootstrapVue);
 Vue.component(VeLine.name, VeLine);
@@ -27,6 +33,9 @@ const i18n = new VueI18n({
     zh: require("./locales/zh.json")
   }
 });
+
+Vue.prototype.$Message = Message;
+Vue.prototype.$MessageBox = MessageBox;
 
 Vue.config.productionTip = false;
 
