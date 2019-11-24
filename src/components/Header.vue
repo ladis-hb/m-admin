@@ -8,6 +8,7 @@
       <span @click="backto"><i class=" el-icon-back"></i></span>
       <span class=" text-light mx-2">|</span>
       <span class="text-center text-light">{{ title }}</span>
+      <span class="ml-auto text-light">{{ $d(new Date(), "long") }}</span>
     </b-col>
   </b-row>
 </template>

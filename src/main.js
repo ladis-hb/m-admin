@@ -27,11 +27,13 @@ Vue.component(VeGuage.name, VeGuage);
 //Vue.component(VeHistogram.name, VeHistogram);
 Vue.use(VueI18n);
 const i18n = new VueI18n({
-  locale: "en",
+  locale: "zh",
   messages: {
     en: require("./locales/en.json"),
     zh: require("./locales/zh.json")
-  }
+  },
+  //date本地化
+  dateTimeFormats: require("./locales/dateTimeFormats")
 });
 
 Vue.prototype.$Message = Message;
