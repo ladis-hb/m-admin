@@ -3,19 +3,19 @@
     <b-row no-gutters class=" py-2">
       <b-col cols="4" class="text-center p-0">
         <switch-quantity
-          title="烟感"
+          :title="$t('main.qh3w9j')"
           :variantBg="devFirst(dev.io, 'smoke')"
         ></switch-quantity>
       </b-col>
       <b-col cols="4" class="text-center p-0">
         <switch-quantity
-          title="漏水"
+          :title="$t('main.4vlfuz')"
           :variantBg="devFirst(dev.io, 'leak')"
         ></switch-quantity>
       </b-col>
       <b-col cols="4" class="text-center p-0">
         <switch-quantity
-          title="门磁"
+          :title="$t('main.jalrtk')"
           :variantBg="devFirst(dev.io, 'access_contral')"
         ></switch-quantity>
       </b-col>
@@ -36,11 +36,13 @@
                 class="mr-2"
                 pill
                 :variant="val.confirm ? 'success' : 'warning'"
-                >{{ val.confirm ? "已确认" : "未确认" }}</b-badge
+                >{{
+                  val.confirm ? $t("main.de85p8") : $t("main.np09ab")
+                }}</b-badge
               >
               <b class="m-0">{{ val.Alarm_msg }}</b>
             </div>
-            <small>{{ val.Alarm_time }}</small>
+            <small>{{ $d(new Date(val.Alarm_time), "long") }}</small>
           </b-list-group-item>
         </b-list-group>
       </b-col>
@@ -49,50 +51,52 @@
       <b-col cols="6" sm="3">
         <span class="text-Critical">
           <i class="iconfont text-success">&#xe602;</i>
-          UPS负载:{{ devFirst(dev.ups, "output_load") }}%
+          {{ $t("main.kl4jme") }}:{{ devFirst(dev.ups, "output_load") }}%
         </span>
       </b-col>
       <b-col cols="6" sm="3" class="m-0 p-0">
         <span class="text-Critical">
           <i class="iconfont text-primary ">&#xe600;</i>
-          UPS功率:{{ devFirst(dev.ups, "output_frequency") }}%
+          {{ $t("main.ea1565") }}:{{ devFirst(dev.ups, "output_frequency") }}%
         </span>
       </b-col>
 
       <b-col cols="6" sm="3" class="m-0 p-0">
         <span class="text-Critical">
           <i class="iconfont text-success">&#xe603;</i>
-          电池电压:{{ devFirst(dev.ups, "battery_voltage") }}V
+          {{ $t("main.awsvap") }}:{{ devFirst(dev.ups, "battery_voltage") }}V
         </span>
       </b-col>
       <b-col cols="6" sm="3" class="m-0 p-0">
         <span class="text-Critical">
           <i class="iconfont text-info">&#xe605;</i>
-          电池容量:{{ devFirst(dev.ups, "Battery capacity") }}Kw
+          {{ $t("main.nq1tox") }}:{{ devFirst(dev.ups, "Battery capacity") }}Kw
         </span>
       </b-col>
       <b-col cols="6" sm="3" class="m-0 p-0">
         <span class="text-Critical">
           <i class="iconfont text-success">&#xe604;</i>
-          冷通道温度:{{ devFirst(dev.th, "temperature") }}&#8451;
+          {{ $t("main.6f21cg") }}:{{ devFirst(dev.th, "temperature") }}&#8451;
         </span>
       </b-col>
       <b-col cols="6" sm="3" class="m-0 p-0">
         <span class="text-Critical">
           <i class="iconfont text-primary">&#xe601;</i>
-          冷通道湿度:{{ devFirst(dev.th, "humidity") }}%
+          {{ $t("main.j6ab1l") }}:{{ devFirst(dev.th, "humidity") }}%
         </span>
       </b-col>
       <b-col cols="6" sm="3" class="m-0 p-0">
         <span class="text-Critical">
           <i class="iconfont text-danger ">&#xe604;</i>
-          热通道温度:{{ devFirst(dev.th, "temperature", 1) }}&#8451;
+          {{ $t("main.5k5m1g") }}:{{
+            devFirst(dev.th, "temperature", 1)
+          }}&#8451;
         </span>
       </b-col>
       <b-col cols="6" sm="3" class="m-0 p-0">
         <span class="text-Critical">
           <i class="iconfont text-warning ">&#xe601;</i>
-          热通道湿度:{{ devFirst(dev.th, "humidity", 1) }}%
+          {{ $t("main.473joa") }}:{{ devFirst(dev.th, "humidity", 1) }}%
         </span>
       </b-col>
     </b-row>
@@ -103,14 +107,13 @@
 import { mapState, mapGetters } from "vuex";
 import { MessageBox } from "element-ui";
 import SwitchQuantity from "../components/switchQuantity";
-import { GetAlarms } from "../util/axios";
 export default {
   components: {
     SwitchQuantity
   },
   computed: {
-    ...mapState({ user: "user", token: "token", dev: "dev", Alarm: "Alarm" }),
-    ...mapGetters(["lang", "unit"])
+    ...mapState({ dev: "dev", Alarm: "Alarm" }),
+    ...mapGetters(["unit"])
   },
   methods: {
     devFirst(value, key, n) {
@@ -122,24 +125,13 @@ export default {
     },
     to(key) {
       this.$router.push({ path: `/dev/${key}` });
-    },
-    /* GetAlarms */
-    GetAlarms() {
-      GetAlarms()
-        .then(({ data: { code, data: result, msg } }) => {
-          if (code != 200) return MessageBox(msg);
-          this.$store.commit("setAlarm", result);
-        })
-        .catch(err => {
-          MessageBox(err, "error_Alarm");
-        });
     }
+    /* GetAlarms */
   },
   mounted() {
-    this.$on("loginOut", () => this.$socket.client.emit("disconnect"));
     this.$nextTick()
       .then(() => {
-        this.GetAlarms();
+        this.$store.dispatch("GetAlarms");
       })
       .catch(err => {
         MessageBox(err, "main error");

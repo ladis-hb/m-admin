@@ -7,7 +7,7 @@
       <b-col cols="12" class="p-0">
         <separated
           :back="true"
-          :title="lang.get(dev.type) + '/' + dev.devid"
+          :title="language.get(dev.type) + '/' + dev.devid"
         ></separated>
       </b-col>
       <b-col cols="12" class="p-0">
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 import separated from "../components/separated.vue";
 import { Search_history_dev } from "../util/axios";
 import { MessageBox } from "element-ui";
@@ -50,9 +50,9 @@ export default {
   data() {
     return {
       dev: {
-        type: "",
-        devid: "",
-        attr: ""
+        type: this.$route.query.type,
+        devid: this.$route.query.devid,
+        attr: this.$route.query.attr
       },
       show_search: false,
       search_date: null,
@@ -63,46 +63,68 @@ export default {
     };
   },
   computed: {
-    ...mapState(["devs", "devsSet", "user", "token"]),
-    ...mapGetters(["lang"]),
+    ...mapState(["devs"]),
+    language() {
+      return this.$store.getters.language(this.$i18n.locale);
+    },
     chartSettings() {
       return {
+        //控制显示key
         metrics: [this.dev.attr],
+        //唯独指标
         dimension: ["generateTime"],
+        //
         area: true,
+        //别名
         labelMap: {
-          [this.dev.attr]: this.lang.get(this.dev.attr)
+          [this.dev.attr]: this.language.get(this.dev.attr)
         }
       };
     },
     chartData() {
-      let {
-        dev: { type, devid, attr }
-      } = this.$data;
-      let rows = this.devsSet.has(devid)
-        ? this.devs[type][devid][attr]
-        : [{ generateTime: "", [attr]: 0 }];
-
+      let { type, devid, attr } = this.$data.dev;
+      let attrVal = "";
       return {
         columns: ["generateTime", attr],
-        rows
+        rows: this.devs[type][devid]
+          .filter(el => {
+            if (el[attr] != attrVal) return el;
+            attrVal = el[attr];
+          })
+          .map(el => {
+            return {
+              generateTime: this.$d(new Date(el.generateTime), "long"),
+              [attr]: el[attr]
+            };
+          })
       };
     }
   },
   methods: {
-    Search_history_dev() {
+    async Search_history_dev() {
       if (!this.search_date) return MessageBox("请选择日期", "tip");
       let { type: devType, devid, attr } = this.$data.dev;
-
-      Search_history_dev({
-        user: this.user,
-        token: this.token,
+      let hisData = await Search_history_dev({
         date: this.search_date,
         devType,
         devid,
         attr
-      })
-        .then(({ data: { code, msg, data } }) => {
+      });
+      let { code, msg, data } = hisData.data;
+      if (code != 200) return MessageBox(msg, code);
+      let attrVal = "";
+      this.search_chartData.rows = data
+        .filter(el => {
+          if (el[attr] != attrVal) return el;
+          attrVal = el[attr];
+        })
+        .map(el => {
+          return {
+            generateTime: this.$d(new Date(el.generateTime), "long"),
+            [attr]: el[attr]
+          };
+        });
+      /* .then(({ data: { code, msg, data } }) => {
           if (code != 200) return MessageBox(msg, code);
           let len = data.length - 1;
           data = data.slice(len - 200, len);
@@ -116,19 +138,11 @@ export default {
         })
         .catch(err => {
           MessageBox(err, "error");
-        });
+        }); */
     }
   },
   components: {
     separated
-  },
-  mounted() {
-    {
-      let { type, devid, attr } = this.$route.params;
-      this.dev.type = type;
-      this.dev.devid = devid;
-      this.dev.attr = attr;
-    }
   }
 };
 </script>

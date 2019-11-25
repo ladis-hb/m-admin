@@ -2,5 +2,99 @@
   "login": {
     "7mc7hf": "Reset",
     "g12379": "registered"
+  },
+  "Header": {
+    "36axth": "user"
+  },
+  "Setting": {
+    "SetMain": {
+      "ke826n": "Details",
+      "ft46db": "Cloud platform sends SMS",
+      "mgppih": "mailbox",
+      "jdlme9": "phone",
+      "bnt5u5": "Circular Control ID",
+      "5u7upj": "quantity",
+      "hb7eip": "operating",
+      "4sdrkr": "Types",
+      "0zc37b": "device id",
+      "umc5nc": "alias",
+      "wpe6tq": "to close up",
+      "l767u9": "Host Device List",
+      "4j7lu9": "Central Control Host MacId:",
+      "1t7pw2": "Add host"
+    },
+    "vyhd2j": "Setting",
+    "SetUser": {
+      "psn9e9": "User Info",
+      "1ia5ax": "user",
+      "l01jlt": "name",
+      "yargs3": "mailbox",
+      "dfu5fs": "phone",
+      "tj9tp4": "organization",
+      "o4ur3n": "address",
+      "8b0j0t": "Creation time",
+      "lig3vv": "User log",
+      "eal2be": "Generation time",
+      "qamubu": "Login status",
+      "ld2nvi": "login information"
+    }
+  },
+  "Home": {
+    "8o1syx": "Alarm management",
+    "9guvkq": "Equipment management",
+    "jn7bzj": "User Management",
+    "82o6lb": "change Password",
+    "7kxb4c": "sign out",
+    "eogsel": "AIR",
+    "vpdd7w": "EM",
+    "htgp8i": "TH",
+    "qieutq": "Are you sure you want to sign out?"
+  },
+  "main": {
+    "qh3w9j": "Smoke",
+    "4vlfuz": "Leaking water",
+    "jalrtk": "Door magnet",
+    "de85p8": "confirmed",
+    "np09ab": "unconfirmed",
+    "kl4jme": "UPS load",
+    "ea1565": "UPS power",
+    "awsvap": "battery voltage",
+    "nq1tox": "battery capacity",
+    "6f21cg": "Cold channel temperature",
+    "j6ab1l": "Cold channel humidity",
+    "5k5m1g": "Hot channel temperature",
+    "473joa": "Hot channel humidity"
+  },
+  "Alarm": {
+    "mevk0t": "Alarm",
+    "ps4cmm": "Alarm management",
+    "8dkiqp": "Alarm device",
+    "44krmr": "Alarm information",
+    "rm5trk": "Alarm type",
+    "aztpkq": "Alarm level",
+    "fbpszi": "confirm",
+    "hk6dew": "Confirmor",
+    "kljy5h": "verify the time",
+    "uiqua3": "index",
+    "5kxbeb": "confirm",
+    "4gm8j1": "Device ID"
+  },
+  "devs": {
+    "xq1j6w": "Device name:",
+    "ao82ns": "Device ID:"
+  },
+  "Device": {
+    "UPS": {
+      "8lhbb5": "Analog quantity",
+      "vk17k4": "trend",
+      "trfyxs": "State quantity",
+      "l232l9": "Analog name",
+      "gf5kur": "value",
+      "68q9gs": "operating",
+      "o46ipg": "State quantity name",
+      "nuot3o": "value",
+      "lkdvcd": "normal",
+      "2lnbvc": "abnormal"
+    }
   }
 }

@@ -2,10 +2,10 @@
   <b-container>
     <b-row>
       <b-col cols="12" sm="6">
-        <separated title="user info"></separated>
+        <separated :title="$t('Setting.SetUser.psn9e9')"></separated>
         <b-form>
           <b-form-group
-            :label="lang.get('user')"
+            :label="$t('Setting.SetUser.1ia5ax')"
             label-cols="4"
             label-align="right"
             label-text-align="center"
@@ -17,7 +17,7 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group
-            :label="lang.get('name')"
+            :label="$t('Setting.SetUser.l01jlt')"
             label-cols="4"
             label-align="right"
             label-text-align="center"
@@ -29,7 +29,7 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group
-            :label="lang.get('mail')"
+            :label="$t('Setting.SetUser.yargs3')"
             label-cols="4"
             label-align="right"
             label-text-align="center"
@@ -41,7 +41,7 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group
-            :label="lang.get('tel')"
+            :label="$t('Setting.SetUser.dfu5fs')"
             label-cols="4"
             label-cols-sm="4"
             label-align="right"
@@ -53,7 +53,7 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group
-            :label="lang.get('compony')"
+            :label="$t('Setting.SetUser.tj9tp4')"
             label-cols="4"
             label-cols-sm="4"
             label-align="right"
@@ -65,7 +65,7 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group
-            :label="lang.get('address')"
+            :label="$t('Setting.SetUser.o4ur3n')"
             label-for="address"
             label-cols="4"
             label-cols-sm="4"
@@ -74,11 +74,11 @@
             <b-form-input
               disabled
               id="address"
-              v-model="accont.address"
+              :placeholder="accont.address"
             ></b-form-input>
           </b-form-group>
           <b-form-group
-            label="creatTime:"
+            :label="$t('Setting.SetUser.8b0j0t')"
             label-for="creatTime"
             label-cols="4"
             label-cols-sm="4"
@@ -87,13 +87,13 @@
             <b-form-input
               disabled
               id="creatTime"
-              v-model="accont.creatTime"
+              :placeholder="$d(new Date(accont.creatTime), 'long')"
             ></b-form-input>
           </b-form-group>
         </b-form>
       </b-col>
       <b-col cols="12">
-        <separated title="user login info"></separated>
+        <separated :title="$t('Setting.SetUser.lig3vv')"></separated>
         <b-table
           :items="User_log"
           :fields="fields"
@@ -102,6 +102,9 @@
           head-variant="dark"
           Borderless
         >
+          <template v-slot:cell(generateTime)="data">
+            <b>{{ $d(new Date(data.value), "long") }}</b>
+          </template>
         </b-table>
       </b-col>
     </b-row>
@@ -132,9 +135,17 @@ export default {
       },
       User_log: [],
       fields: [
-        { key: "generateTime", label: "生成时间", sortable: true },
-        { key: "status", label: "登录状态", sortable: true },
-        { key: "msg", label: "登录信息" }
+        {
+          key: "generateTime",
+          label: this.$t("Setting.SetUser.eal2be"),
+          sortable: true
+        },
+        {
+          key: "status",
+          label: this.$t("Setting.SetUser.qamubu"),
+          sortable: true
+        },
+        { key: "msg", label: this.$t("Setting.SetUser.ld2nvi") }
       ]
     };
   },

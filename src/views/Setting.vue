@@ -1,6 +1,6 @@
 <template>
   <b-container fluid class="d-flex flex-column h-100">
-    <Header :title="lang.get('setting')"></Header>
+    <Header :title="$t('Setting.vyhd2j')"></Header>
     <b-row class="h-75">
       <b-col
         cols="12"

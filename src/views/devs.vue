@@ -9,8 +9,8 @@
         @click="toDevice(id, value.devid)"
       >
         <b-card
-          :title="'设备名称：' + value.name || value.devid"
-          :sub-title="'设备ID：' + value.devid"
+          :title="$t('devs.xq1j6w') + value.name || value.devid"
+          :sub-title="$t('devs.ao82ns') + value.devid"
           ><b-card-body>
             <!-- <argument-block
               v-for="(val, key) of filter_show_value(value)"
@@ -33,7 +33,7 @@ import { Get_user_all_devs, Get_devs_list_single } from "../util/axios";
 export default {
   data() {
     return {
-      card_img: require("../assets/25-600x300.jpg"),
+      /* card_img: require("../assets/25-600x300.jpg"),
       hidd_key: new Set(["generateTime", "name", "devid", "_id", "DateTime"]),
       device: {
         ups: new Set([
@@ -62,8 +62,8 @@ export default {
           "quantity"
         ]),
         io: new Set(["brand", "power_status", "input_status"]),
-        th: new Set(["brand", "temperature", "humidity"])
-      }
+        th: new Set(["brand", "temperature", "humidity"]) 
+      }*/
     };
   },
   components: {
@@ -73,8 +73,8 @@ export default {
     id() {
       return this.$route.params.id;
     },
-    ...mapState(["dev", "user", "token"]),
-    ...mapGetters(["lang", "unit"])
+    ...mapState(["dev"]),
+    ...mapGetters(["unit"])
   },
   methods: {
     //刷选出要显示的字段
@@ -87,8 +87,8 @@ export default {
     }, */
     //到device
     toDevice(id, devid) {
-      if (id == "io") return;
-      this.$router.push({ name: id, params: { devid } });
+      if (id != "io")
+        this.$router.push({ path: `/Device/${id}`, query: { devid } });
     },
     /* toline({ type, devid, attr }) {
       this.$router.push({ name: `Line`, params: { type, devid, attr } });

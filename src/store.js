@@ -1,13 +1,14 @@
 /* jshint esversion:8 */
 import Vue from "vue";
 import Vuex from "vuex";
+import { GetAlarms } from "./util/axios";
 import { language } from "./util/language";
 import { unit } from "./util/unit";
 import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  plugins: [createPersistedState()],
+  plugins: [createPersistedState({ storage: window.sessionStorage })],
   state: {
     token: sessionStorage.getItem("token") || "",
     user: sessionStorage.getItem("user") || "cairui",
@@ -60,7 +61,13 @@ export default new Vuex.Store({
       state.dev[devType][devid] = data;
       //
       let devs = state.devs[devType][devid];
+
       if (!devs) Vue.set(state.devs[devType], devid, []);
+      if (devs.length > 200)
+        state.devs[devType][devid] = state.devs[devType][devid].slice(
+          50,
+          devs.length - 1
+        );
       state.devs[devType][devid].push(data);
 
       /* let { devType, devs, status } = payload;
@@ -87,18 +94,28 @@ export default new Vuex.Store({
     },
     /* 配置Alarm */
     setAlarm(state, payload) {
-      state.Alarm.Alarm_Data = payload;
+      state.Alarm.Alarm_Data.unshift(...payload);
     },
     confirm_alarm(state, payload) {
-      let { key, confirm, confirm_user, confirm_time } = payload;
-      state.Alarm.Alarm_Data[key] = Object.assign(state.Alarm.Alarm_Data[key], {
-        confirm,
-        confirm_user,
-        confirm_time
-      });
+      let {
+        key,
+        data: { data }
+      } = payload;
+      Vue.set(state.Alarm.Alarm_Data[key], "confirm_time", data.confirm_time);
+      Vue.set(state.Alarm.Alarm_Data[key], "confirm_user", data.confirm_user);
+      Vue.set(state.Alarm.Alarm_Data[key], "confirm", data.confirm);
     }
   },
   actions: {
+    //获取报警事件
+    async GetAlarms({ commit, state }) {
+      if (state.Alarm.Alarm_Data.length > 0) return;
+      let {
+        data: { code, data }
+      } = await GetAlarms();
+      if (code != 200) return;
+      commit("setAlarm", data);
+    },
     //socket监听设备接受数据
     async socket_devUpdate({ commit }, result) {
       commit("newDevs", Object.assign(result, { status: true }));
@@ -113,6 +130,8 @@ export default new Vuex.Store({
     },
     //socket监听报警事件
     async socket_DevAlarm({ _vm }, { result }) {
+      console.log(result);
+
       _vm.$MessageBox
         .confirm(result.Alarm_msg, "新的告警消息", {
           confirmButtonText: "点击查看",
@@ -125,6 +144,14 @@ export default new Vuex.Store({
     }
   },
   getters: {
+    language: ({ language }) => lang => {
+      if (lang != "en") lang = "cn";
+      var selang = new Map();
+      for (var [key, val] of Object.entries(language)) {
+        selang.set(key, val[lang]);
+      }
+      return selang;
+    },
     lang: ({ lang, language }) => {
       var selang = new Map();
       for (var [key, val] of Object.entries(language)) {

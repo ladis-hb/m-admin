@@ -22,24 +22,32 @@
               <b-navbar-nav class="ml-auto text-nowrap">
                 <b-nav-item :to="{ path: '/alarm' }">
                   <span class="text-light text-wrap"
-                    ><i></i>{{ lang.get("AM") }}</span
+                    ><i></i>{{ $t("Home.8o1syx") }}</span
                   >
                 </b-nav-item>
                 <b-nav-item :to="{ path: '/SetMain' }">
                   <span class="text-light text-wrap"
-                    ><i></i>{{ lang.get("DM") }}</span
+                    ><i></i>{{ $t("Home.9guvkq") }}</span
                   >
                 </b-nav-item>
                 <b-nav-item :to="{ path: '/SetUser' }">
                   <span class="text-light text-wrap"
-                    ><i></i>{{ lang.get("UM") }}</span
+                    ><i></i>{{ $t("Home.jn7bzj") }}</span
                   >
                 </b-nav-item>
                 <b-nav-item :to="{ path: '/reset' }">
-                  <span class="text-light">{{ lang.get("modify_pw") }}</span>
+                  <span class="text-light">{{ $t("Home.82o6lb") }}</span>
                 </b-nav-item>
+                <b-nav-dropdown text="languga" class=" text-light">
+                  <b-dropdown-item @click="$i18n.locale = 'zh'"
+                    >中文</b-dropdown-item
+                  >
+                  <b-dropdown-item @click="$i18n.locale = 'en'"
+                    >En</b-dropdown-item
+                  >
+                </b-nav-dropdown>
                 <b-nav-item @click="loginOut">
-                  <span class="text-light">{{ lang.get("loginout") }}</span>
+                  <span class="text-light">{{ $t("Home.7kxb4c") }}</span>
                 </b-nav-item>
               </b-navbar-nav>
             </b-collapse>
@@ -57,19 +65,19 @@
     <b-row no-gutters>
       <b-nav fill class="bg-info w-100">
         <b-nav-item :to="{ path: '/dev/ups' }">
-          <span class="text-light">{{ lang.get("ups") }}</span>
+          <span class="text-light">UPS</span>
         </b-nav-item>
         <b-nav-item :to="{ path: '/dev/ac' }">
-          <span class="text-light">{{ lang.get("ac") }}</span>
+          <span class="text-light">{{ $t("Home.eogsel") }}</span>
         </b-nav-item>
         <b-nav-item :to="{ path: '/dev/power' }">
-          <span class="text-light">{{ lang.get("power") }}</span>
+          <span class="text-light">{{ $t("Home.vpdd7w") }}</span>
         </b-nav-item>
         <b-nav-item :to="{ path: '/Device/io' }">
-          <span class="text-light">{{ lang.get("io") }}</span>
+          <span class="text-light">IO</span>
         </b-nav-item>
         <b-nav-item :to="{ path: '/dev/th' }">
-          <span class="text-light">{{ lang.get("th") }}</span>
+          <span class="text-light">{{ $t("Home.htgp8i") }}</span>
         </b-nav-item>
       </b-nav>
     </b-row>
@@ -86,11 +94,12 @@ export default {
   },
   methods: {
     loginOut() {
-      MessageBox.confirm("确定要退出登录吗？", "loginOut", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+      MessageBox.confirm(this.$t("Home.qieutq"), "loginOut", {
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
         type: "warning"
       }).then(() => {
+        this.$socket.client.emit("disconnect");
         this.$emit("loginOut");
         this.$store.commit("loginOut");
         this.$router.push("/");

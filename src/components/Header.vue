@@ -8,7 +8,9 @@
       <span @click="backto"><i class=" el-icon-back"></i></span>
       <span class=" text-light mx-2">|</span>
       <span class="text-center text-light">{{ title }}</span>
-      <span class="ml-auto text-light">{{ $d(new Date(), "long") }}</span>
+      <span class="ml-auto text-light"
+        >{{ $t("Header.36axth") }}:{{ User }}</span
+      >
     </b-col>
   </b-row>
 </template>
@@ -20,6 +22,11 @@ export default {
     title: {
       type: String,
       default: "Ladis"
+    }
+  },
+  computed: {
+    User() {
+      return this.$store.state.user || "";
     }
   },
   methods: {

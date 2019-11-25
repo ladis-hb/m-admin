@@ -1,7 +1,7 @@
 <template>
   <div class=" border p-2 shadow-sm rounded-lg my-2">
     <h5 class="m-0">
-      {{ lang.get(keys)
+      {{ language.get(keys)
       }}<b-badge variant="info" pill class=" float-right"
         >{{ val }} {{ unit.get(keys) }}</b-badge
       >
@@ -18,6 +18,9 @@ export default {
     val: null
   },
   computed: {
+    language() {
+      return this.$store.getters.language(this.$i18n.locale);
+    },
     ...mapGetters(["lang", "unit"])
   }
 };

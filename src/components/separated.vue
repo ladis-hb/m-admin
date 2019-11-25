@@ -2,8 +2,8 @@
   <b-col cols="12" class=" border-bottom m-2 p-1"
     ><span @click="backto" v-show="back"
       ><i class=" el-icon-back"></i><span class=" text-dark mx-2">|</span></span
-    ><b>{{ title }}</b></b-col
-  >
+    ><b>{{ title }}</b>
+  </b-col>
 </template>
 
 <script>
@@ -19,6 +19,7 @@ export default {
       default: false
     }
   },
+
   methods: {
     backto() {
       this.$router.back();

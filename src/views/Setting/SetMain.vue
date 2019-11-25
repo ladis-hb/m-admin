@@ -1,13 +1,13 @@
 <template>
   <b-container class="set-devs">
     <b-row>
-      <separated title="添加主机"></separated>
+      <separated :title="$t('Setting.SetMain.1t7pw2')"></separated>
       <b-col cols="12" sm="8">
         <b-form-group
-          label="环控主机MacId:"
+          :label="$t('Setting.SetMain.4j7lu9')"
           label-for="Devid"
           label-cols="12"
-          label-cols-sm="2"
+          label-cols-sm="4"
         >
           <b-form-input id="Devid" v-model.trim="Devid"></b-form-input>
         </b-form-group>
@@ -23,35 +23,35 @@
       </b-col>
     </b-row>
     <b-row>
-      <separated title="主机设备清单"></separated>
-      <b-col cols="12" class="table-mx">
-        <b-list-group>
-          <b-list-group-item
-            v-for="(client, key) in Dev_list"
-            :key="key"
-            button
-            v-b-toggle="client.clientID"
-          >
-            <i
-              >客户端ID：{{ client.clientID }}，设备数量:{{
-                client.devlistSrize.length
-              }}</i
+      <separated :title="$t('Setting.SetMain.l767u9')"></separated>
+      <b-col cols="12">
+        <b-table :items="Dev_list" :fields="fields">
+          <template v-slot:cell(num)="data">
+            <b>{{ data.item.devlist.length }}</b>
+          </template>
+          <template v-slot:cell(oprate)="row">
+            <b-button size="sm" @click="row.toggleDetails">{{
+              row.detailsShowing
+                ? $t("Setting.SetMain.wpe6tq")
+                : $t("Setting.SetMain.ke826n")
+            }}</b-button>
+          </template>
+          <template v-slot:row-details="row">
+            <b-table-lite
+              :items="[row.item.devTable]"
+              stacked
+              :fields="devTable_fields"
             >
-
-            <b-collapse :id="client.clientID" visible accordion="my-accordion">
-              <b-list-group>
-                <b-list-group-item
-                  v-for="(devs, key) in client.devlistSrize"
-                  :key="key"
-                >
-                  <p>设备类型:{{ devs.devType }}</p>
-                  <p>设备名称:{{ devs.devName }}</p>
-                  <p>设备ID：{{ devs.devid }}</p>
-                </b-list-group-item>
-              </b-list-group>
-            </b-collapse>
-          </b-list-group-item>
-        </b-list-group>
+              <template v-slot:cell(AlarmSendSelect)="data">
+                <b>{{ data.value ? "是" : "否" }}</b>
+              </template>
+            </b-table-lite>
+            <b-table
+              :items="row.item.devlistSrize"
+              :fields="devlist_fields"
+            ></b-table>
+          </template>
+        </b-table>
       </b-col>
     </b-row>
   </b-container>
@@ -73,9 +73,22 @@ export default {
       Devid: "",
       Dev_list: [],
       fields: [
-        { key: "type", label: "类型", sortable: true },
-        { key: "devName", label: "别名" },
-        { key: "devid", label: "设备Id" }
+        { key: "clientID", label: this.$t("Setting.SetMain.bnt5u5") },
+        { key: "num", label: this.$t("Setting.SetMain.5u7upj") },
+        { key: "oprate", label: this.$t("Setting.SetMain.hb7eip") }
+      ],
+      devlist_fields: [
+        { key: "devType", label: this.$t("Setting.SetMain.4sdrkr") },
+        { key: "devid", label: this.$t("Setting.SetMain.0zc37b") },
+        { key: "devName", label: this.$t("Setting.SetMain.umc5nc") }
+      ],
+      devTable_fields: [
+        { key: "mail", label: this.$t("Setting.SetMain.mgppih") },
+        { key: "tel", label: this.$t("Setting.SetMain.jdlme9") },
+        { key: "AlarmSendSelect", label: this.$t("Setting.SetMain.ft46db") },
+        { key: "SocketID", label: "SocketID" },
+        { key: "http_uri", label: "httpAPI" },
+        { key: "websocket_uri", label: "SocketAPI" }
       ]
     };
   },
@@ -89,6 +102,7 @@ export default {
   methods: {
     addDevid() {
       let { Devid } = this.$data;
+
       if (Devid == "") return MessageBox.alert("参数不能为空");
       addDevid({
         devid: Devid

@@ -42,8 +42,10 @@ const Get_devid_list = async ctx => {
   let user = ctx.query.user;
   let clientIDs = await User_dev.GetUserDevs(user);
   let result = clientIDs.map(async clientID => {
-    let { devlist } = await Dev_Table.findOne({ clientID }, "devlist");
-    let devlistInfos = await Dev_all.find({ devid: { $in: devlist } });
+    let devTable = await Dev_Table.findOne({ clientID }).select({
+      password: 0
+    });
+    let devlistInfos = await Dev_all.find({ devid: { $in: devTable.devlist } });
     let devlistSrize = devlistInfos.map(coll => {
       return {
         devType: coll.devType,
@@ -53,8 +55,9 @@ const Get_devid_list = async ctx => {
     });
     return {
       clientID,
-      devlist,
-      devlistSrize
+      devlist: devTable.devlist,
+      devlistSrize,
+      devTable
     };
   });
   ctx.body = formatResult(202, await Promise.all(result));
