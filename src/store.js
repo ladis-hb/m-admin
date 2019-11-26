@@ -35,13 +35,19 @@ export default new Vuex.Store({
     Alarm: {
       Alarm_msg: "点击查看报警",
       Alarm_Data: []
-    }
+    },
+    //存储客户所有设备列表，http获取
+    allDevList: []
   },
   mutations: {
     //退出登录，注销state
     loginOut(state) {
       state.token = sessionStorage.getItem("token") || "";
       state.user = sessionStorage.getItem("user") || "";
+    },
+
+    setAllDevList({ state, payload }) {
+      state.allDevList = payload;
     },
     //设置用户，token
     setUser(state, payload) {
@@ -51,10 +57,9 @@ export default new Vuex.Store({
     },
     //添加新数据
     newDevs(state, payload) {
-      let {
-        result: { devType, devid, data },
-        status
-      } = payload;
+      let { result, status } = payload;
+      let { devType, devid, data } = result;
+
       data.status = status || false;
       let dev = state.dev[devType][devid];
       if (!dev) Vue.set(state.dev[devType], devid, {});

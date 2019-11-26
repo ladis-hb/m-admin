@@ -31,6 +31,9 @@ export default {
   computed: {
     dev() {
       return this.$store.state.dev[this.$route.params.id] || {};
+    },
+    allDevList() {
+      return this.$store.state.allDevList;
     }
   },
   methods: {
@@ -51,15 +54,24 @@ export default {
       console.log(online);
 
       //获取用户所有设备
-      let {
-        data: { data: dev }
-      } = await Get_user_all_devs();
+      let dev =
+        this.allDevList.length > 0
+          ? this.allDevList
+          : await Get_user_all_devs().then(res => {
+              this.$store.commit("setAllDevList", res.data.data);
+              return res.data.data;
+            });
       //刷选出不在线设备
-      let dev_offline = dev.filter(id => {
-        return !online.includes(id);
-      });
+      let dev_offline = dev.filter(id => !online.includes(id));
       //获取所有不在线设备的数据单利
-      dev_offline.forEach(async devid => {
+      Get_devs_list_single({ devlist: dev_offline }).then(res => {
+        if (res.data.code != 200) return;
+        res.data.data.forEach(el => {
+          console.log(el);
+          this.$store.commit("newDevs", { status: false, result: el });
+        });
+      });
+      /* dev_offline.forEach(async devid => {
         let {
           data: { data: singleInfo }
         } = await Get_devs_list_single({ devid });
@@ -70,10 +82,10 @@ export default {
           status: false
         };
         this.$store.dispatch("newDevs", payload);
-      });
+      }); */
     }
   },
-  filters: {
+  /* filters: {
     chartValue(value) {
       let newValue = {};
       for (let [key, val] of Object.entries(value)) {
@@ -81,7 +93,7 @@ export default {
       }
       return newValue;
     }
-  },
+  }, */
   activated() {
     this.check_offline_dev();
   }

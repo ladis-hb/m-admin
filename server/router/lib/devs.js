@@ -75,7 +75,16 @@ const delete_Devid = async ctx => {
 //new
 const Get_user_all_devs = async ctx => {
   let { user } = ctx.query;
-  let result = await User_dev.GetUserDevs(user);
+  let allclient = await User_dev.GetUserDevs(user);
+  let allDevlist = await Dev_Table.find(
+    { clientID: { $in: allclient } },
+    "devlist"
+  );
+  let result = allDevlist.reduce((pre, cu) => {
+    if (Array.isArray(pre)) return [...pre, ...Object.values(cu.devlist)];
+    else return [pre, ...Object.values(cu.devlist)];
+  });
+
   ctx.body = formatResult(210, result);
 };
 const Modify_devName = async ctx => {
@@ -106,8 +115,8 @@ const Search_history_dev = async ctx => {
 };
 //Get_devs_list_single
 const Get_devs_list_single = async ctx => {
-  let { devid } = ctx.query;
-  let result = await Dev_all.findOne({ devid });
+  let { devlist } = ctx.query;
+  let result = await Dev_all.find({ devid: { $in: devlist } });
   ctx.body = formatResult(212, result);
 };
 

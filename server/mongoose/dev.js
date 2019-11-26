@@ -1,4 +1,4 @@
-/* jshint */
+/* jshint esversion:8*/
 const { mongoose, Schema } = require("./index");
 
 const Schema_Dev_all = new Schema({
