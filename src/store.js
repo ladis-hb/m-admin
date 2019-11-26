@@ -147,6 +147,22 @@ export default new Vuex.Store({
           _vm.$router.push({ name: "Alarm" });
         });
     }
+    //root
+    /* async socket_lineInfo({ commit }, payload) {
+      console.log(payload);
+
+      let { type, result, data } = payload;
+      switch (type) {
+        case "user":
+          this.socket.onlinelist_users = data.map(([user, socketId]) => {
+            return { user, socketId };
+          });
+          break;
+        case "dev":
+          this.socket.onlinelist_devs = data;
+          break;
+      }
+    } */
   },
   getters: {
     language: ({ language }) => lang => {

@@ -88,7 +88,7 @@
 
 <script>
 import separated from "../../components/separated";
-import { mapState, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import {
   Get_User_list,
   admin_modify_user_info,
@@ -101,7 +101,26 @@ export default {
   data() {
     return {
       user_items: [],
-      user_fields: [],
+      user_fields: [
+        {
+          key: "statu",
+          label: this.lang.get("status"),
+          sortable: true,
+          variant: "info"
+        },
+        { key: "user", label: this.lang.get("user") },
+        { key: "name", label: this.lang.get("name") },
+        { key: "mail", label: this.lang.get("mail") },
+        { key: "tel", label: this.lang.get("tel") },
+        { key: "orgin", label: this.lang.get("compony") },
+        { key: "userGroup", label: this.lang.get("userGroup") },
+        {
+          key: "creatTime",
+          label: this.lang.get("generateTime"),
+          sortable: true
+        },
+        { key: "modifyTime", label: this.lang.get("updatetime") }
+      ],
       select_item: {},
       select_index: 0
     };
@@ -110,8 +129,7 @@ export default {
     separated
   },
   computed: {
-    ...mapGetters(["lang"]),
-    ...mapState(["user", "token"])
+    ...mapGetters(["lang"])
   },
   methods: {
     onRowSelected(item, index) {
@@ -124,8 +142,6 @@ export default {
     },
     modify_select_user() {
       modify_select_user({
-        user: this.user,
-        token: this.token,
         selectUsers: this.select_item
       })
         .then(({ data: { code, msg } }) => {
@@ -139,8 +155,6 @@ export default {
     disable_select_user() {
       let { status, user } = this.select_item;
       disable_select_user({
-        user: this.user,
-        token: this.token,
         selectUser: user,
         status: !status
       })
@@ -159,8 +173,6 @@ export default {
         "确认删除？"
       ).then(() => {
         delete_select_user({
-          user: this.user,
-          token: this.token,
           selectUser: user
         })
           .then(({ data: { code, msg } }) => {
@@ -173,12 +185,10 @@ export default {
       });
     },
     Get_User_list() {
-      Get_User_list({ user: this.user, token: this.token }).then(
-        ({ data: { code, msg, data } }) => {
-          if (code != 200) return MessageBox(msg, "tip");
-          this.user_items = data;
-        }
-      );
+      Get_User_list().then(({ data: { code, msg, data } }) => {
+        if (code != 200) return MessageBox(msg, "tip");
+        this.user_items = data;
+      });
     },
     Modify_User_Args() {
       admin_modify_user_info();
@@ -186,28 +196,6 @@ export default {
   },
   mounted() {
     this.Get_User_list();
-  },
-  created() {
-    this.user_fields = [
-      {
-        key: "statu",
-        label: this.lang.get("status"),
-        sortable: true,
-        variant: "info"
-      },
-      { key: "user", label: this.lang.get("user") },
-      { key: "name", label: this.lang.get("name") },
-      { key: "mail", label: this.lang.get("mail") },
-      { key: "tel", label: this.lang.get("tel") },
-      { key: "orgin", label: this.lang.get("compony") },
-      { key: "userGroup", label: this.lang.get("userGroup") },
-      {
-        key: "creatTime",
-        label: this.lang.get("generateTime"),
-        sortable: true
-      },
-      { key: "modifyTime", label: this.lang.get("updatetime") }
-    ];
   }
 };
 </script>

@@ -43,8 +43,7 @@
 </template>
 
 <script>
-import { io } from "../../util/MySocket";
-import { mapState, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import separated from "../../components/separated.vue";
 export default {
   name: "OnLine",
@@ -78,43 +77,11 @@ export default {
     };
   },
   computed: {
-    ...mapState({ user: "user", token: "token" }),
     ...mapGetters({ lang: "lang" })
   },
   methods: {},
   components: {
     separated
-  },
-  mounted() {
-    this.$nextTick().then(() => {
-      {
-        io.on("lineInfo", r => {
-          let {
-            type,
-            result, //: { type, msg, user, generateTime },
-            data
-          } = r;
-          ////console.log(r);
-          if (!["user", "dev"].includes(type)) return;
-          this.socket.info.unshift(result);
-          switch (type) {
-            case "user":
-              this.socket.onlinelist_users = data.map(([user, socketId]) => {
-                return { user, socketId };
-              });
-              break;
-            case "dev":
-              this.socket.onlinelist_devs = data;
-              break;
-          }
-        });
-      }
-      {
-        /*
-      获取用户所有设备列表
-      */
-      }
-    });
   }
 };
 </script>

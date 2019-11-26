@@ -105,12 +105,9 @@ const on = () => {
     result.generateTime = format.formatDate();
     Save_log(result);
     let { type, user } = result;
-    if (type == "register") {
-      if ((await Get_root_user()).includes(user)) rootSet.add(user);
-    }
-    if (type == "offlien") {
-      if (rootSet.has(user)) rootSet.delete(user);
-    }
+    if (type == "register" && (await Get_root_user()).includes(user))
+      rootSet.add(user);
+    if (type == "offlien" && rootSet.has(user)) rootSet.delete(user);
     if (rootSet.size == 0) return;
 
     let sendInfo = { type: "", result };
@@ -133,9 +130,7 @@ const on = () => {
         break;
     }
     rootSet.forEach(u => {
-      if (userMap.has(u)) {
-        io.to(userMap.get(u)).emit("lineInfo", sendInfo);
-      }
+      if (userMap.has(u)) io.to(userMap.get(u)).emit("lineInfo", sendInfo);
     });
   });
   function Save_log({ type, msg, user, generateTime }) {

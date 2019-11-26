@@ -35,7 +35,7 @@
 
 <script>
 import separated from "../../components/separated";
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import { MessageBox, Loading } from "element-ui";
 import { Get_devs_list } from "../../util/axios";
 export default {
@@ -44,7 +44,12 @@ export default {
     return {
       devs_items: [],
       devs_items_back: [],
-      devs_fields: {},
+      devs_fields: [
+        { key: "devid", label: "环控ID", variant: "info" },
+        { key: "devType", label: this.lang.get("devType"), sortable: true },
+        { key: "updateTime", label: this.lang.get("generateTime") },
+        { key: "user", label: "所属用户" }
+      ],
       select_item: {},
       select_index: 0,
       search_str: ""
@@ -52,8 +57,7 @@ export default {
   },
   components: { separated },
   computed: {
-    ...mapGetters(["lang"]),
-    ...mapState(["user", "token"])
+    ...mapGetters(["lang"])
   },
   methods: {
     onRowSelected(item, index) {
@@ -65,19 +69,18 @@ export default {
     },
     Search() {
       let loading = Loading.service({ target: "#table_DM" });
-      let str = this.search_str;
-      let items = [];
+      this.devs_items = this.devs_items.filter(val =>
+        JSON.stringify(val).includes(this.search_str)
+      );
+      /* let items = [];
       this.devs_items.forEach(val => {
         let row = JSON.stringify(val);
         if (row.includes(str)) items.push(val);
-      });
-      setTimeout(() => {
-        this.devs_items = items;
-        loading.close();
-      }, 2000);
+      }); */
+      setTimeout(() => loading.close(), 1000);
     },
     Get_devs_list() {
-      Get_devs_list({ user: this.user, token: this.token })
+      Get_devs_list()
         .then(({ data: { code, msg, data } }) => {
           if (code != 200) return MessageBox(msg, code);
           this.devs_items = data;
@@ -91,14 +94,6 @@ export default {
   },
   mounted() {
     this.Get_devs_list();
-  },
-  created() {
-    this.devs_fields = [
-      { key: "devid", label: this.lang.get("devid"), variant: "info" },
-      { key: "devType", label: this.lang.get("devType"), sortable: true },
-      { key: "updateTime", label: this.lang.get("generateTime") },
-      { key: "user", label: "所属用户" }
-    ];
   }
 };
 </script>

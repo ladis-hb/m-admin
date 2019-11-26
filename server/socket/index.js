@@ -39,7 +39,7 @@ module.exports = {
         AppUserMap.set(user, socket.id);
         AppSocketIdMap.set(socket.id, user);
         event.emit("onlien", {
-          type: "register",
+          type: "devOnlien",
           msg: `--Socket--环控APP设备:（${user}）已连接，Socket.id: ${socket.id}`,
           user
         });
