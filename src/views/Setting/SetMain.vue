@@ -14,12 +14,14 @@
       </b-col>
 
       <b-col cols="6" sm="2">
-        <b-button variant="info" block @click="addDevid">Add Device</b-button>
+        <b-button variant="info" block @click="addDevid">{{
+          $t("Setting.SetMain.dqz3fw")
+        }}</b-button>
       </b-col>
       <b-col cols="6" sm="2">
-        <b-button variant="dark" block @click="DeleteDevid"
-          >Delete Device</b-button
-        >
+        <b-button variant="dark" block @click="DeleteDevid">{{
+          $t("Setting.SetMain.uy3sps")
+        }}</b-button>
       </b-col>
     </b-row>
     <b-row>

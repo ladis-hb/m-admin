@@ -1,4 +1,130 @@
 <template>
+  <!-- <b-row class=" w-100 p-3">
+    <b-row>
+      <b-col cols="3">
+        <separated title="市电输入信息"></separated>
+        <b-table-lite :items="filter_simulate" :fields="fields_simulate">
+          <template v-slot:cell(operate)="data">
+            <b-button
+              variant="info"
+              @click="
+                toline({
+                  type: 'ups',
+                  devid,
+                  attr: data.item.name
+                })
+              "
+              class=" block el-icon-pie-chart  px-1 py-0 pt-1"
+              >{{ $t("Device.UPS.vk17k4") }}</b-button
+            >
+          </template>
+        </b-table-lite>
+      </b-col>
+      <b-col cols="6">
+        <b-card>
+          <b-card-body>
+            <b-img :src="betty_model" class=" mw-100"></b-img>
+          </b-card-body>
+        </b-card>
+      </b-col>
+      <b-col cols="3">
+        <separated title="输出信息"></separated>
+        <b-table-lite :items="filter_simulate" :fields="fields_simulate">
+          <template v-slot:cell(operate)="data">
+            <b-button
+              variant="info"
+              @click="
+                toline({
+                  type: 'ups',
+                  devid,
+                  attr: data.item.name
+                })
+              "
+              class=" block el-icon-pie-chart  px-1 py-0 pt-1"
+              >{{ $t("Device.UPS.vk17k4") }}</b-button
+            >
+          </template>
+        </b-table-lite>
+      </b-col>
+    </b-row>
+    <b-col cols="12">
+      <separated title="电池信息"></separated>
+      <b-table-lite
+        :items="
+          Object.entries(device).map(([key, val]) => {
+            return { key: key, val: val };
+          })
+        "
+      >
+      </b-table-lite>
+    </b-col>
+  </b-row> -->
+  <!-- <b-row class=" w-100">
+    <b-col cols="8">
+      <b-row ref="img">
+        <b-col class=" m-0 p-0 my-2">
+          <b-card>
+            <b-card-body>
+              <b-img :src="betty_model" class=" mw-100"></b-img>
+            </b-card-body>
+          </b-card>
+        </b-col>
+      </b-row>
+      <b-row ref="inputAndStaut">
+        <b-col cols="6" class=" border">
+          <separated title="市电输入信息"></separated>
+          <b-table-lite :items="filter_simulate" :fields="fields_simulate">
+            <template v-slot:cell(operate)="data">
+              <b-button
+                variant="info"
+                @click="
+                  toline({
+                    type: 'ups',
+                    devid,
+                    attr: data.item.name
+                  })
+                "
+                class=" block el-icon-pie-chart  px-1 py-0 pt-1"
+                >{{ $t("Device.UPS.vk17k4") }}</b-button
+              >
+            </template>
+          </b-table-lite></b-col
+        >
+        <b-col cols="6" class=" border">
+          <separated title="电池信息"></separated>
+          <b-table-lite :items="filter_simulate" :fields="fields_simulate">
+            <template v-slot:cell(operate)="data">
+              <b-button
+                variant="info"
+                @click="
+                  toline({
+                    type: 'ups',
+                    devid,
+                    attr: data.item.name
+                  })
+                "
+                class=" block el-icon-pie-chart  px-1 py-0 pt-1"
+                >{{ $t("Device.UPS.vk17k4") }}</b-button
+              >
+            </template>
+          </b-table-lite></b-col
+        >
+      </b-row>
+    </b-col>
+    <b-col cols="4">
+      <div class=" border">
+        <separated title="输出信息"></separated>
+        <b-table-lite
+          :items="
+            Object.entries(device).map(([key, val]) => {
+              return { key: key, val: val };
+            })
+          "
+        >
+        </b-table-lite>
+      </div>
+    </b-col>
+  </b-row> -->
   <b-row class=" w-100 ml-0">
     <section class=" w-100 border-bottom d-flex flex-row p-2 px-3">
       <h4>{{ device.name || device.devid }}</h4>
@@ -89,6 +215,7 @@ export default {
     ...mapGetters(["lang", "unit"]),
     ...mapState(["dev"]),
     device() {
+      Object.entries;
       return this.dev.ups[this.devid];
     },
     betty_model() {
@@ -98,13 +225,18 @@ export default {
       return require("../../assets/image/ups1.gif");
     },
     filter_core() {
+      //电池信息
       let cores = new Set([
+        "DevType",
+        "Ups Mode",
+        "phase",
+        "Battery group number",
+        "Battery standard voltage per unit",
+        "Battery remain time",
+        "Battery piece number",
         "temperature",
         "residual_capacity",
-        "battery_voltage",
-        "load_ratio",
-        "output_frequency",
-        "output_load"
+        "battery_voltage"
       ]);
 
       return Object.entries(this.device)
@@ -112,19 +244,30 @@ export default {
         .map(([key, val]) => [key, val]);
     },
     filter_simulate() {
+      //模拟量
       let simulate = new Set([
-        "residual_capacity",
-        "battery_voltage",
-        "battery_voltage_negative",
+        "temperature",
+        "output_load",
+        "Battery capacity",
         "load_ratio",
         "output_frequency",
-        "input_voltage_l1",
-        "input_voltage_l2",
-        "input_voltage_l3",
-        "output_voltage_l1",
-        "output_voltage_l2",
-        "output_voltage_l3",
-        "output_load"
+        "output_frequency",
+        "output_load",
+        "Nominal O/P Voltage",
+        "Output power factor",
+        "Nominal I/P Voltage",
+        "Positive BUS voltage",
+        "Negative BUS voltage",
+        "Output voltage",
+        "Rating Output Frequency",
+        "Input voltage",
+        "Rating Output Voltage",
+        "Rating Output Current",
+        "Input frequency",
+        "P Battery voltage",
+        "Output current",
+        "Rating Voltage",
+        "N Battery voltage"
       ]);
       return Object.entries(this.device)
         .filter(([key]) => simulate.has(key))
@@ -137,6 +280,7 @@ export default {
         });
     },
     filter_status() {
+      //状态量
       let status = new Set([
         "smoke",
         "access_contral",

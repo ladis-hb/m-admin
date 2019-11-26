@@ -64,8 +64,12 @@ module.exports = async (ctx, next) => {
                 generateTime: date,
                 name: name,
                 devid: deviceCode,
-                temperature: [...data["Temperature"]].slice(0, 4).join(""),
-                humidity: [...data["Humidity"]].slice(0, 4).join(""),
+                temperature: [...data["Temperature"]]
+                  .slice(0, [...data["Temperature"]].length - 1)
+                  .join(""),
+                humidity: [...data["Humidity"]]
+                  .slice(0, [...data["Humidity"]].length - 3)
+                  .join(""),
                 DateTime: new Date(date)
               };
               let th = new DevMongo.Dev_th(TempData);

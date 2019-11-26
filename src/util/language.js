@@ -322,6 +322,70 @@ const ups = {
   grid_state: {
     en: "grid_state",
     cn: "市电状态"
+  },
+  "Battery group number": {
+    en: "Battery group number",
+    cn: "电池组"
+  },
+  "Battery standard voltage per unit": {
+    en: "Battery standard voltage per unit",
+    cn: "单位电池标准电压"
+  },
+  "Battery capacity": {
+    en: "Battery capacity",
+    cn: "电池容量"
+  },
+  "Battery remain time": {
+    en: "Battery remain time",
+    cn: "电池保持时间"
+  },
+  "Battery piece number": {
+    en: "Battery piece number",
+    cn: "电池片数量"
+  },
+  DevType: {
+    en: "DevType",
+    cn: "型号"
+  },
+  "Ups Mode": {
+    en: "Ups Mode",
+    cn: "运行模式"
+  },
+  "Output power factor": {
+    en: "Output power factor",
+    cn: "输出功率因数"
+  },
+  "Output voltage": {
+    en: "Output voltage",
+    cn: "输出电压"
+  },
+  "Rating Output Frequency": {
+    en: "Rating Output Frequency",
+    cn: "额定输出频率"
+  },
+  "Input voltage": {
+    en: "Input voltage",
+    cn: "输入电压"
+  },
+  "Rating Output Voltage": {
+    en: "Rating Output Voltage",
+    cn: "额定输出电压"
+  },
+  "Rating Output Current": {
+    en: "Rating Output Current",
+    cn: "额定输出电流"
+  },
+  "Input frequency": {
+    en: "Input frequency",
+    cn: "输入频率"
+  },
+  "Output current": {
+    en: "Output current",
+    cn: "输出电流"
+  },
+  "Rating Voltage": {
+    en: "Rating Voltage",
+    cn: "额定电压"
   }
 };
 

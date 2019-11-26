@@ -90,16 +90,12 @@ const Modify_devName = async ctx => {
 //new phone
 const Search_history_dev = async ctx => {
   let { date, devType, devid, attr } = ctx.query;
-  let date_start = new Date(date);
-  let date_start_stamp = new Date(date).getTime();
-  let date_end = date_start.setDate(date_start.getDate() + 1);
   let result = await Dev_list[devType]
     .find({ devid })
     .where("DateTime")
-    .gte(new Date(date_start_stamp))
-    .lte(new Date(date_end))
+    .gte(new Date(new Date(date + " 00:00:00")))
+    .lte(new Date(new Date(date + " 23:59:59")))
     .select({ _id: 0, [attr]: 1, generateTime: 1 })
-    .limit(100)
     .exec();
 
   ctx.body = formatResult(

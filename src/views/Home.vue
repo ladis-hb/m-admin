@@ -38,7 +38,7 @@
                 <b-nav-item :to="{ path: '/reset' }">
                   <span class="text-light">{{ $t("Home.82o6lb") }}</span>
                 </b-nav-item>
-                <b-nav-dropdown text="languga" class=" text-light">
+                <b-nav-dropdown text="languga" class=" language-text-light">
                   <b-dropdown-item @click="$i18n.locale = 'zh'"
                     >中文</b-dropdown-item
                   >
@@ -57,7 +57,7 @@
     </b-row>
     <b-row no-gutters class="main-default main-page h-100 overflow-auto">
       <transition>
-        <keep-alive exclude="chartline">
+        <keep-alive exclude="chartline,devs">
           <router-view> </router-view>
         </keep-alive>
       </transition>
@@ -119,5 +119,15 @@ export default {
 }
 .main-page {
   max-height: calc(100vh - 96px);
+}
+.language-text-light {
+  a {
+    span {
+      color: aliceblue;
+    }
+  }
+}
+.navbar-dark .navbar-nav .nav-link {
+  color: aliceblue;
 }
 </style>

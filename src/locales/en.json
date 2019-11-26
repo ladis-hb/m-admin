@@ -21,7 +21,9 @@
       "wpe6tq": "to close up",
       "l767u9": "Host Device List",
       "4j7lu9": "Central Control Host MacId:",
-      "1t7pw2": "Add host"
+      "1t7pw2": "Add host",
+      "dqz3fw": "Add device",
+      "uy3sps": "Delete device"
     },
     "vyhd2j": "Setting",
     "SetUser": {
@@ -81,7 +83,9 @@
   },
   "devs": {
     "xq1j6w": "Device name:",
-    "ao82ns": "Device ID:"
+    "ao82ns": "Device ID:",
+    "9x42hm": "Update time",
+    "cehfec": "View"
   },
   "Device": {
     "UPS": {
@@ -95,6 +99,56 @@
       "nuot3o": "value",
       "lkdvcd": "normal",
       "2lnbvc": "abnormal"
+    },
+    "IO": {
+      "t1c5l9": "IO status",
+      "lso2xm": "The green status is normal, and the red status is abnormal. The customer can freely configure the status.",
+      "i9l7f9": "smoke",
+      "vhi9h8": "Leaking water",
+      "4xqfbb": "Door sensor",
+      "upanj4": "other"
     }
+  },
+  "userRegister": {
+    "c0u6wi": "registered",
+    "1p5rbj": "Name",
+    "p56exu": "The same name as the account by default",
+    "a0e9qc": "account number",
+    "w36psy": "password",
+    "v0u33p": "Enter the password, it is recommended that the password be longer than 8 characters",
+    "4po0ur": "Enter the password again",
+    "wpob65": "Repeat the password",
+    "czkrmo": "Please enter your password again",
+    "4ncql6": "mailbox",
+    "8a6dev": "The mailbox will be used to retrieve the password and accept the alarm message",
+    "3yn9wn": "Mobile phone",
+    "qv34kf": "organization",
+    "di0z0m": "Account cannot be empty!",
+    "dhh39o": "password can not be blank",
+    "vl6hbl": "password can not be blank",
+    "ln6jyb": "E-mail can not be empty",
+    "t465uj": "The password must be the same twice",
+    "7oc52f": "Registering",
+    "1lhcx9": "Registering",
+    "b9rreb": "Registration error",
+    "kkmdbf": "Registration is successful, whether to return to the login interface"
+  },
+  "userReset": {
+    "8qiebb": "reset Password",
+    "xrhvom": "mailbox",
+    "f7dhuk": "Enter email to get verification code",
+    "b2vyxw": "Click for authentication code",
+    "kl6zyu": "Enter confirmation code",
+    "wri8fr": "Verification code",
+    "wjlttc": "password",
+    "0z7jyr": "Enter password It is recommended that the password be longer than 8 characters",
+    "umca1s": "Repeat the password",
+    "90fo75": "Enter the password again",
+    "7g996d": "Getting verification code",
+    "6kom8o": "verification code must be filled",
+    "ovan4l": "password can not be blank",
+    "kbavci": "The passwords entered twice are inconsistent",
+    "ghl67b": "Submitting edits",
+    "2jv9zj": "Reset successfully, whether to return to the login interface"
   }
 }

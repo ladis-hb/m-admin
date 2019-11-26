@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <b-row>
-      <separated :title="th.name || th.devid"></separated>
+      <separated :title="th ? th.name : '' || th.devid"></separated>
       <b-col cols="6">
         <div class="ths">
           <i class=" iconfont text-success">&#xe604;</i
@@ -42,37 +42,39 @@ import { mapState, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      devid: this.$route.params.devid,
+      devid: this.$route.query.devid,
       th_fiedls: [
-        { names: "模拟量名称" },
-        { value: "值" },
-        { operate: "操作" }
+        { names: this.$t("Device.UPS.l232l9") },
+        { value: this.$t("Device.UPS.gf5kur") },
+        { operate: this.$t("Device.UPS.68q9gs") }
       ],
       simulate: new Set(["temperature", "humidity"])
     };
   },
   computed: {
-    ...mapGetters(["lang", "unit"]),
+    language() {
+      return this.$store.getters.language(this.$i18n.locale);
+    },
+    ...mapGetters(["unit"]),
     ...mapState(["dev"]),
     th() {
       return this.dev.th[this.devid];
     },
     items() {
-      let item = [];
-      Object.entries(this.th).forEach(([key, val]) => {
-        if (this.simulate.has(key))
-          item.push({
+      return Object.entries(this.th)
+        .filter(([key]) => this.simulate.has(key))
+        .map(([key, val]) => {
+          return {
             name: key,
-            names: this.lang.get(key),
+            names: this.language.get(key),
             value: `${val}${this.unit.get(key)}`
-          });
-      });
-      return item;
+          };
+        });
     }
   },
   methods: {
     toline({ type, devid, attr }) {
-      this.$router.push({ name: `Line`, params: { type, devid, attr } });
+      this.$router.push({ path: `/line`, query: { type, devid, attr } });
     }
   },
   components: { separated }

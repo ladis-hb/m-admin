@@ -109,12 +109,12 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import separated from "../../components/separated";
 export default {
   data() {
     return {
-      devid: this.$route.params.devid,
+      devid: this.$route.query.devid,
       speedStop: require("../../assets/image/icons/fen_gray.gif"),
       speedRun: require("../../assets/image/icons/fen.gif"),
       hotStop: require("../../assets/image/icons/sun_gary.gif"),
@@ -159,14 +159,17 @@ export default {
     separated
   },
   computed: {
-    ...mapState(["dev"]),
-    ...mapGetters(["lang", "unit"]),
+    language() {
+      return this.$store.getters.language(this.$i18n.locale);
+    },
+    dev() {
+      return this.$store.state.dev;
+    },
+    ...mapGetters(["unit"]),
     ac() {
       return this.dev.ac[this.devid];
     },
     th() {
-      //console.log(this.dev.th);
-
       return Object.values(this.dev.th);
     },
     temperatureColor() {
@@ -194,21 +197,20 @@ export default {
       return this.speedRun;
     },
     items() {
-      let item = [];
-      Object.entries(this.ac).forEach(([key, val]) => {
-        if (this.simulate.has(key))
-          item.push({
+      return Object.entries(([key]) => this.simulate.has(key)).map(
+        ([key, val]) => {
+          return {
             name: key,
-            names: this.lang.get(key),
+            names: this.language.get(key),
             value: `${val}${this.unit.get(key)}`
-          });
-      });
-      return item;
+          };
+        }
+      );
     }
   },
   methods: {
     toline({ type, devid, attr }) {
-      this.$router.push({ name: `Line`, params: { type, devid, attr } });
+      this.$router.push({ path: `/line`, query: { type, devid, attr } });
     }
   }
 };

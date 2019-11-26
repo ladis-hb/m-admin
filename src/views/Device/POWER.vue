@@ -78,7 +78,7 @@ import separated from "../../components/separated";
 export default {
   data() {
     return {
-      devid: this.$route.params.devid,
+      devid: this.$route.query.devid,
       simulate: new Set([
         "active_power",
         "input_current",
@@ -104,10 +104,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["lang", "unit"]),
+    language() {
+      return this.$store.getters.language(this.$i18n.locale);
+    },
+    ...mapGetters(["unit"]),
     ...mapState(["dev"]),
     device() {
-      ////console.log(this.dev.power[this.devid]);
       return this.dev.power[this.devid];
     },
     core() {
@@ -149,19 +151,17 @@ export default {
       };
     },
     filter_simulate() {
-      let core = [];
-      for (let [key, val] of Object.entries(this.device)) {
-        if (this.simulate.has(key)) {
-          core.push({
+      return Object.entries(this.device)
+        .filter(([key]) => this.simulate.has(key))
+        .map(([key, val]) => {
+          return {
             name: key,
-            names: this.lang.get(key) || key,
+            names: this.language.get(key) || key,
             value: `${val[2] || 0} ${this.unit.get(key)}`,
             top: val[0] || 0,
             bottom: val[1] || 0
-          });
-        }
-      }
-      return core;
+          };
+        });
     }
   },
   components: {
@@ -169,7 +169,7 @@ export default {
   },
   methods: {
     toline({ type, devid, attr }) {
-      this.$router.push({ name: `Line`, params: { type, devid, attr } });
+      this.$router.push({ path: `/line`, query: { type, devid, attr } });
     }
   }
 };

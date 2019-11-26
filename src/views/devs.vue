@@ -3,113 +3,53 @@
     <b-row class="m-0 overflow-auto">
       <b-col
         cols="12"
-        v-for="(value, i0, key) in dev[id]"
+        v-for="(value, i0, key) in dev"
         :key="key"
         class=" mt-2 overflow-auto"
-        @click="toDevice(id, value.devid)"
+        @click="toDevice(value.devid)"
       >
         <b-card
           :title="$t('devs.xq1j6w') + value.name || value.devid"
           :sub-title="$t('devs.ao82ns') + value.devid"
-          ><b-card-body>
-            <!-- <argument-block
-              v-for="(val, key) of filter_show_value(value)"
-              :val="val"
-              :keys="key"
-              :key="key"
-              class=" d-block"
-            ></argument-block> -->
-          </b-card-body></b-card
         >
+          <b-card-text>
+            <i
+              >{{ $t("devs.9x42hm") }}:{{
+                $d(new Date(value.generateTime), "long")
+              }}</i
+            >
+          </b-card-text>
+        </b-card>
       </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
 import { Get_user_all_devs, Get_devs_list_single } from "../util/axios";
-//import argumentBlock from "../components/argumentBlock";
 export default {
-  data() {
-    return {
-      /* card_img: require("../assets/25-600x300.jpg"),
-      hidd_key: new Set(["generateTime", "name", "devid", "_id", "DateTime"]),
-      device: {
-        ups: new Set([
-          "generateTime",
-          "brand",
-          "temperature",
-          "status",
-          "phase",
-          "smoke",
-          "access_contral",
-          "leak",
-          "shutdown_active",
-          "Test_mode",
-          "Battery_test",
-          "UPS_work_situation",
-          "bypass_mode",
-          "Battery_voltage_state",
-          "grid_state"
-        ]),
-        ac: new Set(["brand", "refrigeration_temperature", "humidity", "mode"]),
-        power: new Set([
-          "brand",
-          "active_power",
-          "reactive_power",
-          "power_factor",
-          "quantity"
-        ]),
-        io: new Set(["brand", "power_status", "input_status"]),
-        th: new Set(["brand", "temperature", "humidity"]) 
-      }*/
-    };
-  },
-  components: {
-    //argumentBlock
-  },
   computed: {
-    id() {
-      return this.$route.params.id;
-    },
-    ...mapState(["dev"]),
-    ...mapGetters(["unit"])
+    dev() {
+      return this.$store.state.dev[this.$route.params.id] || {};
+    }
   },
   methods: {
-    //刷选出要显示的字段
-    /* filter_show_value(value) {
-      let valueMap = {};
-      for (let [key, val] of Object.entries(value)) {
-        if (this.device[this.id].has(key)) valueMap[key] = val;
-      }
-      return valueMap;
-    }, */
     //到device
-    toDevice(id, devid) {
-      if (id != "io")
-        this.$router.push({ path: `/Device/${id}`, query: { devid } });
-    },
-    /* toline({ type, devid, attr }) {
-      this.$router.push({ name: `Line`, params: { type, devid, attr } });
-    },
-    filter_key(value) {
-      let newValue = {};
-      for (let key of Object.keys(value)) {
-        if (!this.hidd_key.has(key)) newValue[key] = value[key];
-      }
-      return newValue;
-    },
-    ArrayBool(val) {
-      //console.log(typeof val);
-    }, */
-    /* 检查哪些设备不在线，get获取数据库的存档，写入store，当有socket新数据传入会直接复写存档数据 */
-    async check_offline_dev() {
-      //获取socket在线设备id
-      let online = [];
-      Object.values(this.dev).forEach(val => {
-        online = [...online, ...Object.keys(val)];
+    toDevice(devid) {
+      this.$router.push({
+        path: `/Device/${this.$route.params.id}`,
+        query: { devid }
       });
+    },
+    //写入store，当有socket新数据传入会直接复写存档数据 */
+    async check_offline_dev() {
+      let online =
+        Object.keys(this.dev).reduce((pre, cu) => {
+          if (Array.isArray(pre)) return [...pre, cu];
+          else return [pre, cu];
+        }) || [];
+      console.log(online);
+
       //获取用户所有设备
       let {
         data: { data: dev }

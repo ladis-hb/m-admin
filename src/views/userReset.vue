@@ -1,6 +1,6 @@
 <template>
   <b-container fluid class="d-flex flex-column h-100">
-    <Header :title="lang.get('reset')"></Header>
+    <Header :title="$t('userReset.8qiebb')"></Header>
     <b-row class="h-75">
       <b-col
         cols="12"
@@ -9,7 +9,7 @@
       >
         <b-form>
           <b-form-group
-            :label="lang.get('mail') + ':'"
+            :label="$t('userReset.xrhvom')"
             label-for="mail"
             label-cols="12"
             label-cols-sm="3"
@@ -18,18 +18,18 @@
             <b-form-input
               id="mail"
               v-model.trim="mail"
-              placeholder="输入邮箱获取验证码"
+              :placeholder="$t('userReset.f7dhuk')"
             ></b-form-input>
-            <b-button variant="info" class=" mt-1" @click="GetMailValidation"
-              >点击获取验证码</b-button
-            >
+            <b-button variant="info" class=" mt-1" @click="GetMailValidation">{{
+              $t("userReset.b2vyxw")
+            }}</b-button>
           </b-form-group>
           <b-form-group
-            :label="lang.get('Validation') + ':'"
+            :label="$t('userReset.wri8fr')"
             label-for="Validation"
             label-cols="12"
             label-cols-sm="3"
-            description="输入验证码"
+            :description="$t('userReset.kl6zyu')"
             v-show="boolValidation"
           >
             <b-form-input
@@ -38,11 +38,11 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group
-            :label="lang.get('password') + ':'"
+            :label="$t('userReset.wjlttc')"
             label-for="passwd"
             label-cols="12"
             label-cols-sm="3"
-            description="输入密码 建议密码超过8个字符"
+            :description="$t('userReset.0z7jyr')"
             v-show="boolValidation"
           >
             <b-form-input
@@ -53,11 +53,11 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group
-            :label="lang.get('password2') + ':'"
+            :label="$t('userReset.umca1s')"
             label-for="passwd2"
             label-cols="12"
             label-cols-sm="3"
-            description="再次输入密码"
+            :description="$t('userReset.90fo75')"
             v-show="boolValidation"
           >
             <b-form-input
@@ -69,7 +69,7 @@
           </b-form-group>
           <b-form-group class="p-3" v-show="boolValidation">
             <b-button @click="reset_submit" block variant="info">{{
-              lang.get("reset")
+              $t("userReset.8qiebb")
             }}</b-button>
           </b-form-group>
         </b-form>
@@ -79,7 +79,6 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import { MessageBox, Loading } from "element-ui";
 import { GetMailValidation, Resetpasswd } from "../util/axios";
 import { btoa } from "../util/tool";
@@ -98,8 +97,6 @@ export default {
     Header
   },
   computed: {
-    ...mapGetters(["lang"]),
-
     stateUser() {
       return false;
     },
@@ -118,7 +115,9 @@ export default {
   },
   methods: {
     GetMailValidation() {
-      let getmailLoading = Loading.service({ text: "正在获取验证码" });
+      let getmailLoading = Loading.service({
+        text: this.$t("userReset.7g996d")
+      });
       GetMailValidation({ mail: this.mail, user: "" })
         .then(({ code, msg }) => {
           getmailLoading.close();
@@ -132,11 +131,13 @@ export default {
     },
     reset_submit() {
       let { Validation, passwd, passwd2, mail } = this.$data;
-      if (Validation == "") return MessageBox.alert("验证码不能为空");
+      if (Validation == "")
+        return MessageBox.alert(this.$t("userReset.6kom8o"));
       if (passwd == "" || passwd2 == "")
-        return MessageBox.alert("密码不能为空");
-      if (passwd !== passwd2) return MessageBox.alert("两次输入密码不一致");
-      let resetLoading = Loading.service({ text: "正在提交修改" });
+        return MessageBox.alert(this.$t("userReset.ovan4l"));
+      if (passwd !== passwd2)
+        return MessageBox.alert(this.$t("userReset.kbavci"));
+      let resetLoading = Loading.service({ text: this.$t("userReset.ghl67b") });
       Resetpasswd({
         Validation: String(Validation),
         mail,
@@ -147,12 +148,12 @@ export default {
           setTimeout(() => {
             resetLoading.close();
             if (code != 200) return MessageBox.alert(msg, "info");
-            MessageBox.confirm("重置成功，是否返回登录界面", msg, {
+            MessageBox.confirm(this.$t("userReset.2jv9zj"), msg, {
               type: "success"
             }).then(() => {
               this.$router.push("/");
             });
-          }, 3000);
+          }, 1000);
         })
         .catch(err => {
           resetLoading.close();

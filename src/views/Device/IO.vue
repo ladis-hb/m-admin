@@ -4,24 +4,30 @@
       <b-col cols="12">
         <b-card class="m-4 text-center">
           <b-card-body
-            title="IO状态"
-            sub-title="绿色状态正常，红色状态异常，客户可自由配置状态量，默认烟雾常开，漏水常开，门磁常闭。"
+            :title="$t('Device.IO.t1c5l9')"
+            :sub-title="$t('Device.IO.lso2xm')"
           >
             <div>
-              <b-button pill :variant="Smoke" class="m-2" @click="show = true"
-                >烟雾</b-button
+              <b-button
+                pill
+                :variant="Smoke"
+                class="m-2"
+                @click="show = true"
+                >{{ $t("Device.IO.i9l7f9") }}</b-button
               >
-              <b-button pill :variant="Leak" class="m-2" @click="show = true"
-                >漏水</b-button
-              >
+              <b-button pill :variant="Leak" class="m-2" @click="show = true">{{
+                $t("Device.IO.vhi9h8")
+              }}</b-button>
               <b-button
                 pill
                 :variant="access_contral"
                 class="m-2"
                 @click="show = true"
-                >门磁</b-button
+                >{{ $t("Device.IO.4xqfbb") }}</b-button
               >
-              <b-button pill variant="success" class="m-2">其他</b-button>
+              <b-button pill variant="success" class="m-2">{{
+                $t("Device.IO.upanj4")
+              }}</b-button>
             </div>
             <div>
               <section
@@ -136,7 +142,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 import { Setfinal, Getfinal } from "../../util/axios";
 import { MessageBox } from "element-ui";
 export default {
@@ -159,45 +165,33 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["lang", "unit"]),
-    ...mapState(["dev", "user", "token"]),
+    language() {
+      return this.$store.getters.language(this.$i18n.locale);
+    },
+    ...mapState(["dev"]),
     IO() {
       let io = Object.values(this.dev.io);
-      //console.log(io);
-
-      if (io[0]) return io[0];
-      else return false;
+      return io[0] ? io[0] : false;
     },
     Smoke() {
-      if (!this.IO) return "success";
-      let devData = this.IO.smoke;
-      let localData = this.final.smoke;
-
-      if (devData == localData) return "success";
-      else return "danger";
+      if (!this.IO) return;
+      return this.IO.smoke === this.final.smoke ? "success" : "danger";
     },
     Leak() {
-      if (!this.IO) return "success";
-      let devData = this.IO.leak;
-      let localData = this.final.leak;
-
-      if (devData == localData) return "success";
-      else return "danger";
+      if (!this.IO) return;
+      return this.IO.leak === this.final.leak ? "success" : "danger";
     },
     access_contral() {
-      if (!this.IO) return "success";
-      let devData = this.IO.access_contral;
-      let localData = this.final.access_contral;
-
-      if (devData == localData) return "success";
-      else return "danger";
+      if (!this.IO) return;
+      return this.IO.access_contral === this.final.access_contral
+        ? "success"
+        : "danger";
     }
   },
-  components: {},
   methods: {
     SetFinal() {
       this.show = false;
-      Setfinal({ user: this.user, token: this.token, final: this.final }).then(
+      Setfinal({ final: this.final }).then(
         ({ data: { code, msg, data: result } }) => {
           if (code != 200) return MessageBox.alert(msg, code);
           let { nModified } = result;
@@ -218,12 +212,10 @@ export default {
   },
   //进入组件钩子
   activated() {
-    Getfinal({ user: this.user, token: this.token }).then(
-      ({ data: { code, msg, data: result } }) => {
-        if (code != 200) return MessageBox.alert(msg);
-        this.final = Object.assign(this.final, result);
-      }
-    );
+    Getfinal().then(({ data: { code, msg, data: result } }) => {
+      if (code != 200) return MessageBox.alert(msg);
+      this.final = Object.assign(this.final, result);
+    });
   }
 };
 </script>

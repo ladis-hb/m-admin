@@ -32,7 +32,11 @@
       <b-col cols="12" class="p-0" v-if="search_date">
         <separated
           :back="true"
-          :title="dev.devid + '/' + search_date"
+          :title="
+            search_date +
+              ',此次共检索数据条目数:' +
+              search_chartData.rows.length
+          "
         ></separated>
         <ve-line :data="search_chartData" :settings="chartSettings"></ve-line>
       </b-col>
@@ -88,8 +92,10 @@ export default {
         columns: ["generateTime", attr],
         rows: this.devs[type][devid]
           .filter(el => {
-            if (el[attr] != attrVal) return el;
-            attrVal = el[attr];
+            if (el[attr] != attrVal) {
+              attrVal = el[attr];
+              return el;
+            }
           })
           .map(el => {
             return {
@@ -115,8 +121,10 @@ export default {
       let attrVal = "";
       this.search_chartData.rows = data
         .filter(el => {
-          if (el[attr] != attrVal) return el;
-          attrVal = el[attr];
+          if (el[attr] != attrVal) {
+            attrVal = el[attr];
+            return el;
+          }
         })
         .map(el => {
           return {
@@ -124,21 +132,6 @@ export default {
             [attr]: el[attr]
           };
         });
-      /* .then(({ data: { code, msg, data } }) => {
-          if (code != 200) return MessageBox(msg, code);
-          let len = data.length - 1;
-          data = data.slice(len - 200, len);
-          if (devType == "power") {
-            data.forEach((dev, key) => {
-              data[key][attr] = dev[attr][2];
-            });
-          }
-          this.search_chartData.rows = data;
-          ////console.log(this.search_chartData.rows);
-        })
-        .catch(err => {
-          MessageBox(err, "error");
-        }); */
     }
   },
   components: {
