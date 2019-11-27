@@ -38,10 +38,6 @@ module.exports = {
         let { user } = data;
         AppUserMap.set(user, socket.id);
         AppSocketIdMap.set(socket.id, user);
-        console.log(
-          `--Socket--环控APP设备:（${user}）已连接，Socket.id: ${socket.id}`
-        );
-
         event.emit("onlien", {
           type: "devOnlien",
           msg: `--Socket--环控APP设备:（${user}）已连接，Socket.id: ${socket.id}`,
@@ -50,12 +46,6 @@ module.exports = {
         io.to(socket.id).emit("operate", {
           Type: "Register",
           socketID: socket.id
-        });
-        io.to(socket.id).emit("operate", {
-          Type: "Operate",
-          DeviceCode: "mac00101001",
-          OptCode: "StartUps",
-          OptType: "operate"
         });
       });
       //监听socket断开事件

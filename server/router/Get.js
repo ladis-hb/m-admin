@@ -41,6 +41,8 @@ const {
 
 //Alarm
 const { GetAlarms, confirm_alarm } = require("./lib/alarm");
+//oprate
+const { OprateUPS } = require("./lib/oprate");
 
 module.exports = async (ctx, next) => {
   let { params, query } = ctx;
@@ -150,6 +152,10 @@ module.exports = async (ctx, next) => {
           break;
         case "Getfinal":
           await Getfinal(ctx);
+          break;
+        //Oprate devcice
+        case "OprateUPS":
+          await OprateUPS(ctx);
           break;
       }
     }

@@ -118,7 +118,6 @@ export default new Vuex.Store({
     },
     //root
     SOCKET_LINEINFO(state, payload) {
-      console.log(payload);
       let { type, result, data } = payload;
       state.root.infos.push(result);
       switch (type) {

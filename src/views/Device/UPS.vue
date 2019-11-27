@@ -1,130 +1,4 @@
 <template>
-  <!-- <b-row class=" w-100 p-3">
-    <b-row>
-      <b-col cols="3">
-        <separated title="市电输入信息"></separated>
-        <b-table-lite :items="filter_simulate" :fields="fields_simulate">
-          <template v-slot:cell(operate)="data">
-            <b-button
-              variant="info"
-              @click="
-                toline({
-                  type: 'ups',
-                  devid,
-                  attr: data.item.name
-                })
-              "
-              class=" block el-icon-pie-chart  px-1 py-0 pt-1"
-              >{{ $t("Device.UPS.vk17k4") }}</b-button
-            >
-          </template>
-        </b-table-lite>
-      </b-col>
-      <b-col cols="6">
-        <b-card>
-          <b-card-body>
-            <b-img :src="betty_model" class=" mw-100"></b-img>
-          </b-card-body>
-        </b-card>
-      </b-col>
-      <b-col cols="3">
-        <separated title="输出信息"></separated>
-        <b-table-lite :items="filter_simulate" :fields="fields_simulate">
-          <template v-slot:cell(operate)="data">
-            <b-button
-              variant="info"
-              @click="
-                toline({
-                  type: 'ups',
-                  devid,
-                  attr: data.item.name
-                })
-              "
-              class=" block el-icon-pie-chart  px-1 py-0 pt-1"
-              >{{ $t("Device.UPS.vk17k4") }}</b-button
-            >
-          </template>
-        </b-table-lite>
-      </b-col>
-    </b-row>
-    <b-col cols="12">
-      <separated title="电池信息"></separated>
-      <b-table-lite
-        :items="
-          Object.entries(device).map(([key, val]) => {
-            return { key: key, val: val };
-          })
-        "
-      >
-      </b-table-lite>
-    </b-col>
-  </b-row> -->
-  <!-- <b-row class=" w-100">
-    <b-col cols="8">
-      <b-row ref="img">
-        <b-col class=" m-0 p-0 my-2">
-          <b-card>
-            <b-card-body>
-              <b-img :src="betty_model" class=" mw-100"></b-img>
-            </b-card-body>
-          </b-card>
-        </b-col>
-      </b-row>
-      <b-row ref="inputAndStaut">
-        <b-col cols="6" class=" border">
-          <separated title="市电输入信息"></separated>
-          <b-table-lite :items="filter_simulate" :fields="fields_simulate">
-            <template v-slot:cell(operate)="data">
-              <b-button
-                variant="info"
-                @click="
-                  toline({
-                    type: 'ups',
-                    devid,
-                    attr: data.item.name
-                  })
-                "
-                class=" block el-icon-pie-chart  px-1 py-0 pt-1"
-                >{{ $t("Device.UPS.vk17k4") }}</b-button
-              >
-            </template>
-          </b-table-lite></b-col
-        >
-        <b-col cols="6" class=" border">
-          <separated title="电池信息"></separated>
-          <b-table-lite :items="filter_simulate" :fields="fields_simulate">
-            <template v-slot:cell(operate)="data">
-              <b-button
-                variant="info"
-                @click="
-                  toline({
-                    type: 'ups',
-                    devid,
-                    attr: data.item.name
-                  })
-                "
-                class=" block el-icon-pie-chart  px-1 py-0 pt-1"
-                >{{ $t("Device.UPS.vk17k4") }}</b-button
-              >
-            </template>
-          </b-table-lite></b-col
-        >
-      </b-row>
-    </b-col>
-    <b-col cols="4">
-      <div class=" border">
-        <separated title="输出信息"></separated>
-        <b-table-lite
-          :items="
-            Object.entries(device).map(([key, val]) => {
-              return { key: key, val: val };
-            })
-          "
-        >
-        </b-table-lite>
-      </div>
-    </b-col>
-  </b-row> -->
   <b-row class=" w-100 ml-0">
     <section class=" w-100 border-bottom d-flex flex-row p-2 px-3">
       <h4>{{ device.name || device.devid }}</h4>
@@ -144,6 +18,16 @@
             </b-card>
           </b-col>
           <b-col cols="12" md="4" class="m-0 p-0 my-2">
+            <b-button-group class=" px-3 pb-1">
+              <b-button @click="oprate('StartUps')">{{
+                $t("Device.UPS.hu1ydo")
+              }}</b-button>
+              <b-button @click="oprate('ShutdownUps')">{{
+                $t("Device.UPS.6bq94d")
+              }}</b-button>
+              <b-button>{{ $t("Device.UPS.ffb8wz") }}</b-button>
+            </b-button-group>
+
             <b-card>
               <argumentBlocktwo
                 v-for="([keys, val], key) in filter_core"
@@ -191,6 +75,7 @@
 import { mapState, mapGetters } from "vuex";
 import argumentBlocktwo from "../../components/argumentBlock2";
 import separated from "../../components/separated";
+import { OprateUPS } from "../../util/axios";
 export default {
   data() {
     return {
@@ -308,17 +193,6 @@ export default {
               : this.$t("Device.UPS.2lnbvc")
           };
         });
-      /* let core = [];
-      for (let [key, val] of Object.entries(this.device)) {
-        if (this.status.has(key)) {
-          core.push({
-            name: key,
-            names: this.lang.get(key) || key,
-            value: val ? "正常" : "异常"
-          });
-        }
-      }
-      return core; */
     }
   },
   components: {
@@ -328,6 +202,11 @@ export default {
   methods: {
     toline({ type, devid, attr }) {
       this.$router.push({ path: `/line`, query: { type, devid, attr } });
+    },
+    oprate(oprate) {
+      OprateUPS({ oprate, devid: this.devid }).then(({ data }) => {
+        this.$MessageBox(data.msg, "Tip");
+      });
     }
   }
 };

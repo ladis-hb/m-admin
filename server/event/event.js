@@ -2,7 +2,7 @@
 const { User_dev, Users } = require("../mongoose/user");
 const { log_socket } = require("../mongoose/log");
 const format = require("../util/Format");
-const { devsMap, userMap, rootSet } = require("../store");
+const { devsMap, userMap, rootSet, AppUserMap } = require("../store");
 const { io } = require("../socket/index");
 const event = require("../event/index");
 
@@ -28,16 +28,6 @@ const on = () => {
     let userArray = await DevsMapValue(devid);
     if (![...userArray].includes(user))
       devsMap.set(devid, new Set([...userArray, user]));
-    /* 
-    let { devid, devType, user } = data;
-    let { user: devUser } = devsMap.get(devid);
-    devUser.add(user);
-    devsMap.set(devid, { devType, user: devUser });
-    event.emit("onlien", {
-      type: "addDevice",
-      msg: `用户${user}添加设备${devType}，设备号:${devid}`,
-      user
-    }); */
   });
   //
   /*
@@ -96,10 +86,24 @@ const on = () => {
       msg: `用户${user}删除设备${devType}，设备号:${devid}`,
       user
     });
+  });*/
+  //oprate devcice
+  event.on("OprateUPS", async data => {
+    let { oprate, devid } = data;
+    let clientID = devid.split("@")[0];
+    let clientSocket = AppUserMap.get(clientID + "@");
+    console.log(clientSocket);
+
+    io.to(clientSocket).emit("operate", {
+      Type: "Operate",
+      DeviceCode: devid,
+      OptCode: oprate,
+      OptType: "operate"
+    });
   });
 
   //online
-   */
+
   event.on("onlien", async result => {
     await result;
     result.generateTime = format.formatDate();

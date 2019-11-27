@@ -10,9 +10,6 @@ const socketIdMap = new Map();
 const rootSet = new Set();
 //存储all客户端 clientID:socketID
 const ClientSocketMap = new Map();
-//存储所有环控设备 devID:clientID
-const DevClientMap = new Map();
-
 //HK-app
 //存取所有连接socket user:socket.id
 const AppUserMap = new Map();
@@ -25,7 +22,6 @@ module.exports = {
   socketIdMap,
   rootSet,
   ClientSocketMap,
-  DevClientMap,
   AppSocketIdMap,
   AppUserMap
 };

@@ -101,7 +101,10 @@
       "o46ipg": "State quantity name",
       "nuot3o": "value",
       "lkdvcd": "normal",
-      "2lnbvc": "abnormal"
+      "2lnbvc": "abnormal",
+      "hu1ydo": "Boot",
+      "6bq94d": "Shutdown",
+      "ffb8wz": "test"
     },
     "IO": {
       "t1c5l9": "IO status",

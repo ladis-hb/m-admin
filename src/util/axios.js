@@ -160,6 +160,12 @@ export const Getfinal = () => {
   return axios.get("/Get/Getfinal", assginArgument());
 };
 
+//设备操作区
+//ups oprate
+export const OprateUPS = ({ oprate, devid }) => {
+  return axios.get("/Get/OprateUPS", assginArgument({ oprate, devid }));
+};
+
 /**
  *
  *
