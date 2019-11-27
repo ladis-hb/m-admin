@@ -45,13 +45,15 @@
               :fields="devTable_fields"
             >
               <template v-slot:cell(AlarmSendSelect)="data">
-                <b>{{ data.value ? "是" : "否" }}</b>
+                <b>{{
+                  data.value
+                    ? $t("Setting.SetMain.dt8cjh")
+                    : $t("Setting.SetMain.y8pfii")
+                }}</b>
               </template>
             </b-table-lite>
-            <b-table
-              :items="row.item.devlistSrize"
-              :fields="devlist_fields"
-            ></b-table>
+            <b-table :items="row.item.devlistSrize" :fields="devlist_fields">
+            </b-table>
           </template>
         </b-table>
       </b-col>
@@ -80,9 +82,10 @@ export default {
         { key: "oprate", label: this.$t("Setting.SetMain.hb7eip") }
       ],
       devlist_fields: [
-        { key: "devType", label: this.$t("Setting.SetMain.4sdrkr") },
+        //{ key: "devType", label: this.$t("Setting.SetMain.4sdrkr") },
         { key: "devid", label: this.$t("Setting.SetMain.0zc37b") },
         { key: "devName", label: this.$t("Setting.SetMain.umc5nc") }
+        //{ key: "oprate", label: this.$t("Setting.SetMain.q4ah9g") }
       ],
       devTable_fields: [
         { key: "mail", label: this.$t("Setting.SetMain.mgppih") },
@@ -102,12 +105,13 @@ export default {
     ...mapState(["user", "token"])
   },
   methods: {
+    oprate(item) {
+      console.log(item);
+    },
     addDevid() {
-      let { Devid } = this.$data;
-
-      if (Devid == "") return MessageBox.alert("参数不能为空");
+      if (this.Devid == "") return MessageBox.alert("参数不能为空");
       addDevid({
-        devid: Devid
+        devid: this.Devid
       })
         .then(({ data: { code, msg } }) => {
           if (code != 200) return MessageBox(msg, "tip");
@@ -138,25 +142,6 @@ export default {
         }
       );
     },
-    /* Modify_select_items() {
-      let items = this.Select_items[0];
-      if (!items) return Message("请选择需要修改的设备/单选");
-      let { devid, devName } = items;
-      MessageBox.prompt("别名:", "修改别名", {
-        inputValue: devName
-      }).then(({ value }) => {
-        let arg = { user: this.user, token: this.token, devid, devName: value };
-        Modify_devName(arg)
-          .then(({ data: { code, msg } }) => {
-            if (code != 200) return MessageBox(msg, "tip");
-            this.Get_user_all_devs();
-            return Message("modify devName success");
-          })
-          .catch(err => {
-            MessageBox(err, "error-settingMain");
-          });
-      });
-    }, */
     Get_user_all_devs() {
       Get_devid_list().then(result => {
         let { code, data } = result.data;

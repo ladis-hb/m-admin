@@ -1,21 +1,29 @@
 <template>
   <b-row>
     <b-col cols="12">
-      <separated :title="lang.get('DM')"></separated>
-      <b-table
-        id="table_DM"
-        ref="devsListTable"
-        :items="devs_items"
-        :fields="devs_fields"
-        hover
-        head-variant="dark"
-        primary-key="devid"
-        sticky-header="700px"
-        selectable
-        selected-variant="primary"
-        select-mode="single"
-        @row-clicked="onRowSelected"
-      >
+      <separated :title="$t('root.DeviceManage.9z7eqt')"></separated>
+      <b-table ref="devsListTable" :items="devs_items" :fields="devs_fields">
+        <template v-slot:cell(num)="data">
+          <b>{{ data.item.devlist.length }}</b>
+        </template>
+        <template v-slot:cell(oprate)="row">
+          <b-button size="sm" @click="row.toggleDetails">{{
+            row.detailsShowing
+              ? $t("Setting.SetMain.wpe6tq")
+              : $t("Setting.SetMain.ke826n")
+          }}</b-button>
+        </template>
+        <template v-slot:row-details="row">
+          <b-table-lite :items="[row.item]" stacked :fields="devTable_fields">
+            <template v-slot:cell(AlarmSendSelect)="data">
+              <b>{{ data.value ? "是" : "否" }}</b>
+            </template>
+          </b-table-lite>
+          <b-table
+            :items="row.item.devlistSrize"
+            :fields="devlist_fields"
+          ></b-table>
+        </template>
       </b-table>
     </b-col>
     <b-col cols="12" md="6">
@@ -35,7 +43,6 @@
 
 <script>
 import separated from "../../components/separated";
-import { mapGetters } from "vuex";
 import { MessageBox, Loading } from "element-ui";
 import { Get_devs_list } from "../../util/axios";
 export default {
@@ -45,10 +52,22 @@ export default {
       devs_items: [],
       devs_items_back: [],
       devs_fields: [
-        { key: "devid", label: "环控ID", variant: "info" },
-        { key: "devType", label: this.lang.get("devType"), sortable: true },
-        { key: "updateTime", label: this.lang.get("generateTime") },
-        { key: "user", label: "所属用户" }
+        { key: "clientID", label: "环控ID" },
+        { key: "num", label: this.$t("root.DeviceManage.9kkdle") },
+        { key: "users", label: "所属用户" },
+        { key: "oprate", label: this.$t("root.DeviceManage.xju8cu") }
+      ],
+      devTable_fields: [
+        { key: "mail", label: this.$t("Setting.SetMain.mgppih") },
+        { key: "tel", label: this.$t("Setting.SetMain.jdlme9") },
+        { key: "AlarmSendSelect", label: this.$t("Setting.SetMain.ft46db") },
+        { key: "http_uri", label: "httpAPI" },
+        { key: "websocket_uri", label: "SocketAPI" }
+      ],
+      devlist_fields: [
+        { key: "devType", label: this.$t("Setting.SetMain.4sdrkr") },
+        { key: "devid", label: this.$t("Setting.SetMain.0zc37b") },
+        { key: "devName", label: this.$t("Setting.SetMain.umc5nc") }
       ],
       select_item: {},
       select_index: 0,
@@ -56,9 +75,6 @@ export default {
     };
   },
   components: { separated },
-  computed: {
-    ...mapGetters(["lang"])
-  },
   methods: {
     onRowSelected(item, index) {
       this.select_item = item;
@@ -72,11 +88,6 @@ export default {
       this.devs_items = this.devs_items.filter(val =>
         JSON.stringify(val).includes(this.search_str)
       );
-      /* let items = [];
-      this.devs_items.forEach(val => {
-        let row = JSON.stringify(val);
-        if (row.includes(str)) items.push(val);
-      }); */
       setTimeout(() => loading.close(), 1000);
     },
     Get_devs_list() {

@@ -1,7 +1,7 @@
 <template>
   <b-container>
     <b-row>
-      <separated :title="th ? th.name : '' || th.devid"></separated>
+      <separated :title="th.name || th.devid"></separated>
       <b-col cols="6">
         <div class="ths">
           <i class=" iconfont text-success">&#xe604;</i
@@ -27,7 +27,7 @@
                 })
               "
               class=" block  px-1 py-0 pt-1"
-              >趋势</b-button
+              >{{ $t("Device.TH.mrsen7") }}</b-button
             >
           </template>
         </b-table>
@@ -42,16 +42,17 @@ import { mapState, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      devid: this.$route.query.devid,
-      th_fiedls: [
-        { names: this.$t("Device.UPS.l232l9") },
-        { value: this.$t("Device.UPS.gf5kur") },
-        { operate: this.$t("Device.UPS.68q9gs") }
-      ],
-      simulate: new Set(["temperature", "humidity"])
+      devid: this.$route.query.devid
     };
   },
   computed: {
+    th_fiedls() {
+      return [
+        { names: this.$t("Device.UPS.l232l9") },
+        { value: this.$t("Device.UPS.gf5kur") },
+        { operate: this.$t("Device.UPS.68q9gs") }
+      ];
+    },
     language() {
       return this.$store.getters.language(this.$i18n.locale);
     },
@@ -61,8 +62,9 @@ export default {
       return this.dev.th[this.devid];
     },
     items() {
+      let simulate = new Set(["temperature", "humidity"]);
       return Object.entries(this.th)
-        .filter(([key]) => this.simulate.has(key))
+        .filter(([key]) => simulate.has(key))
         .map(([key, val]) => {
           return {
             name: key,
@@ -85,7 +87,7 @@ export default {
 .ths {
   i,
   b {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 }
 </style>

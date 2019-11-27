@@ -1,4 +1,5 @@
 /* jshint esversion:8 */
+import { socket_address } from "./config";
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
@@ -18,7 +19,7 @@ import "./assets/theme-chalk/message-box.css";
 import "./assets/theme-chalk/icon.css";
 import "./assets/icon/iconfont.css";
 //socket.io
-const socket = io("http://192.168.1.119:81");
+const socket = io(socket_address);
 Vue.use(VueSocketIOExt, socket, { store });
 
 Vue.use(BootstrapVue);
@@ -42,17 +43,9 @@ Vue.prototype.$MessageBox = MessageBox;
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
-  /* console.log(to);
-  console.log(from); */
   let localUser = sessionStorage.getItem("user");
-  //console.log(localUser);
-  if (to.name != "Login" && !localUser) {
-    next({ path: "/" });
-  }
-  /* let r = ["ups", "power", "ac", "th", "Devs", "Line", "io"];
-  if (r.includes(to.name) && !from.name) {
-    next({ path: "/main" });
-  } */
+  if (to.name != "Login" && !localUser) next({ path: "/" });
+
   if (to.name == "Root") {
     if (localUser != "root" || !sessionStorage.getItem("token")) next();
   }

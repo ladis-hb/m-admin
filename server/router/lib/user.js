@@ -39,7 +39,7 @@ const login = async ctx => {
       ctx.body = formatResult(102, ctx.query);
     }
   } else {
-    ctx.body = formatResult(102, ctx.query);
+    ctx.body = formatResult(104, ctx.query);
   }
 };
 

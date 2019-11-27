@@ -105,7 +105,6 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import { MessageBox } from "element-ui";
 import SwitchQuantity from "../components/switchQuantity";
 export default {
   components: {
@@ -126,16 +125,9 @@ export default {
     to(key) {
       this.$router.push({ path: `/dev/${key}` });
     }
-    /* GetAlarms */
   },
   mounted() {
-    this.$nextTick()
-      .then(() => {
-        this.$store.dispatch("GetAlarms");
-      })
-      .catch(err => {
-        MessageBox(err, "main error");
-      });
+    this.$store.dispatch("GetAlarms");
   }
 };
 </script>

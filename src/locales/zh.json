@@ -23,7 +23,10 @@
       "4j7lu9": "环控主机MacId:",
       "1t7pw2": "添加主机",
       "dqz3fw": "添加设备",
-      "uy3sps": "删除设备"
+      "uy3sps": "删除设备",
+      "q4ah9g": "操作",
+      "dt8cjh": "是",
+      "y8pfii": "否"
     },
     "vyhd2j": "设置",
     "SetUser": {
@@ -107,6 +110,9 @@
       "vhi9h8": "漏水",
       "4xqfbb": "门磁",
       "upanj4": "其他"
+    },
+    "TH": {
+      "mrsen7": "趋势"
     }
   },
   "userRegister": {
@@ -150,5 +156,44 @@
     "kbavci": "两次输入密码不一致",
     "ghl67b": "正在提交修改",
     "2jv9zj": "重置成功，是否返回登录界面"
+  },
+  "root": {
+    "online": {
+      "o0f7o4": "生成时间",
+      "icx6zc": "消息类型",
+      "qlqnkm": "用户",
+      "1fymis": "客户端ID",
+      "sc9ync": "socket登录设备",
+      "3e0ggg": "socket登录用户",
+      "6m5hai": "socket服务器信息"
+    },
+    "UserManage": {
+      "3tq6gn": "用户管理",
+      "9swcfu": "状态",
+      "lm2jra": "账号",
+      "qcy4wu": "姓名",
+      "es63r7": "邮箱",
+      "xwyua9": "电话",
+      "y53ith": "组织",
+      "zlzuz3": "用户组",
+      "smy9cj": "创建时间",
+      "7wvamv": "修改时间",
+      "czy5jd": "启用",
+      "aqlz8e": "禁用",
+      "xfnd5o": "修改用户分组",
+      "ck6r6a": "用户",
+      "zj504r": "删除用户",
+      "5oezer": "修改用户分组",
+      "jwwcln": "名字",
+      "zibwmr": "邮箱",
+      "bzc1np": "电话",
+      "wft2tk": "组织",
+      "w9mipe": "用户组"
+    },
+    "DeviceManage": {
+      "9z7eqt": "设备管理",
+      "xju8cu": "操作",
+      "9kkdle": "设备数"
+    }
   }
 }

@@ -24,6 +24,10 @@ module.exports = (code, body, msg) => {
       result.msg = "用户登录失败-没有检索到用户名";
       result.stat = "login warn";
       break;
+    case 104:
+      result.msg = "用户未注册";
+      result.stat = "login error";
+      break;
     //register
     case 110:
       result.msg = "注册成功";

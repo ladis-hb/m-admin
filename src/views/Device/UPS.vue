@@ -219,10 +219,14 @@ export default {
       return this.dev.ups[this.devid];
     },
     betty_model() {
-      let { bypass_mode, grid_state } = this.device;
-      if (bypass_mode) return require("../../assets/image/ups2.gif");
-      if (grid_state) return require("../../assets/image/ups3.gif");
-      return require("../../assets/image/ups1.gif");
+      let map = {
+        L: require("../../assets/image/ups3.gif"),
+        B: require("../../assets/image/ups1.gif"),
+        Y: require("../../assets/image/ups2.gif"),
+        P: require("../../assets/image/ups.gif"),
+        S: require("../../assets/image/ups.gif")
+      };
+      return map[this.device["Ups Mode"].trim()];
     },
     filter_core() {
       //电池信息

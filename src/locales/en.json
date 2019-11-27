@@ -23,7 +23,10 @@
       "4j7lu9": "Central Control Host MacId:",
       "1t7pw2": "Add host",
       "dqz3fw": "Add device",
-      "uy3sps": "Delete device"
+      "uy3sps": "Delete device",
+      "q4ah9g": "operating",
+      "dt8cjh": "True",
+      "y8pfii": "no"
     },
     "vyhd2j": "Setting",
     "SetUser": {
@@ -107,6 +110,9 @@
       "vhi9h8": "Leaking water",
       "4xqfbb": "Door sensor",
       "upanj4": "other"
+    },
+    "TH": {
+      "mrsen7": "trend"
     }
   },
   "userRegister": {
@@ -150,5 +156,44 @@
     "kbavci": "The passwords entered twice are inconsistent",
     "ghl67b": "Submitting edits",
     "2jv9zj": "Reset successfully, whether to return to the login interface"
+  },
+  "root": {
+    "online": {
+      "o0f7o4": "Build time",
+      "icx6zc": "Message type",
+      "qlqnkm": "user",
+      "1fymis": "Client ID",
+      "sc9ync": "socket login device",
+      "3e0ggg": "socket login user",
+      "6m5hai": "socket server information"
+    },
+    "UserManage": {
+      "3tq6gn": "User Management",
+      "9swcfu": "status",
+      "lm2jra": "account number",
+      "qcy4wu": "Name",
+      "es63r7": "mailbox",
+      "xwyua9": "phone",
+      "y53ith": "organization",
+      "zlzuz3": "user group",
+      "smy9cj": "Creation time",
+      "7wvamv": "Change the time",
+      "czy5jd": "Enable",
+      "aqlz8e": "Disable",
+      "xfnd5o": "Modify user group",
+      "ck6r6a": "user",
+      "zj504r": "delete users",
+      "5oezer": "Modify user group",
+      "jwwcln": "first name",
+      "zibwmr": "mailbox",
+      "bzc1np": "phone",
+      "wft2tk": "organization",
+      "w9mipe": "user group"
+    },
+    "DeviceManage": {
+      "9z7eqt": "Equipment management",
+      "xju8cu": "operating",
+      "9kkdle": "Number of devices"
+    }
   }
 }

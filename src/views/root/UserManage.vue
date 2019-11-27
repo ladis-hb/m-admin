@@ -1,7 +1,7 @@
 <template>
   <b-row>
     <b-col cols="12">
-      <separated :title="lang.get('UM')"></separated>
+      <separated :title="$t('root.UserManage.3tq6gn')"></separated>
       <b-table
         ref="userListTable"
         :items="user_items"
@@ -16,25 +16,45 @@
         @row-clicked="onRowSelected"
         :tbody-tr-class="rowClass"
       >
-        <template slot="[statu]" slot-scope="data">
-          {{ data.item.status ? "启用" : "禁用" }}
+        <template v-slot:cell(creatTime)="data">
+          <b>{{ $d(new Date(data.value), "long") }}</b>
+        </template>
+        <template v-slot:cell(modifyTime)="data">
+          <b>{{ data.value ? $d(new Date(data.value), "long") : "" }}</b>
+        </template>
+        <template v-slot:cell(status)="data">
+          {{
+            data.value
+              ? $t("root.UserManage.czy5jd")
+              : $t("root.UserManage.aqlz8e")
+          }}
         </template>
       </b-table>
     </b-col>
     <b-col cols="12">
       <b-button-group>
-        <b-button variant="info" v-b-modal.modal-1>修改用户分组</b-button>
+        <b-button variant="info" v-b-modal.modal-1>{{
+          $t("root.UserManage.xfnd5o")
+        }}</b-button>
         <b-button variant="warning" @click="disable_select_user"
-          >{{ !select_item.status ? "启用" : "禁用" }}用户</b-button
+          >{{
+            !select_item.status
+              ? $t("root.UserManage.czy5jd")
+              : $t("root.UserManage.aqlz8e")
+          }}{{ $t("root.UserManage.ck6r6a") }}</b-button
         >
-        <b-button variant="primary" @click="delete_select_user"
-          >删除用户</b-button
-        >
+        <b-button variant="primary" @click="delete_select_user">{{
+          $t("root.UserManage.zj504r")
+        }}</b-button>
       </b-button-group>
-      <b-modal id="modal-1" title="修改用户分组" @ok="modify_select_user">
+      <b-modal
+        id="modal-1"
+        :title="$t('root.UserManage.5oezer')"
+        @ok="modify_select_user"
+      >
         <b-form>
           <b-form-group
-            :label="lang.get('name')"
+            :label="$t('root.UserManage.jwwcln')"
             label-for="name"
             label-cols="12"
             label-cols-md="3"
@@ -42,7 +62,7 @@
             <b-form-input id="name" v-model="select_item.name"></b-form-input>
           </b-form-group>
           <b-form-group
-            :label="lang.get('mail')"
+            :label="$t('root.UserManage.zibwmr')"
             label-for="mail"
             label-cols="12"
             label-cols-md="3"
@@ -50,7 +70,7 @@
             <b-form-input id="mail" v-model="select_item.mail"></b-form-input>
           </b-form-group>
           <b-form-group
-            :label="lang.get('tel')"
+            :label="$t('root.UserManage.bzc1np')"
             label-for="tel"
             label-cols="12"
             label-cols-md="3"
@@ -58,7 +78,7 @@
             <b-form-input id="tel" v-model="select_item.tel"></b-form-input>
           </b-form-group>
           <b-form-group
-            :label="lang.get('compony')"
+            :label="$t('root.UserManage.wft2tk')"
             label-for="compony"
             label-cols="12"
             label-cols-md="3"
@@ -69,7 +89,7 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group
-            :label="lang.get('userGroup')"
+            :label="$t('root.UserManage.w9mipe')"
             label-for="userGroup"
             label-cols="12"
             label-cols-md="3"
@@ -88,7 +108,6 @@
 
 <script>
 import separated from "../../components/separated";
-import { mapGetters } from "vuex";
 import {
   Get_User_list,
   admin_modify_user_info,
@@ -103,23 +122,23 @@ export default {
       user_items: [],
       user_fields: [
         {
-          key: "statu",
-          label: this.lang.get("status"),
+          key: "status",
+          label: this.$t("root.UserManage.9swcfu"),
           sortable: true,
           variant: "info"
         },
-        { key: "user", label: this.lang.get("user") },
-        { key: "name", label: this.lang.get("name") },
-        { key: "mail", label: this.lang.get("mail") },
-        { key: "tel", label: this.lang.get("tel") },
-        { key: "orgin", label: this.lang.get("compony") },
-        { key: "userGroup", label: this.lang.get("userGroup") },
+        { key: "user", label: this.$t("root.UserManage.lm2jra") },
+        { key: "name", label: this.$t("root.UserManage.qcy4wu") },
+        { key: "mail", label: this.$t("root.UserManage.es63r7") },
+        { key: "tel", label: this.$t("root.UserManage.xwyua9") },
+        { key: "orgin", label: this.$t("root.UserManage.y53ith") },
+        { key: "userGroup", label: this.$t("root.UserManage.zlzuz3") },
         {
           key: "creatTime",
-          label: this.lang.get("generateTime"),
+          label: this.$t("root.UserManage.smy9cj"),
           sortable: true
         },
-        { key: "modifyTime", label: this.lang.get("updatetime") }
+        { key: "modifyTime", label: this.$t("root.UserManage.7wvamv") }
       ],
       select_item: {},
       select_index: 0
@@ -127,9 +146,6 @@ export default {
   },
   components: {
     separated
-  },
-  computed: {
-    ...mapGetters(["lang"])
   },
   methods: {
     onRowSelected(item, index) {
@@ -170,7 +186,7 @@ export default {
       let { user, name } = this.select_item;
       MessageBox.confirm(
         `确定要删除用户：< ${user}|${name} >吗?`,
-        "确认删除？"
+        "delete user"
       ).then(() => {
         delete_select_user({
           selectUser: user

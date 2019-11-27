@@ -1,7 +1,7 @@
 /* jshint esversion:8 */
 const { Validation_root_Group } = require("../../util/Format");
 const { Users, User_dev } = require("../../mongoose/user");
-const { Dev_Table } = require("../../mongoose/dev");
+const { Dev_Table, Dev_all } = require("../../mongoose/dev");
 const formatResult = require("../../util/formatResult");
 
 const modify_user_info = async ctx => {
@@ -60,19 +60,31 @@ const modify_select_user = async ctx => {
 //Get_devs_list
 const Get_devs_list = async ctx => {
   let allDevs = await Dev_Table.find();
-  allDevs = allDevs.map(async el => {
-    el.user = await User_dev.GetDevidUsers(el.clientID);
-    return el;
-  });
-  /* let Devs_all = await Dev_all.find()
-    .select({ _id: 0, data: 0 })
-    .exec();
-  let Devs_all_promise = Devs_all.map(async val => {
-    val.user = await User_dev.GetDevidUsers(val.devid);
-    return val;
-  });
-  let p = await Promise.all(Devs_all_promise); */
-  ctx.body = formatResult(505, await Promise.all(allDevs));
+  let result = [];
+  for (const el of allDevs) {
+    let devlistSrize = (await Dev_all.find({ devid: { $in: el.devlist } })).map(
+      coll => {
+        return {
+          devType: coll.devType,
+          devid: coll.devid,
+          devName: coll.data.name
+        };
+      }
+    );
+    result.push({
+      devlistSrize,
+      users: await User_dev.GetDevidUsers(el.clientID),
+      devlist: el.devlist,
+      clientID: el.clientID,
+      AlarmSendSelect: el.AlarmSendSelect,
+      http_uri: el.http_uri,
+      mail: el.mail,
+      tel: el.mail,
+      webConnect: el.webConnect,
+      websocket_uri: el.websocket_uri
+    });
+  }
+  ctx.body = formatResult(505, result);
 };
 
 module.exports = {

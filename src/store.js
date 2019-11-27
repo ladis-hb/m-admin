@@ -4,11 +4,11 @@ import Vuex from "vuex";
 import { GetAlarms } from "./util/axios";
 import { language } from "./util/language";
 import { unit } from "./util/unit";
-import createPersistedState from "vuex-persistedstate";
+//import createPersistedState from "vuex-persistedstate";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  plugins: [createPersistedState({ storage: window.sessionStorage })],
+  //plugins: [createPersistedState({ storage: window.sessionStorage })],
   state: {
     token: sessionStorage.getItem("token") || "",
     user: sessionStorage.getItem("user") || "cairui",
@@ -37,7 +37,12 @@ export default new Vuex.Store({
       Alarm_Data: []
     },
     //存储客户所有设备列表，http获取
-    allDevList: []
+    allDevList: [],
+    root: {
+      usersMap: new Map(),
+      infos: [],
+      devsMap: new Map()
+    }
   },
   mutations: {
     //退出登录，注销state
@@ -45,8 +50,8 @@ export default new Vuex.Store({
       state.token = sessionStorage.getItem("token") || "";
       state.user = sessionStorage.getItem("user") || "";
     },
-
-    setAllDevList({ state, payload }) {
+    //设置用户所有设备
+    setAllDevList(state, payload) {
       state.allDevList = payload;
     },
     //设置用户，token
@@ -68,7 +73,7 @@ export default new Vuex.Store({
       let devs = state.devs[devType][devid];
 
       if (!devs) Vue.set(state.devs[devType], devid, []);
-      if (devs.length > 200)
+      if (state.devs[devType][devid].length > 200)
         state.devs[devType][devid] = state.devs[devType][devid].slice(
           50,
           devs.length - 1
@@ -101,6 +106,7 @@ export default new Vuex.Store({
     setAlarm(state, payload) {
       state.Alarm.Alarm_Data.unshift(...payload);
     },
+    //确认告警
     confirm_alarm(state, payload) {
       let {
         key,
@@ -109,6 +115,20 @@ export default new Vuex.Store({
       Vue.set(state.Alarm.Alarm_Data[key], "confirm_time", data.confirm_time);
       Vue.set(state.Alarm.Alarm_Data[key], "confirm_user", data.confirm_user);
       Vue.set(state.Alarm.Alarm_Data[key], "confirm", data.confirm);
+    },
+    //root
+    SOCKET_LINEINFO(state, payload) {
+      console.log(payload);
+      let { type, result, data } = payload;
+      state.root.infos.push(result);
+      switch (type) {
+        case "user":
+          data.forEach(el => state.root.usersMap.set(el[0], el[1]));
+          break;
+        case "dev":
+          data.forEach(el => state.root.devsMap.set(el[0], el[1]));
+          break;
+      }
     }
   },
   actions: {
@@ -147,22 +167,6 @@ export default new Vuex.Store({
           _vm.$router.push({ name: "Alarm" });
         });
     }
-    //root
-    /* async socket_lineInfo({ commit }, payload) {
-      console.log(payload);
-
-      let { type, result, data } = payload;
-      switch (type) {
-        case "user":
-          this.socket.onlinelist_users = data.map(([user, socketId]) => {
-            return { user, socketId };
-          });
-          break;
-        case "dev":
-          this.socket.onlinelist_devs = data;
-          break;
-      }
-    } */
   },
   getters: {
     language: ({ language }) => lang => {

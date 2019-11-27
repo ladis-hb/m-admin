@@ -51,18 +51,19 @@ export default {
           if (Array.isArray(pre)) return [...pre, cu];
           else return [pre, cu];
         }) || [];
-      console.log(online);
 
       //获取用户所有设备
       let dev =
         this.allDevList.length > 0
           ? this.allDevList
           : await Get_user_all_devs().then(res => {
-              this.$store.commit("setAllDevList", res.data.data);
-              return res.data.data;
+              this.$store.commit("setAllDevList", res.data.data.devlist);
+              return res.data.data.devlist;
             });
+
       //刷选出不在线设备
       let dev_offline = dev.filter(id => !online.includes(id));
+      console.log(dev_offline);
       //获取所有不在线设备的数据单利
       Get_devs_list_single({ devlist: dev_offline }).then(res => {
         if (res.data.code != 200) return;
@@ -85,15 +86,6 @@ export default {
       }); */
     }
   },
-  /* filters: {
-    chartValue(value) {
-      let newValue = {};
-      for (let [key, val] of Object.entries(value)) {
-        if (typeof val != "boolean") newValue[key] = val;
-      }
-      return newValue;
-    }
-  }, */
   activated() {
     this.check_offline_dev();
   }

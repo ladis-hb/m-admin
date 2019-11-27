@@ -122,11 +122,10 @@ const on = () => {
       case "deleteDevice":
       case "addDevice":
         sendInfo.type = "dev";
-        //sendInfo.data = [...devsMap.entries()];
-        sendInfo.data = [...devsMap.entries()].map(([devid, arg]) => {
-          let { devType, user } = arg;
-          return { devid, devType, user: Array.from(user).join("|") };
-        });
+        sendInfo.data = [...devsMap.entries()].map(([devid, arg]) => [
+          devid,
+          Array.from(arg)
+        ]);
         break;
     }
     rootSet.forEach(u => {
