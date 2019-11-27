@@ -123,9 +123,10 @@ module.exports = async (ctx, next) => {
           { clientID },
           { $addToSet: { devlist: deviceCode } },
           { upsert: true }
-        ); /* .then(res => {
-          //console.log(res);
-        }); */
+        ).then((res, err) => {
+          if (err) console.log(err);
+          if (res) console.log(res);
+        });
         if (result.result._id) {
           result.stat = true;
           result.result = {};
