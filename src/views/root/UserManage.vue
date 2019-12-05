@@ -4,7 +4,7 @@
       <separated :title="$t('root.UserManage.3tq6gn')"></separated>
       <b-table
         ref="userListTable"
-        :items="user_items"
+        :items="Users"
         :fields="user_fields"
         hover
         head-variant="dark"
@@ -33,19 +33,19 @@
     </b-col>
     <b-col cols="12">
       <b-button-group>
-        <b-button variant="info" v-b-modal.modal-1>{{
-          $t("root.UserManage.xfnd5o")
-        }}</b-button>
-        <b-button variant="warning" @click="disable_select_user"
-          >{{
+        <b-button variant="info" v-b-modal.modal-1>
+          {{ $t("root.UserManage.xfnd5o") }}
+        </b-button>
+        <b-button variant="warning" @click="disable_select_user">
+          {{
             !select_item.status
               ? $t("root.UserManage.czy5jd")
               : $t("root.UserManage.aqlz8e")
-          }}{{ $t("root.UserManage.ck6r6a") }}</b-button
-        >
-        <b-button variant="primary" @click="delete_select_user">{{
-          $t("root.UserManage.zj504r")
-        }}</b-button>
+          }}{{ $t("root.UserManage.ck6r6a") }}
+        </b-button>
+        <b-button variant="primary" @click="delete_select_user">
+          {{ $t("root.UserManage.zj504r") }}
+        </b-button>
       </b-button-group>
       <b-modal
         id="modal-1"
@@ -108,18 +108,11 @@
 
 <script>
 import separated from "../../components/separated";
-import {
-  Get_User_list,
-  admin_modify_user_info,
-  disable_select_user,
-  delete_select_user,
-  modify_select_user
-} from "../../util/axios";
-import { MessageBox } from "element-ui";
+import gql from "graphql-tag";
 export default {
   data() {
     return {
-      user_items: [],
+      Users: [],
       user_fields: [
         {
           key: "status",
@@ -147,6 +140,25 @@ export default {
   components: {
     separated
   },
+  apollo: {
+    Users: {
+      query: gql`
+        query getAllUserInfo {
+          Users {
+            name
+            user
+            userGroup
+            mail
+            orgin
+            tel
+            creatTime
+            modifyTime
+            status
+          }
+        }
+      `
+    }
+  },
   methods: {
     onRowSelected(item, index) {
       this.select_item = item;
@@ -157,38 +169,74 @@ export default {
       if (!item.status) return "table-warning";
     },
     modify_select_user() {
-      modify_select_user({
-        selectUsers: this.select_item
-      })
-        .then(({ data: { code, msg } }) => {
-          if (code != 200) return MessageBox(msg, "tip");
-          this.user_items[this.select_index] = this.select_item;
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation($user: String) {
+              modify_select_user(user: $user) {
+                ok
+                msg
+              }
+            }
+          `,
+          variables: {
+            user: JSON.stringify(this.select_item)
+          }
         })
-        .catch(err => {
-          MessageBox(err, "error");
-        });
+        .then(data =>
+          this.$MessageBox(data.data.modify_select_user.msg || "success", "tip")
+        );
     },
     disable_select_user() {
       let { status, user } = this.select_item;
-      disable_select_user({
-        selectUser: user,
-        status: !status
-      })
-        .then(({ data: { code, msg } }) => {
-          if (code != 200) return MessageBox(msg, "tip");
-          this.user_items[this.select_index].status = !status;
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation disable_select_user($user: String, $status: Boolean) {
+              disable_select_user(user: $user, status: $status) {
+                ok
+                msg
+              }
+            }
+          `,
+          variables: {
+            user,
+            status: !status
+          }
         })
-        .catch(err => {
-          MessageBox(err, "error");
-        });
+        .then(data =>
+          this.$MessageBox(
+            data.data.disable_select_user.msg || "success",
+            "tip"
+          )
+        );
     },
     delete_select_user() {
       let { user, name } = this.select_item;
-      MessageBox.confirm(
-        `确定要删除用户：< ${user}|${name} >吗?`,
-        "delete user"
-      ).then(() => {
-        delete_select_user({
+      this.$MessageBox
+        .confirm(`确定要删除用户：< ${user}|${name} >吗?`, "delete user")
+        .then(() => {
+          this.$apollo
+            .mutate({
+              mutation: gql`
+                mutation delete_select_user($user: String) {
+                  delete_select_user(user: $user) {
+                    ok
+                    msg
+                  }
+                }
+              `,
+              variables: {
+                user
+              }
+            })
+            .then(data =>
+              this.$MessageBox(
+                data.data.delete_select_user.msg || "success",
+                "tip"
+              )
+            );
+          /* delete_select_user({
           selectUser: user
         })
           .then(({ data: { code, msg } }) => {
@@ -197,21 +245,9 @@ export default {
           })
           .catch(err => {
             MessageBox(err, "error");
-          });
-      });
-    },
-    Get_User_list() {
-      Get_User_list().then(({ data: { code, msg, data } }) => {
-        if (code != 200) return MessageBox(msg, "tip");
-        this.user_items = data;
-      });
-    },
-    Modify_User_Args() {
-      admin_modify_user_info();
+          }); */
+        });
     }
-  },
-  mounted() {
-    this.Get_User_list();
   }
 };
 </script>

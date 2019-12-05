@@ -1,6 +1,6 @@
 /* jshint esversion:8 */
 
-let development = false;
+let development = true;
 let API_3000 = "http://127.0.0.1:3000/Api/";
 let API_81 = "http://127.0.0.1:81/Api/";
 

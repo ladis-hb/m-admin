@@ -84,7 +84,7 @@ const Validation_user = async (ctx, data) => {
   };
   return result;
 };
-const Validation_root_Group = async (ctx, operationUser) => {
+const Validation_root_Group = async operationUser => {
   let validation = await Users.findOne({
     user: operationUser,
     userGroup: "root"

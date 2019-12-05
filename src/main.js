@@ -12,6 +12,13 @@ import VueSocketIOExt from "vue-socket.io-extended";
 import io from "socket.io-client";
 import { Message, MessageBox } from "element-ui";
 //import VeHistogram from "v-charts/lib/histogram";
+import VueApollo from "vue-apollo";
+import ApolloClient from "apollo-boost";
+
+const apolloClient = new ApolloClient({
+  // You should use an absolute URL here
+  uri: "http://localhost:81/graphql"
+});
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
@@ -19,6 +26,12 @@ import "./assets/theme-chalk/message-box.css";
 import "./assets/theme-chalk/icon.css";
 import "./assets/icon/iconfont.css";
 //socket.io
+Vue.use(VueApollo);
+
+const apolloProvider = new VueApollo({
+  defaultClient: apolloClient
+});
+
 const socket = io(socket_address);
 Vue.use(VueSocketIOExt, socket, { store });
 
@@ -55,5 +68,6 @@ new Vue({
   i18n,
   router,
   store,
+  apolloProvider,
   render: h => h(App)
 }).$mount("#app");

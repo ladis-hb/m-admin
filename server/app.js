@@ -6,6 +6,7 @@ const Logger = require("koa-logger");
 //const mongo = require("koa-mongo");
 const body = require("koa-body");
 const error = require("koa-error");
+const ApolloServer = require("./apollo");
 
 const config = require("./config");
 const router = require("./router/index");
@@ -27,6 +28,8 @@ attach(app);
 //emit监听器，挂载在app主进程上面，公用event实例
 const { on } = require("./event/event");
 on();
+
+ApolloServer.applyMiddleware({ app, path: "/graphql" });
 
 app.use(router.routes()).use(router.allowedMethods());
 
