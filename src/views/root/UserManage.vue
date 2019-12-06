@@ -33,9 +33,9 @@
     </b-col>
     <b-col cols="12">
       <b-button-group>
-        <b-button variant="info" v-b-modal.modal-1>
-          {{ $t("root.UserManage.xfnd5o") }}
-        </b-button>
+        <b-button variant="info" v-b-modal.modal-1>{{
+          $t("root.UserManage.xfnd5o")
+        }}</b-button>
         <b-button variant="warning" @click="disable_select_user">
           {{
             !select_item.status
@@ -43,9 +43,9 @@
               : $t("root.UserManage.aqlz8e")
           }}{{ $t("root.UserManage.ck6r6a") }}
         </b-button>
-        <b-button variant="primary" @click="delete_select_user">
-          {{ $t("root.UserManage.zj504r") }}
-        </b-button>
+        <b-button variant="primary" @click="delete_select_user">{{
+          $t("root.UserManage.zj504r")
+        }}</b-button>
       </b-button-group>
       <b-modal
         id="modal-1"
@@ -183,9 +183,13 @@ export default {
             user: JSON.stringify(this.select_item)
           }
         })
-        .then(data =>
-          this.$MessageBox(data.data.modify_select_user.msg || "success", "tip")
-        );
+        .then(data => {
+          this.$apollo.queries.Users.refetch();
+          this.$MessageBox(
+            data.data.modify_select_user.msg || "success",
+            "tip"
+          );
+        });
     },
     disable_select_user() {
       let { status, user } = this.select_item;
@@ -204,12 +208,13 @@ export default {
             status: !status
           }
         })
-        .then(data =>
+        .then(data => {
+          this.$apollo.queries.Users.refetch();
           this.$MessageBox(
             data.data.disable_select_user.msg || "success",
             "tip"
-          )
-        );
+          );
+        });
     },
     delete_select_user() {
       let { user, name } = this.select_item;
@@ -230,12 +235,13 @@ export default {
                 user
               }
             })
-            .then(data =>
+            .then(data => {
+              this.$apollo.queries.Users.refetch();
               this.$MessageBox(
                 data.data.delete_select_user.msg || "success",
                 "tip"
-              )
-            );
+              );
+            });
           /* delete_select_user({
           selectUser: user
         })
