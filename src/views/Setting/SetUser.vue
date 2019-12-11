@@ -11,7 +11,7 @@
             label-text-align="center"
           >
             <b-form-input
-              disabled
+              plaintext
               id="user"
               v-model="accont.user"
             ></b-form-input>
@@ -72,7 +72,7 @@
             label-align="right"
           >
             <b-form-input
-              disabled
+              plaintext
               id="address"
               :placeholder="accont.address"
             ></b-form-input>
@@ -85,7 +85,7 @@
             label-align="right"
           >
             <b-form-input
-              disabled
+              plaintext
               id="creatTime"
               :placeholder="$d(new Date(accont.creatTime), 'long')"
             ></b-form-input>

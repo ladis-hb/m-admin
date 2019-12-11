@@ -25,10 +25,12 @@
             label-for="user"
             label-cols="12"
             label-cols-sm="3"
-            :state="stateUser"
-            :invalid-feedback="invalidFeedback"
           >
-            <b-form-input id="user" v-model.trim="user"></b-form-input>
+            <b-form-input
+              id="user"
+              v-model.trim="user"
+              :state="userState"
+            ></b-form-input>
           </b-form-group>
           <b-form-group
             :label="$t('userRegister.w36psy')"
@@ -64,7 +66,11 @@
             label-cols-sm="3"
             description=" $t('userRegister.8a6dev') "
           >
-            <b-form-input id="mail" v-model.trim="mail"></b-form-input>
+            <b-form-input
+              id="mail"
+              v-model.trim="mail"
+              :state="MailState"
+            ></b-form-input>
           </b-form-group>
           <!--  <b-form-group
             :label=" $t('userRegister.3yn9wn') "
@@ -77,7 +83,7 @@
               v-model.trim="tel"
               placeholder="Let us know your tel"
             ></b-form-input>
-          </b-form-group> -->
+          </b-form-group>-->
           <b-form-group
             :label="$t('userRegister.qv34kf')"
             label-for="company"
@@ -91,9 +97,9 @@
             ></b-form-input>
           </b-form-group>
           <b-form-group class="p-3">
-            <b-button @click="register_submit" block variant="info">{{
-              $t("userRegister.c0u6wi")
-            }}</b-button>
+            <b-button @click="register_submit" block variant="info">
+              {{ $t("userRegister.c0u6wi") }}
+            </b-button>
           </b-form-group>
         </b-form>
       </b-col>
@@ -102,10 +108,11 @@
 </template>
 
 <script>
-import { MessageBox, Loading } from "element-ui";
+import { Loading } from "element-ui";
 import { UserRegister } from "../util/axios";
 import { btoa } from "../util/tool";
 import Header from "../components/Header";
+import gql from "graphql-tag";
 export default {
   data() {
     return {
@@ -115,40 +122,79 @@ export default {
       passwd2: "",
       company: "",
       mail: "",
-      tel: ""
+      tel: "",
+      User: null,
+      Mail: null
     };
   },
   components: {
     Header
   },
   computed: {
-    stateUser() {
-      return false;
+    userState() {
+      return this.user == this.User ? false : true;
     },
-    validFeedback() {
-      return this.state === true ? "Thank you" : "";
+    MailState() {
+      return this.mail == this.Mail ? false : true;
+    }
+  },
+  apollo: {
+    User: {
+      query: gql`
+        query user($user: String) {
+          User(user: $user) {
+            user
+          }
+        }
+      `,
+      variables() {
+        return { user: this.user };
+      },
+      update: data => (data.User == null ? null : data.User.user)
     },
-    invalidFeedback() {
-      if (this.user.length > 4) {
-        return "";
-      } else if (this.user.length > 0) {
-        return "Enter at least 4 characters";
-      } else {
-        return "Please enter something";
-      }
+    Mail: {
+      query: gql`
+        query mailStat($mail: String) {
+          User(mail: $mail) {
+            mail
+          }
+        }
+      `,
+      variables() {
+        return {
+          mail: this.mail
+        };
+      },
+      update: data => (data.User == null ? null : data.User.mail)
     }
   },
   methods: {
     register_submit() {
       let { company, mail, passwd, passwd2, tel, user } = this.$data;
-      if (user == "") return MessageBox.alert(this.$t("userRegister.di0z0m"));
-      if (passwd == "") return MessageBox.alert(this.$t("userRegister.vl6hbl"));
-      if (mail == "") return MessageBox.alert(this.$t("userRegister.ln6jyb"));
+      if (user == "")
+        return this.$MessageBox.alert(this.$t("userRegister.di0z0m"));
+      if (passwd == "")
+        return this.$MessageBox.alert(this.$t("userRegister.vl6hbl"));
+      if (mail == "")
+        return this.$MessageBox.alert(this.$t("userRegister.ln6jyb"));
       if (passwd !== passwd2)
-        return MessageBox.alert(this.$t("userRegister.t465uj"));
+        return this.$MessageBox.alert(this.$t("userRegister.t465uj"));
       let registerLoading = Loading.service({
         text: this.$t("userRegister.1lhcx9")
       });
+      /* this.$apollo.mutate({
+        mutation: gql`
+          mutation userRegisterTo($arg: String) {
+            userRegister(arg: $arg) {
+              msg
+              ok
+            }
+          }
+        `,
+        variables: {
+          arg: JSON.stringify({ company, mail, passwd, passwd2, tel, user })
+        }
+      }); */
       UserRegister({
         orgin: company,
         mail,
@@ -162,17 +208,22 @@ export default {
           setTimeout(() => {
             registerLoading.close();
             if (code != 200)
-              return MessageBox.alert(msg, this.$t("userRegister.b9rreb"));
-            MessageBox.confirm(this.$t("userRegister.kkmdbf"), msg, {
-              type: "success"
-            }).then(() => {
-              this.$router.push("/");
-            });
+              return this.$MessageBox.alert(
+                msg,
+                this.$t("userRegister.b9rreb")
+              );
+            this.$MessageBox
+              .confirm(this.$t("userRegister.kkmdbf"), msg, {
+                type: "success"
+              })
+              .then(() => {
+                this.$router.push("/");
+              });
           }, 1000);
         })
         .catch(err => {
           registerLoading.close();
-          MessageBox.alert(err, "error");
+          this.$MessageBox.alert(err, "error");
         });
     }
   }

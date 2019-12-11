@@ -28,23 +28,28 @@ const typeDefs = gql`
   #Query
   type Query {
     hello: String
-    User(user: String): user
+    User(user: String, mail: String): user
     Users: [user]
   }
 
   #mutation
   type Mutation {
+    #admin
     modify_select_user(user: String): result
     disable_select_user(user: String, status: Boolean): result
     delete_select_user(user: String): result
+    #register
+    userRegister(arg: String): result
   }
 `;
 
 const resolvers = {
   Query: {
     //
-    async User(user) {
-      return await Users.findOne({ user });
+    async User(root, { user, mail }) {
+      return await Users.findOne({
+        $or: [{ user: user || "" }, { mail: mail || null }]
+      });
     },
     //
     async Users() {
@@ -52,6 +57,9 @@ const resolvers = {
     }
   },
   Mutation: {
+    //async userRegister(root, { arg }) {
+    //let { company, mail, passwd, passwd2, tel, user } = JSON.parse(arg);
+    //},
     async modify_select_user(root, arg) {
       let { user, mail, name, orgin, tel, userGroup } = JSON.parse(arg.user);
       userGroup = userGroup == "user" ? userGroup : "user";
