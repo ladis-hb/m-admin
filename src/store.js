@@ -154,8 +154,6 @@ export default new Vuex.Store({
     },
     //socket监听报警事件
     async socket_DevAlarm({ _vm }, { result }) {
-      console.log(result);
-
       _vm.$MessageBox
         .confirm(result.Alarm_msg, "新的告警消息", {
           confirmButtonText: "点击查看",

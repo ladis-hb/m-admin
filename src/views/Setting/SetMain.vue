@@ -106,6 +106,7 @@ export default {
   },
   methods: {
     oprate(item) {
+      // eslint-disable-next-line
       console.log(item);
     },
     addDevid() {

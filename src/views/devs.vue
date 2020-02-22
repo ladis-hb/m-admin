@@ -63,11 +63,13 @@ export default {
 
       //刷选出不在线设备
       let dev_offline = dev.filter(id => !online.includes(id));
+      // eslint-disable-next-line
       console.log(dev_offline);
       //获取所有不在线设备的数据单利
       Get_devs_list_single({ devlist: dev_offline }).then(res => {
         if (res.data.code != 200) return;
         res.data.data.forEach(el => {
+          // eslint-disable-next-line
           console.log(el);
           this.$store.commit("newDevs", { status: false, result: el });
         });
